@@ -1,5 +1,6 @@
 package org.kotgll
 
+import org.kotgll.grammar.Alternative
 import org.kotgll.sppf.SPPFNode
 import java.util.*
 

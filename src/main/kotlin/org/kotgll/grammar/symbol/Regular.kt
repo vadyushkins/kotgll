@@ -1,4 +1,4 @@
-package org.kotgll.symbol
+package org.kotgll.grammar.symbol
 
 import java.util.*
 

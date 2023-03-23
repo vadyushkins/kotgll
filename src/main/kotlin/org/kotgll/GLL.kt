@@ -1,8 +1,9 @@
 package org.kotgll
 
+import org.kotgll.grammar.Alternative
+import org.kotgll.grammar.symbol.Nonterminal
+import org.kotgll.grammar.symbol.Terminal
 import org.kotgll.sppf.*
-import org.kotgll.symbol.Nonterminal
-import org.kotgll.symbol.Terminal
 
 class GLL(
     val symbol: Nonterminal,

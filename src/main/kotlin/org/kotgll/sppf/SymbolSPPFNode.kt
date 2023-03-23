@@ -1,7 +1,7 @@
 package org.kotgll.sppf
 
-import org.kotgll.symbol.Nonterminal
-import org.kotgll.symbol.Symbol
+import org.kotgll.grammar.symbol.Nonterminal
+import org.kotgll.grammar.symbol.Symbol
 import java.util.*
 
 class SymbolSPPFNode(

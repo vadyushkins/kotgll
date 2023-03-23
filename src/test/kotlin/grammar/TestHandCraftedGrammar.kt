@@ -3,12 +3,10 @@ package grammar
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import org.kotgll.Alternative
 import org.kotgll.GLL
-import org.kotgll.symbol.Char
-import org.kotgll.symbol.Literal
-import org.kotgll.symbol.Nonterminal
-import org.kotgll.symbol.Star
+import org.kotgll.grammar.Alternative
+import org.kotgll.grammar.symbol.*
+import org.kotgll.grammar.symbol.Char
 import kotlin.test.assertNotNull
 
 class TestHandCraftedGrammar {
@@ -47,7 +45,7 @@ class TestHandCraftedGrammar {
     @ValueSource(strings = ["a", "aa", "aaa"])
     fun `test 'a-plus' hand-crafted grammar`(input: String) {
         val grammar = Nonterminal("S")
-        grammar.addAlternative(Alternative(listOf(Star(Char('a')))))
+        grammar.addAlternative(Alternative(listOf(Plus(Char('a')))))
 
         assertNotNull(GLL(grammar, input).parse())
     }
@@ -83,6 +81,30 @@ class TestHandCraftedGrammar {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Literal("ab"))))
         grammar.addAlternative(Alternative(listOf(Literal("cd"))))
+
+        assertNotNull(GLL(grammar, input).parse())
+    }
+
+    @ParameterizedTest(name = "Should be NotNull for {0}")
+    @ValueSource(strings = ["", "a"])
+    fun `test 'a-optional' hand-crafted grammar`(input: String) {
+        val grammar = Nonterminal("S")
+        grammar.addAlternative(Alternative(listOf(Optional(Char('a')))))
+
+        assertNotNull(GLL(grammar, input).parse())
+    }
+
+    @ParameterizedTest(name = "Should be NotNull for ({0})")
+    @ValueSource(strings = ["a", "b", "c", "abc"]) // TODO: Fix for ""
+    fun `test 'regular expression' hand-crafted grammar`(input: String) {
+        val grammar = Nonterminal("S")
+        grammar.addAlternative(
+            Alternative(
+                listOf(
+                    RegularExpression("(a|b|c)*")
+                )
+            )
+        )
 
         assertNotNull(GLL(grammar, input).parse())
     }

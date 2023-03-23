@@ -1,6 +1,6 @@
 package org.kotgll.sppf
 
-import org.kotgll.Alternative
+import org.kotgll.grammar.Alternative
 import java.util.*
 
 open class PackedSPPFNode(

@@ -1,6 +1,6 @@
-package org.kotgll.symbol
+package org.kotgll.grammar.symbol
 
-import org.kotgll.Alternative
+import org.kotgll.grammar.Alternative
 
 class Optional(symbol: Symbol) : Regular(symbol, "?") {
     init {

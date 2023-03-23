@@ -1,6 +1,6 @@
 package org.kotgll.sppf
 
-import org.kotgll.symbol.Terminal
+import org.kotgll.grammar.symbol.Terminal
 import java.util.*
 
 class TerminalSPPFNode(

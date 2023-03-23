@@ -1,6 +1,6 @@
 package org.kotgll.sppf
 
-import org.kotgll.symbol.Symbol
+import org.kotgll.grammar.symbol.Symbol
 import java.util.*
 
 open class SPPFNode(val leftExtent: Int, val rightExtent: Int) {
