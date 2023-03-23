@@ -20,11 +20,11 @@ class GLL(
         val s1 = Nonterminal("S'")
         val alternative = Alternative(listOf(symbol))
         s1.addAlternative(alternative)
-        return makeGSSNode(Item(alternative, 1), 0)
+        return makeGSSNode(alternative, 1, 0)
     }
 
-    fun makeGSSNode(item: Item, ci: Int): GSSNode {
-        val gssNode = GSSNode(item, ci)
+    fun makeGSSNode(alternative: Alternative, dot: Int, ci: Int): GSSNode {
+        val gssNode = GSSNode(alternative, dot, ci)
         if (!gssNodes.contains(gssNode)) {
             gssNodes.add(gssNode)
         }
@@ -33,7 +33,7 @@ class GLL(
 
     fun parse(): SPPFNode? {
         for (alternative in startSymbol) {
-            add(alternative, startGSSNode, 0, null)
+            add(alternative, 0, startGSSNode, 0, null)
         }
 
         while (!queue.isEmpty()) {
@@ -44,8 +44,8 @@ class GLL(
         return getResult()
     }
 
-    fun add(parser: Parser, gssNode: GSSNode, ci: Int, sppfNode: SPPFNode?) {
-        queue.add(parser, gssNode, ci, sppfNode)
+    fun add(alternative: Alternative, dot: Int, gssNode: GSSNode, ci: Int, sppfNode: SPPFNode?) {
+        queue.add(alternative, dot, gssNode, ci, sppfNode)
     }
 
     fun getResult(): SPPFNode? {
@@ -68,20 +68,38 @@ class GLL(
             toPop[gssNode]!!.add(sppfNode)
             for (e in gssNode.edges.entries) {
                 for (u in e.value) {
-                    add(gssNode.item, u, ci, getNodeP(gssNode.item as Item, e.key, sppfNode))
+                    add(
+                        gssNode.alternative,
+                        gssNode.dot,
+                        u,
+                        ci,
+                        getNodeP(gssNode.alternative, gssNode.dot, e.key, sppfNode),
+                    )
                 }
             }
         }
     }
 
-    fun createGSSNode(item: Item, gssNode: GSSNode, sppfNode: SPPFNode?, ci: Int): GSSNode {
+    fun createGSSNode(
+        alternative: Alternative,
+        dot: Int,
+        gssNode: GSSNode,
+        sppfNode: SPPFNode?,
+        ci: Int
+    ): GSSNode {
         val w = sppfNode
-        val v: GSSNode = makeGSSNode(item, ci)
+        val v: GSSNode = makeGSSNode(alternative, dot, ci)
 
         if (v.addEdge(w, gssNode)) {
             if (toPop.containsKey(v)) {
                 for (z in toPop[v]!!) {
-                    add(item, gssNode, z!!.rightExtent, getNodeP(item, w, z))
+                    add(
+                        alternative,
+                        dot,
+                        gssNode,
+                        z!!.rightExtent,
+                        getNodeP(alternative, dot, w, z)
+                    )
                 }
             }
         }
@@ -89,8 +107,13 @@ class GLL(
         return v
     }
 
-    fun getNodeP(item: Item, sppfNode: SPPFNode?, nextSPPFNode: SPPFNode?): SPPFNode? {
-        if (item.dot == 1 && item.alternative.elements.size > 1) {
+    fun getNodeP(
+        alternative: Alternative,
+        dot: Int,
+        sppfNode: SPPFNode?,
+        nextSPPFNode: SPPFNode?,
+    ): SPPFNode? {
+        if (dot == 1 && alternative.elements.size > 1) {
             assert(sppfNode == null)
             return nextSPPFNode
         }
@@ -101,16 +124,16 @@ class GLL(
 
         if (sppfNode != null) {
             j = sppfNode.leftExtent
-//            assert(sppfNode.rightExtent == k)
+            assert(sppfNode.rightExtent == k)
         }
 
         val y: ParentSPPFNode =
-            if (item.isAtEnd())
-                makeSymbolSPPFNode(item.alternative.nonterminal, j, i)
+            if (dot == alternative.elements.size)
+                makeSymbolSPPFNode(alternative.nonterminal, j, i)
             else
-                makeItemSPPFNode(item, j, i)
+                makeItemSPPFNode(alternative, dot, j, i)
 
-        y.kids.add(PackedSPPFNode(k, item, sppfNode, nextSPPFNode))
+        y.kids.add(PackedSPPFNode(k, alternative, dot, sppfNode, nextSPPFNode))
 
         return y
     }
@@ -131,8 +154,8 @@ class GLL(
         return y
     }
 
-    fun makeItemSPPFNode(item: Item, i: Int, j: Int): ParentSPPFNode {
-        val y = ItemSPPFNode(i, j, item)
+    fun makeItemSPPFNode(alternative: Alternative, dot: Int, i: Int, j: Int): ParentSPPFNode {
+        val y = ItemSPPFNode(i, j, alternative, dot)
         if (!sppfNodes.contains(y)) {
             sppfNodes.add(y)
         }

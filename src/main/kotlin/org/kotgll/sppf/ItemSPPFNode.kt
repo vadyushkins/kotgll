@@ -1,27 +1,30 @@
 package org.kotgll.sppf
 
-import org.kotgll.Item
+import org.kotgll.Alternative
 import java.util.*
 
 class ItemSPPFNode(
     leftExtent: Int,
     rightExtent: Int,
-    val item: Item,
+    val alternative: Alternative,
+    val dot: Int,
 ) : ParentSPPFNode(leftExtent, rightExtent) {
     override fun toString() = "ItemSPPFNode(" +
             "leftExtent=$leftExtent," +
             "rightExtent=$rightExtent, " +
-            "item=$item)"
+            "alternative=$alternative, " +
+            "dot=$dot)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is ItemSPPFNode) return false
         if (!super.equals(other)) return false
 
-        if (item != other.item) return false
+        if (alternative != other.alternative) return false
+        if (dot != other.dot) return false
 
         return true
     }
 
-    override fun hashCode() = Objects.hash(leftExtent, rightExtent, item)
+    override fun hashCode() = Objects.hash(leftExtent, rightExtent, alternative, dot)
 }
