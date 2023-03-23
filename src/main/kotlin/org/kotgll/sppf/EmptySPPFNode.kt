@@ -1,6 +1,6 @@
 package org.kotgll.sppf
 
-import java.util.Objects
+import java.util.*
 
 class EmptySPPFNode(i: Int) : SPPFNode(i, i) {
     override fun toString() = "EmptySPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent)"

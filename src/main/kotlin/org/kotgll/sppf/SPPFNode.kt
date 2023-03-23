@@ -1,7 +1,7 @@
 package org.kotgll.sppf
 
 import org.kotgll.symbol.Symbol
-import java.util.Objects
+import java.util.*
 
 open class SPPFNode(val leftExtent: Int, val rightExtent: Int) {
     override fun toString() = "SPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent)"

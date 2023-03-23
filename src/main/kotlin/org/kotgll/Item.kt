@@ -1,11 +1,11 @@
 package org.kotgll
 
 import org.kotgll.sppf.SPPFNode
-import java.util.Objects
+import java.util.*
 
-class Item(val alternative: Alternative, val dot: Int): Parser {
+class Item(val alternative: Alternative, val dot: Int) : Parser {
     override fun parse(pos: Int, cu: GSSNode, cn: SPPFNode?, ctx: GLL) {
-        alternative.parseAt(dot, pos, cu, cn!!, ctx)
+        alternative.parseAt(dot, pos, cu, cn, ctx)
     }
 
     fun isAtEnd() = dot == alternative.elements.size

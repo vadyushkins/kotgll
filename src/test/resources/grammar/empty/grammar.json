@@ -1,21 +1,21 @@
 {
-  "kind" : "Grammar",
-  "rules" : [
+  "kind": "Grammar",
+  "rules": [
     {
-      "kind" : "Rule",
-      "head" : {
-        "kind" : "Nonterminal",
-        "name" : "S"
+      "kind": "Rule",
+      "head": {
+        "kind": "Nonterminal",
+        "name": "S"
       },
-      "body" : []
+      "body": []
     }
   ],
-  "start" : {
-    "kind" : "Start",
-    "name" : "S",
-    "nonterminal" : {
-      "kind" : "Nonterminal",
-      "name" : "S"
+  "start": {
+    "kind": "Start",
+    "name": "S",
+    "nonterminal": {
+      "kind": "Nonterminal",
+      "name": "S"
     }
   }
 }

@@ -1,7 +1,7 @@
 package org.kotgll.sppf
 
 import org.kotgll.symbol.Terminal
-import java.util.Objects
+import java.util.*
 
 class TerminalSPPFNode(
     leftExtent: Int,

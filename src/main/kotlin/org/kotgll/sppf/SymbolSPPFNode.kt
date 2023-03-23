@@ -2,13 +2,13 @@ package org.kotgll.sppf
 
 import org.kotgll.symbol.Nonterminal
 import org.kotgll.symbol.Symbol
-import java.util.Objects
+import java.util.*
 
 class SymbolSPPFNode(
     leftExtent: Int,
     rightExtent: Int,
     val symbol: Nonterminal,
-    ) : ParentSPPFNode(leftExtent, rightExtent) {
+) : ParentSPPFNode(leftExtent, rightExtent) {
     override fun toString() = "SymbolSPPFNode(" +
             "leftExtent=$leftExtent," +
             "rightExtent=$rightExtent, " +

@@ -1,14 +1,15 @@
 package org.kotgll
 
 import org.kotgll.sppf.SPPFNode
-import java.util.Objects
+import java.util.*
+import kotlin.collections.ArrayDeque
 
-class DescriptorsQueue(val size: Int) {
+class DescriptorsQueue(size: Int) {
     val todo: ArrayDeque<Descriptor> = ArrayDeque()
     val done: Array<HashSet<Configuration>> = Array(size) { HashSet() }
 
     fun add(parser: Parser, gssNode: GSSNode, pos: Int, sppfNode: SPPFNode?) {
-        val config: Configuration = Configuration(parser, gssNode, sppfNode)
+        val config = Configuration(parser, gssNode, sppfNode)
         if (!done[pos].contains(config)) {
             done[pos].add(config)
             todo.add(Descriptor(config, pos))
@@ -23,7 +24,7 @@ class DescriptorsQueue(val size: Int) {
         val parser: Parser,
         val gssNode: GSSNode,
         val sppfNode: SPPFNode?,
-        ) {
+    ) {
         override fun toString() = "Configuration(" +
                 "parser=$parser, " +
                 "gssNode=$gssNode, " +
@@ -67,4 +68,4 @@ class DescriptorsQueue(val size: Int) {
         }
     }
 
-    }
+}

@@ -1,4 +1,3 @@
 package org.kotgll.symbol
 
-interface Symbol {
-}
+interface Symbol

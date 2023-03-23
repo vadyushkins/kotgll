@@ -4,13 +4,12 @@ import org.kotgll.sppf.SPPFNode
 import org.kotgll.symbol.Nonterminal
 import org.kotgll.symbol.Symbol
 import org.kotgll.symbol.Terminal
-import java.util.Objects
+import java.util.*
 
-class Alternative(
-    val elements: List<Symbol>,
-) : Parser {
+class Alternative(val elements: List<Symbol>) : Parser {
     val items: MutableList<Item> = ArrayList()
     lateinit var nonterminal: Nonterminal
+
     init {
         for (i in 0..elements.size) {
             items.add(Item(this, i))

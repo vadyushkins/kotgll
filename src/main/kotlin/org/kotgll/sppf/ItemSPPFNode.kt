@@ -1,13 +1,13 @@
 package org.kotgll.sppf
 
 import org.kotgll.Item
-import java.util.Objects
+import java.util.*
 
 class ItemSPPFNode(
     leftExtent: Int,
     rightExtent: Int,
     val item: Item,
-    ) : ParentSPPFNode(leftExtent, rightExtent) {
+) : ParentSPPFNode(leftExtent, rightExtent) {
     override fun toString() = "ItemSPPFNode(" +
             "leftExtent=$leftExtent," +
             "rightExtent=$rightExtent, " +

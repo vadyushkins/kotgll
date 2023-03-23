@@ -1,8 +1,7 @@
 package org.kotgll.symbol
 
 import org.kotgll.Alternative
-import org.kotgll.symbol.Symbol
-import java.util.Objects
+import java.util.*
 
 open class Nonterminal(
     val name: String,

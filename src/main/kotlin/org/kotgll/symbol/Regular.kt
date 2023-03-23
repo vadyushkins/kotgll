@@ -1,11 +1,11 @@
 package org.kotgll.symbol
 
-import java.util.Objects
+import java.util.*
 
 open class Regular(
     val symbol: Symbol,
     val suffix: String,
-    ) : Nonterminal(symbol.toString() + suffix) {
+) : Nonterminal(symbol.toString() + suffix) {
     override fun toString() = "$symbol$suffix"
 
     override fun equals(other: Any?): Boolean {

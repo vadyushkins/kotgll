@@ -1,11 +1,11 @@
 package org.kotgll.sppf
 
-import java.util.Objects
+import java.util.*
 
 open class ParentSPPFNode(
     leftExtent: Int,
     rightExtent: Int,
-    ) : SPPFNode(leftExtent, rightExtent) {
+) : SPPFNode(leftExtent, rightExtent) {
     val kids: MutableSet<PackedSPPFNode> = HashSet()
 
     override fun toString() = "ParentSPPFNode(" +
