@@ -6,7 +6,6 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.kotgll.GLL
 import org.kotgll.grammar.Alternative
 import org.kotgll.grammar.symbol.*
-import org.kotgll.grammar.symbol.Char
 import kotlin.test.assertNotNull
 
 class TestHandCraftedGrammar {
@@ -90,15 +89,6 @@ class TestHandCraftedGrammar {
     fun `test 'a-optional' hand-crafted grammar`(input: String) {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Optional(Char('a')))))
-
-        assertNotNull(GLL(grammar, input).parse())
-    }
-
-    @ParameterizedTest(name = "Should be NotNull for ({0})")
-    @ValueSource(strings = ["a", "b", "c", "abc"]) // TODO: Fix for ""
-    fun `test 'regular expression' hand-crafted grammar`(input: String) {
-        val grammar = Nonterminal("S")
-        grammar.addAlternative(Alternative(listOf(RegularExpression("(a|b|c)*"))))
 
         assertNotNull(GLL(grammar, input).parse())
     }

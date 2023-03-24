@@ -6,10 +6,7 @@ import org.kotgll.grammar.symbol.Symbol
 import org.kotgll.grammar.symbol.Terminal
 import org.kotgll.sppf.*
 
-class GLL(
-    val symbol: Nonterminal,
-    val input: String,
-) {
+class GLL(val symbol: Nonterminal, val input: String) {
     val queue: DescriptorsQueue = DescriptorsQueue(input.length + 1)
     val toPop: HashMap<GSSNode, HashSet<SPPFNode?>> = HashMap()
     val gssNodes: HashSet<GSSNode> = HashSet()
@@ -124,7 +121,7 @@ class GLL(
         dot: Int,
         gssNode: GSSNode,
         ci: Int,
-        sppfNode: SPPFNode?
+        sppfNode: SPPFNode?,
     ) {
         queue.add(alternative, dot, gssNode, ci, sppfNode)
     }
@@ -166,7 +163,7 @@ class GLL(
         dot: Int,
         gssNode: GSSNode,
         sppfNode: SPPFNode?,
-        ci: Int
+        ci: Int,
     ): GSSNode {
         val w = sppfNode
         val v: GSSNode = makeGSSNode(alternative, dot, ci)
@@ -239,7 +236,7 @@ class GLL(
         alternative: Alternative,
         dot: Int,
         i: Int,
-        j: Int
+        j: Int,
     ): ParentSPPFNode {
         val y = ItemSPPFNode(i, j, alternative, dot)
         if (!sppfNodes.contains(y)) {
