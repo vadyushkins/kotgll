@@ -46,7 +46,6 @@ class GLL(
                     descriptor.pos,
                     descriptor.gssNode,
                     descriptor.sppfNode,
-                    this,
                 )
             } else {
                 parseAt(
@@ -55,7 +54,6 @@ class GLL(
                     descriptor.pos,
                     descriptor.gssNode,
                     descriptor.sppfNode,
-                    this
                 )
             }
         }
@@ -68,14 +66,13 @@ class GLL(
         pos: Int,
         cu: GSSNode,
         cn: SPPFNode?,
-        ctx: GLL,
     ) {
         if (alternative.elements.isEmpty()) {
-            val cr: SPPFNode = ctx.getNodeE(pos)
-            val ncn: SPPFNode? = ctx.getNodeP(alternative, 0, cn, cr)
-            ctx.pop(cu, ncn, pos)
+            val cr: SPPFNode = getNodeE(pos)
+            val ncn: SPPFNode? = getNodeP(alternative, 0, cn, cr)
+            pop(cu, ncn, pos)
         } else {
-            parseAt(alternative, 0, pos, cu, cn, ctx)
+            parseAt(alternative, 0, pos, cu, cn)
         }
     }
 
@@ -85,7 +82,6 @@ class GLL(
         pos: Int,
         cu: GSSNode,
         cn: SPPFNode?,
-        ctx: GLL,
     ) {
         var curPos: Int = pos
         var curGSSNode: GSSNode = cu
@@ -94,12 +90,12 @@ class GLL(
             val curSymbol: Symbol = alternative.elements[i]
 
             if (curSymbol is Terminal) {
-                if (ctx.isAtEnd(curPos)) return
-                val value: String? = curSymbol.match(curPos, ctx)
+                if (curPos >= input.length) return
+                val value: String? = curSymbol.match(curPos, input)
                 if (value != null) {
                     val skip: Int = value.length
-                    val cr: SPPFNode = ctx.getNodeT(curSymbol, value, curPos, skip)
-                    curSPPFNode = ctx.getNodeP(alternative, i + 1, curSPPFNode, cr)
+                    val cr: SPPFNode = getNodeT(curSymbol, value, curPos, skip)
+                    curSPPFNode = getNodeP(alternative, i + 1, curSPPFNode, cr)
                     curPos += skip
                     continue
                 }
@@ -107,7 +103,7 @@ class GLL(
             }
 
             if (curSymbol is Nonterminal) {
-                curGSSNode = ctx.createGSSNode(
+                curGSSNode = createGSSNode(
                     alternative,
                     i + 1,
                     curGSSNode,
@@ -115,12 +111,12 @@ class GLL(
                     curPos,
                 )
                 for (alt in curSymbol) {
-                    ctx.add(alt, 0, curGSSNode, curPos, null)
+                    add(alt, 0, curGSSNode, curPos, null)
                 }
                 return
             }
         }
-        ctx.pop(curGSSNode, curSPPFNode, pos)
+        pop(curGSSNode, curSPPFNode, pos)
     }
 
     fun add(
@@ -259,6 +255,4 @@ class GLL(
         }
         return y
     }
-
-    fun isAtEnd(pos: Int) = pos >= input.length
 }

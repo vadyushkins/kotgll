@@ -1,14 +1,10 @@
 package org.kotgll.grammar.symbol
 
-import org.kotgll.GLL
 import kotlin.Char
 
 class Char(val char: Char) : Terminal {
-    override fun match(pos: Int, driver: GLL): String? {
-        if (driver.input[pos] == char) {
-            return char + ""
-        }
-        return null
+    override fun match(pos: Int, input: String): String? {
+        return if (input[pos] == char) char + "" else null
     }
 
     override fun toString() = "Char(char='$char')"
