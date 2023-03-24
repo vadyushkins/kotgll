@@ -2,6 +2,7 @@ package org.kotgll
 
 import org.kotgll.grammar.Alternative
 import org.kotgll.grammar.symbol.Nonterminal
+import org.kotgll.grammar.symbol.Symbol
 import org.kotgll.grammar.symbol.Terminal
 import org.kotgll.sppf.*
 
@@ -39,13 +40,96 @@ class GLL(
 
         while (!queue.isEmpty()) {
             val descriptor: DescriptorsQueue.Descriptor = queue.next()
-            descriptor.parse(this)
+            if (descriptor.dot == 0) {
+                parse(
+                    descriptor.alternative,
+                    descriptor.pos,
+                    descriptor.gssNode,
+                    descriptor.sppfNode,
+                    this,
+                )
+            } else {
+                parseAt(
+                    descriptor.alternative,
+                    descriptor.dot,
+                    descriptor.pos,
+                    descriptor.gssNode,
+                    descriptor.sppfNode,
+                    this
+                )
+            }
         }
 
         return getResult()
     }
 
-    fun add(alternative: Alternative, dot: Int, gssNode: GSSNode, ci: Int, sppfNode: SPPFNode?) {
+    fun parse(
+        alternative: Alternative,
+        pos: Int,
+        cu: GSSNode,
+        cn: SPPFNode?,
+        ctx: GLL,
+    ) {
+        if (alternative.elements.isEmpty()) {
+            val cr: SPPFNode = ctx.getNodeE(pos)
+            val ncn: SPPFNode? = ctx.getNodeP(alternative, 0, cn, cr)
+            ctx.pop(cu, ncn, pos)
+        } else {
+            parseAt(alternative, 0, pos, cu, cn, ctx)
+        }
+    }
+
+    fun parseAt(
+        alternative: Alternative,
+        dot: Int,
+        pos: Int,
+        cu: GSSNode,
+        cn: SPPFNode?,
+        ctx: GLL,
+    ) {
+        var curPos: Int = pos
+        var curGSSNode: GSSNode = cu
+        var curSPPFNode: SPPFNode? = cn
+        for (i in dot until alternative.elements.size) {
+            val curSymbol: Symbol = alternative.elements[i]
+
+            if (curSymbol is Terminal) {
+                if (ctx.isAtEnd(curPos)) return
+                val value: String? = curSymbol.match(curPos, ctx)
+                if (value != null) {
+                    val skip: Int = value.length
+                    val cr: SPPFNode = ctx.getNodeT(curSymbol, value, curPos, skip)
+                    curSPPFNode = ctx.getNodeP(alternative, i + 1, curSPPFNode, cr)
+                    curPos += skip
+                    continue
+                }
+                return
+            }
+
+            if (curSymbol is Nonterminal) {
+                curGSSNode = ctx.createGSSNode(
+                    alternative,
+                    i + 1,
+                    curGSSNode,
+                    curSPPFNode,
+                    curPos,
+                )
+                for (alt in curSymbol) {
+                    ctx.add(alt, 0, curGSSNode, curPos, null)
+                }
+                return
+            }
+        }
+        ctx.pop(curGSSNode, curSPPFNode, pos)
+    }
+
+    fun add(
+        alternative: Alternative,
+        dot: Int,
+        gssNode: GSSNode,
+        ci: Int,
+        sppfNode: SPPFNode?
+    ) {
         queue.add(alternative, dot, gssNode, ci, sppfNode)
     }
 
@@ -155,7 +239,12 @@ class GLL(
         return y
     }
 
-    fun makeItemSPPFNode(alternative: Alternative, dot: Int, i: Int, j: Int): ParentSPPFNode {
+    fun makeItemSPPFNode(
+        alternative: Alternative,
+        dot: Int,
+        i: Int,
+        j: Int
+    ): ParentSPPFNode {
         val y = ItemSPPFNode(i, j, alternative, dot)
         if (!sppfNodes.contains(y)) {
             sppfNodes.add(y)

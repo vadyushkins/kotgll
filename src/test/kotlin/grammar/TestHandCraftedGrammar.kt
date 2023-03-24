@@ -98,13 +98,7 @@ class TestHandCraftedGrammar {
     @ValueSource(strings = ["a", "b", "c", "abc"]) // TODO: Fix for ""
     fun `test 'regular expression' hand-crafted grammar`(input: String) {
         val grammar = Nonterminal("S")
-        grammar.addAlternative(
-            Alternative(
-                listOf(
-                    RegularExpression("(a|b|c)*")
-                )
-            )
-        )
+        grammar.addAlternative(Alternative(listOf(RegularExpression("(a|b|c)*"))))
 
         assertNotNull(GLL(grammar, input).parse())
     }

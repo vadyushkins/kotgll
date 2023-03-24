@@ -9,7 +9,13 @@ class DescriptorsQueue(size: Int) {
     val todo: ArrayDeque<Descriptor> = ArrayDeque()
     val done: Array<HashSet<Descriptor>> = Array(size) { HashSet() }
 
-    fun add(alternative: Alternative, dot: Int, gssNode: GSSNode, pos: Int, sppfNode: SPPFNode?) {
+    fun add(
+        alternative: Alternative,
+        dot: Int,
+        gssNode: GSSNode,
+        pos: Int,
+        sppfNode: SPPFNode?,
+    ) {
         val descriptor = Descriptor(alternative, dot, gssNode, sppfNode, pos)
         if (!done[pos].contains(descriptor)) {
             done[pos].add(descriptor)
@@ -49,14 +55,6 @@ class DescriptorsQueue(size: Int) {
         }
 
         override fun hashCode() = Objects.hash(alternative, dot, gssNode, sppfNode, pos)
-
-        fun parse(driver: GLL) {
-            if (dot == 0) {
-                alternative.parse(pos, gssNode, sppfNode, driver)
-            } else {
-                alternative.parseAt(dot, pos, gssNode, sppfNode, driver)
-            }
-        }
     }
 
 }
