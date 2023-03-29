@@ -1,5 +1,6 @@
 package org.kotgll.rsm
 
+import org.kotgll.rsm.grammar.RSMNonterminalEdge
 import org.kotgll.rsm.grammar.RSMState
 import org.kotgll.rsm.grammar.symbol.Nonterminal
 import org.kotgll.rsm.grammar.symbol.Terminal
@@ -13,7 +14,19 @@ class GLL(val rsmState: RSMState, val input: String) {
 
     val startState: RSMState = rsmState
     val startNonterminal: Nonterminal = rsmState.isStartFor[0]
-    val startGSSNode: GSSNode = makeGSSNode(rsmState, 0)
+    val startGSSNode: GSSNode = makeStartGSSNode()
+
+    fun makeStartGSSNode(): GSSNode {
+        val state: RSMState = RSMState(
+            id = -1,
+            isStartFor = listOf(Nonterminal("S'")),
+        )
+        state.addNonterminalEdge(RSMNonterminalEdge(
+            nonterminal = startNonterminal,
+            head = startState,
+        ))
+        return makeGSSNode(state, 0)
+    }
 
     fun makeGSSNode(state: RSMState, ci: Int): GSSNode {
         val gssNode = GSSNode(state, ci)
@@ -25,49 +38,19 @@ class GLL(val rsmState: RSMState, val input: String) {
 
     fun parse(): SPPFNode? {
 //        TODO: Think
-//        for (alternative in startSymbol) {
-//            add(alternative, 0, startGSSNode, 0, null)
-//        }
         add(startState, startGSSNode, 0, null)
 
         while (!queue.isEmpty()) {
             val descriptor: DescriptorsQueue.Descriptor = queue.next()
-            if (descriptor.rsmState.isStartFor.contains(startNonterminal)) {
-                parse(
-                    descriptor.rsmState,
-                    descriptor.pos,
-                    descriptor.gssNode,
-                    descriptor.sppfNode,
-                )
-            } else {
-                parseAt(
-                    descriptor.rsmState,
-                    descriptor.pos,
-                    descriptor.gssNode,
-                    descriptor.sppfNode,
-                )
-            }
+            parseAt(
+                descriptor.rsmState,
+                descriptor.pos,
+                descriptor.gssNode,
+                descriptor.sppfNode,
+            )
         }
 
         return getResult()
-    }
-
-    fun parse(
-        state: RSMState,
-        pos: Int,
-        cu: GSSNode,
-        cn: SPPFNode?,
-    ) {
-        if (
-            state.outgoingTerminalEdges.isEmpty() &&
-            state.outgoingNonterminalEdges.isEmpty()
-            ) {
-            val cr: SPPFNode = getNodeE(pos)
-            val ncn: SPPFNode? = getNodeP(state, cn, cr)
-            pop(cu, ncn, pos)
-        } else {
-            parseAt(state, pos, cu, cn)
-        }
     }
 
     fun parseAt(
@@ -80,16 +63,13 @@ class GLL(val rsmState: RSMState, val input: String) {
         var curGSSNode: GSSNode = cu
         var curSPPFNode: SPPFNode? = cn
         for (rsmEdge in state.outgoingTerminalEdges) {
-            if (curPos >= input.length) return
             val value: String? = rsmEdge.terminal.match(curPos, input)
             if (value != null) {
                 val skip: Int = value.length
                 val cr: SPPFNode = getNodeT(rsmEdge.terminal, value, curPos, skip)
                 curSPPFNode = getNodeP(rsmEdge.head, curSPPFNode, cr)
                 curPos += skip
-                continue
             }
-            return
         }
         for (rsmEdge in state.outgoingNonterminalEdges) {
             curGSSNode = createGSSNode(
@@ -174,10 +154,6 @@ class GLL(val rsmState: RSMState, val input: String) {
         nextSPPFNode: SPPFNode?,
     ): SPPFNode? {
 //        TODO: Think
-//        if (dot == 1 && alternative.elements.size > 1) {
-//            assert(sppfNode == null)
-//            return nextSPPFNode
-//        }
         if (sppfNode == null) {  // TODO: Maybe wrong
             return nextSPPFNode
         }

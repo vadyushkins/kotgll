@@ -6,6 +6,7 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.kotgll.vanilla.GLL
 import org.kotgll.vanilla.grammar.Alternative
 import org.kotgll.vanilla.grammar.symbol.*
+import org.kotgll.vanilla.grammar.symbol.Char
 import kotlin.test.assertNotNull
 
 class TestHandCraftedGrammar {
@@ -15,6 +16,14 @@ class TestHandCraftedGrammar {
         grammar.addAlternative(Alternative(listOf()))
 
         assertNotNull(GLL(grammar, "").parse())
+    }
+
+    @Test
+    fun `test 'a' hand-crafted grammar`() {
+        val grammar = Nonterminal("S")
+        grammar.addAlternative(Alternative(listOf(Char('a'))))
+
+        assertNotNull(GLL(grammar, "a").parse())
     }
 
     @Test
