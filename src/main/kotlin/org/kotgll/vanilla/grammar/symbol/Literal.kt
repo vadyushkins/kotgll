@@ -1,4 +1,4 @@
-package org.kotgll.grammar.symbol
+package org.kotgll.vanilla.grammar.symbol
 
 class Literal(val literal: String) : Terminal {
     override fun match(pos: Int, input: String): String? {

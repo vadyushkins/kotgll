@@ -1,4 +1,4 @@
-package org.kotgll.grammar.symbol
+package org.kotgll.vanilla.grammar.symbol
 
 import kotlin.Char
 
@@ -11,7 +11,7 @@ class Char(val char: Char) : Terminal {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
-        if (other !is org.kotgll.grammar.symbol.Char) return false
+        if (other !is org.kotgll.vanilla.grammar.symbol.Char) return false
 
         if (char != other.char) return false
 

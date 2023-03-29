@@ -1,10 +1,10 @@
-package org.kotgll
+package org.kotgll.vanilla
 
-import org.kotgll.grammar.Alternative
-import org.kotgll.grammar.symbol.Nonterminal
-import org.kotgll.grammar.symbol.Symbol
-import org.kotgll.grammar.symbol.Terminal
-import org.kotgll.sppf.*
+import org.kotgll.vanilla.grammar.Alternative
+import org.kotgll.vanilla.grammar.symbol.Nonterminal
+import org.kotgll.vanilla.grammar.symbol.Symbol
+import org.kotgll.vanilla.grammar.symbol.Terminal
+import org.kotgll.vanilla.sppf.*
 
 class GLL(val symbol: Nonterminal, val input: String) {
     val queue: DescriptorsQueue = DescriptorsQueue(input.length + 1)

@@ -1,11 +1,11 @@
-package grammar
+package vanilla
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import org.kotgll.GLL
-import org.kotgll.grammar.Alternative
-import org.kotgll.grammar.symbol.*
+import org.kotgll.vanilla.GLL
+import org.kotgll.vanilla.grammar.Alternative
+import org.kotgll.vanilla.grammar.symbol.*
 import kotlin.test.assertNotNull
 
 class TestHandCraftedGrammar {
@@ -23,7 +23,7 @@ class TestHandCraftedGrammar {
         grammar.addAlternative(
             Alternative(
                 listOf(
-                    Char('a'), Char('b'),
+                    org.kotgll.vanilla.grammar.symbol.Char('a'), org.kotgll.vanilla.grammar.symbol.Char('b'),
                 )
             )
         )
@@ -35,7 +35,7 @@ class TestHandCraftedGrammar {
     @ValueSource(strings = ["", "a", "aa", "aaa"])
     fun `test 'a-star' hand-crafted grammar`(input: String) {
         val grammar = Nonterminal("S")
-        grammar.addAlternative(Alternative(listOf(Star(Char('a')))))
+        grammar.addAlternative(Alternative(listOf(Star(org.kotgll.vanilla.grammar.symbol.Char('a')))))
 
         assertNotNull(GLL(grammar, input).parse())
     }
@@ -44,7 +44,7 @@ class TestHandCraftedGrammar {
     @ValueSource(strings = ["a", "aa", "aaa"])
     fun `test 'a-plus' hand-crafted grammar`(input: String) {
         val grammar = Nonterminal("S")
-        grammar.addAlternative(Alternative(listOf(Plus(Char('a')))))
+        grammar.addAlternative(Alternative(listOf(Plus(org.kotgll.vanilla.grammar.symbol.Char('a')))))
 
         assertNotNull(GLL(grammar, input).parse())
     }
@@ -66,7 +66,8 @@ class TestHandCraftedGrammar {
         grammar.addAlternative(
             Alternative(
                 listOf(
-                    Char('('), grammar, Char(')'), grammar,
+                    org.kotgll.vanilla.grammar.symbol.Char('('), grammar,
+                    org.kotgll.vanilla.grammar.symbol.Char(')'), grammar,
                 )
             )
         )
@@ -88,7 +89,7 @@ class TestHandCraftedGrammar {
     @ValueSource(strings = ["", "a"])
     fun `test 'a-optional' hand-crafted grammar`(input: String) {
         val grammar = Nonterminal("S")
-        grammar.addAlternative(Alternative(listOf(Optional(Char('a')))))
+        grammar.addAlternative(Alternative(listOf(Optional(org.kotgll.vanilla.grammar.symbol.Char('a')))))
 
         assertNotNull(GLL(grammar, input).parse())
     }

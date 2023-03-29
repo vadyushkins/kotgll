@@ -1,7 +1,7 @@
-package org.kotgll
+package org.kotgll.vanilla
 
-import org.kotgll.grammar.Alternative
-import org.kotgll.sppf.SPPFNode
+import org.kotgll.vanilla.grammar.Alternative
+import org.kotgll.vanilla.sppf.SPPFNode
 import java.util.*
 import kotlin.collections.ArrayDeque
 

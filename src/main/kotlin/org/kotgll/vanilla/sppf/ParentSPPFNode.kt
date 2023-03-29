@@ -1,4 +1,4 @@
-package org.kotgll.sppf
+package org.kotgll.vanilla.sppf
 
 import java.util.*
 

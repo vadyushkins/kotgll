@@ -1,6 +1,6 @@
-package org.kotgll.grammar.symbol
+package org.kotgll.vanilla.grammar.symbol
 
-import org.kotgll.grammar.Alternative
+import org.kotgll.vanilla.grammar.Alternative
 
 class Plus(symbol: Symbol) : Regular(symbol, "+") {
     init {

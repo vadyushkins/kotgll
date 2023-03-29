@@ -1,7 +1,7 @@
-package org.kotgll.grammar
+package org.kotgll.vanilla.grammar
 
-import org.kotgll.grammar.symbol.Nonterminal
-import org.kotgll.grammar.symbol.Symbol
+import org.kotgll.vanilla.grammar.symbol.Nonterminal
+import org.kotgll.vanilla.grammar.symbol.Symbol
 import java.util.*
 
 class Alternative(val elements: List<Symbol>) {
