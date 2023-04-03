@@ -5,16 +5,18 @@ import java.util.*
 
 class RSMState(
     val id: Int,
-    val isStartFor: List<Nonterminal> = emptyList(),
-    val isFinalFor: List<Nonterminal> = emptyList(),
+    val nonterminal: Nonterminal,
+    val isStart: Boolean = false,
+    val isFinal: Boolean = false,
 ) {
     val outgoingTerminalEdges: MutableList<RSMTerminalEdge> = mutableListOf()
     val outgoingNonterminalEdges: MutableList<RSMNonterminalEdge> = mutableListOf()
 
     override fun toString() = "RSMState(" +
             "id=$id, " +
-            "isStartFor=$isStartFor, " +
-            "isFinalFor=$isFinalFor, " +
+            "nonterminal=$nonterminal, " +
+            "isStart=$isStart, " +
+            "isFinal=$isFinal, " +
             "outgoingTerminalEdges=$outgoingTerminalEdges, " +
             "outgoingNonterminalEdges=$outgoingNonterminalEdges" +
             ")"
@@ -24,8 +26,8 @@ class RSMState(
         if (other !is RSMState) return false
 
         if (id != other.id) return false
-        if (isStartFor != other.isStartFor) return false
-        if (isFinalFor != other.isFinalFor) return false
+        if (isStart != other.isStart) return false
+        if (isFinal != other.isFinal) return false
         if (outgoingTerminalEdges != other.outgoingTerminalEdges) return false
         if (outgoingNonterminalEdges != other.outgoingNonterminalEdges) return false
 
@@ -33,8 +35,8 @@ class RSMState(
     }
 
     override fun hashCode() = Objects.hash(
-        id, isStartFor, isFinalFor, outgoingTerminalEdges, outgoingNonterminalEdges,
-        )
+        id, isStart, isFinal, outgoingTerminalEdges, outgoingNonterminalEdges,
+    )
 
     fun addTerminalEdge(edge: RSMTerminalEdge) {
         outgoingTerminalEdges.add(edge)

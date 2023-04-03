@@ -1,7 +1,7 @@
 package org.kotgll.rsm.grammar
 
-import java.util.*
 import org.kotgll.rsm.grammar.symbol.Nonterminal
+import java.util.*
 
 class RSMNonterminalEdge(
     val nonterminal: Nonterminal,

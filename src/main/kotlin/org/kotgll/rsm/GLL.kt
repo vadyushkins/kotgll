@@ -13,19 +13,29 @@ class GLL(val rsmState: RSMState, val input: String) {
     val sppfNodes: HashSet<SPPFNode> = HashSet()
 
     val startState: RSMState = rsmState
-    val startNonterminal: Nonterminal = rsmState.isStartFor[0]
-    val startGSSNode: GSSNode = makeStartGSSNode()
+    val startNonterminal: Nonterminal = rsmState.nonterminal
+    val startGSSNode: GSSNode = makeGSSNode(startState, 0)
 
     fun makeStartGSSNode(): GSSNode {
-        val state: RSMState = RSMState(
-            id = -1,
-            isStartFor = listOf(Nonterminal("S'")),
+        val fakeStartNonterminal: Nonterminal = Nonterminal("S'")
+        val fakeStartRSMState: RSMState = RSMState(
+            id = -2,
+            nonterminal = fakeStartNonterminal,
+            isStart = true,
         )
-        state.addNonterminalEdge(RSMNonterminalEdge(
-            nonterminal = startNonterminal,
-            head = startState,
-        ))
-        return makeGSSNode(state, 0)
+        fakeStartNonterminal.startState = fakeStartRSMState
+        val fakeFinalRSMState: RSMState = RSMState(
+            id = -1,
+            nonterminal = fakeStartNonterminal,
+            isFinal = true,
+        )
+        fakeStartRSMState.addNonterminalEdge(
+            RSMNonterminalEdge(
+                nonterminal = startNonterminal,
+                head = fakeFinalRSMState,
+            )
+        )
+        return makeGSSNode(fakeStartRSMState, 0)
     }
 
     fun makeGSSNode(state: RSMState, ci: Int): GSSNode {
@@ -37,11 +47,25 @@ class GLL(val rsmState: RSMState, val input: String) {
     }
 
     fun parse(): SPPFNode? {
+//        if (input.isEmpty()) {
+//            val cr: SPPFNode = getNodeE(0)
+//            val ncn: SPPFNode = getNodeP(startState, null, cr)
+//            pop(startGSSNode, ncn, 0)
+//            return getResult()
+//        }
 //        TODO: Think
         add(startState, startGSSNode, 0, null)
 
         while (!queue.isEmpty()) {
             val descriptor: DescriptorsQueue.Descriptor = queue.next()
+//            if (descriptor.rsmState.isStart) {
+//                parse(
+//                    descriptor.rsmState,
+//                    descriptor.pos,
+//                    descriptor.gssNode,
+//                    descriptor.sppfNode,
+//                )
+//            }
             parseAt(
                 descriptor.rsmState,
                 descriptor.pos,
@@ -53,6 +77,19 @@ class GLL(val rsmState: RSMState, val input: String) {
         return getResult()
     }
 
+    fun parse(
+        state: RSMState,
+        pos: Int,
+        cu: GSSNode,
+        cn: SPPFNode?,
+    ) {
+        if (state.isFinal) {
+            val cr: SPPFNode = getNodeE(pos)
+            val ncn: SPPFNode = getNodeP(state, cn, cr)
+            pop(cu, ncn, pos)
+        }
+    }
+
     fun parseAt(
         state: RSMState,
         pos: Int,
@@ -62,13 +99,24 @@ class GLL(val rsmState: RSMState, val input: String) {
         var curPos: Int = pos
         var curGSSNode: GSSNode = cu
         var curSPPFNode: SPPFNode? = cn
+        if (
+            state.isStart && state.isFinal
+        ) {
+            curSPPFNode = getNodeP(state, curSPPFNode, getNodeE(pos))
+        }
         for (rsmEdge in state.outgoingTerminalEdges) {
+            if (curPos >= input.length) return
             val value: String? = rsmEdge.terminal.match(curPos, input)
             if (value != null) {
+//                pop(curGSSNode, curSPPFNode, pos)
                 val skip: Int = value.length
                 val cr: SPPFNode = getNodeT(rsmEdge.terminal, value, curPos, skip)
                 curSPPFNode = getNodeP(rsmEdge.head, curSPPFNode, cr)
                 curPos += skip
+                add(
+                    rsmEdge.head, curGSSNode, curPos, curSPPFNode
+                )
+                return
             }
         }
         for (rsmEdge in state.outgoingNonterminalEdges) {
@@ -78,7 +126,12 @@ class GLL(val rsmState: RSMState, val input: String) {
                 curSPPFNode,
                 curPos,
             )
-            add(rsmEdge.head, curGSSNode, curPos, null)
+            add(
+                rsmEdge.nonterminal.startState, curGSSNode, curPos, null
+            )
+//            add(
+//                rsmEdge.head, curGSSNode, curPos, null
+//            )
         }
         pop(curGSSNode, curSPPFNode, pos)
     }
@@ -152,11 +205,11 @@ class GLL(val rsmState: RSMState, val input: String) {
         state: RSMState,
         sppfNode: SPPFNode?,
         nextSPPFNode: SPPFNode?,
-    ): SPPFNode? {
+    ): SPPFNode {
 //        TODO: Think
-        if (sppfNode == null) {  // TODO: Maybe wrong
-            return nextSPPFNode
-        }
+//        if (sppfNode == null) {  // TODO: Maybe wrong
+//            return nextSPPFNode
+//        }
 
         val k = nextSPPFNode!!.leftExtent
         val i = nextSPPFNode.rightExtent
@@ -164,16 +217,13 @@ class GLL(val rsmState: RSMState, val input: String) {
 
         if (sppfNode != null) {
             j = sppfNode.leftExtent
-            assert(sppfNode.rightExtent == k)
+//            assert(sppfNode.rightExtent == k)
         }
 
         // TODO: Maybe wrong from here
         val y: ParentSPPFNode =
-            if (
-                state.outgoingTerminalEdges.isEmpty() &&
-                state.outgoingNonterminalEdges.isEmpty()
-                )
-                makeSymbolSPPFNode(startNonterminal, j, i)
+            if (state.isFinal)
+                makeSymbolSPPFNode(state.nonterminal, j, i)
             else
                 makeItemSPPFNode(state, j, i)
         // TODO: Maybe wrong to here
