@@ -133,7 +133,7 @@ class GLL(val rsmState: RSMState, val input: String) {
 //                rsmEdge.head, curGSSNode, curPos, null
 //            )
         }
-        pop(curGSSNode, curSPPFNode, pos)
+        pop(curGSSNode, curSPPFNode, curPos)
     }
 
     fun add(

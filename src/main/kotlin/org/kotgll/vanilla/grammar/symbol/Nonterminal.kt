@@ -9,9 +9,7 @@ open class Nonterminal(
 ) : Symbol, Iterable<Alternative> {
     override fun iterator(): Iterator<Alternative> = alternatives.iterator()
 
-    override fun toString() = "Nonterminal(" +
-            "name=$name, " +
-            "alternatives=$alternatives)"
+    override fun toString() = "Nonterminal($name)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

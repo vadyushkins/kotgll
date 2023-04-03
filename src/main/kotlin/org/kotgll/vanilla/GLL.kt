@@ -113,7 +113,7 @@ class GLL(val symbol: Nonterminal, val input: String) {
                 return
             }
         }
-        pop(curGSSNode, curSPPFNode, pos)
+        pop(curGSSNode, curSPPFNode, curPos)
     }
 
     fun add(

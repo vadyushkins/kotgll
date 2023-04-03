@@ -7,7 +7,7 @@ import java.util.*
 class Alternative(val elements: List<Symbol>) {
     lateinit var nonterminal: Nonterminal
 
-    override fun toString() = "Alternative(elements=$elements)"
+    override fun toString() = "Alternative($elements)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
