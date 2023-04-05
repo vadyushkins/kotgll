@@ -16,10 +16,7 @@ class RSMState(
             "id=$id, " +
             "nonterminal=$nonterminal, " +
             "isStart=$isStart, " +
-            "isFinal=$isFinal, " +
-            "outgoingTerminalEdges=$outgoingTerminalEdges, " +
-            "outgoingNonterminalEdges=$outgoingNonterminalEdges" +
-            ")"
+            "isFinal=$isFinal)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
