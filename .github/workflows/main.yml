@@ -19,12 +19,17 @@ jobs:
           distribution: temurin
           java-version: 11
 
-      - name: Setup and execute Gradle 'test' task
+      - name: Execute Gradle `build` task
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build --scan
+
+      - name: Execute Gradle `test` task
         uses: gradle/gradle-build-action@v2
         with:
           arguments: test --scan
 
-      - name: Upload 'test' report artifact
+      - name: Upload `test` report artifact
         if: always()
         uses: actions/upload-artifact@v3
         with:
