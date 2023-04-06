@@ -4,8 +4,10 @@ on: [ push, pull_request, workflow_dispatch ]
 
 jobs:
   test:
-    name: Test
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - name: Checkout
@@ -29,13 +31,3 @@ jobs:
         with:
           name: TestReport
           path: build/reports/tests/test/index.html
-
-      - name: Render 'test' report
-        if: always()
-        uses: dorny/test-reporter@v1
-        with:
-          name: 'TestReport'
-          path: 'build/reports/tests/test/index.xml'
-          reporter: 'java-junit'
-          list-tests: 'all'
-          max-annotations: '50'
