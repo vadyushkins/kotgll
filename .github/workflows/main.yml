@@ -35,7 +35,7 @@ jobs:
         uses: dorny/test-reporter@v1
         with:
           name: 'TestReport'
-          path: 'build/reports/tests/test/*'
+          path: 'build/reports/tests/test/index.xml'
           reporter: 'java-junit'
           list-tests: 'all'
           max-annotations: '50'
