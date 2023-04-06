@@ -1,9 +1,11 @@
-package org.kotgll.rsm.grammar.symbol
+package org.kotgll.cfg.grammar.symbol
 
 import kotlin.Char
 
 class Char(val char: Char) : Terminal {
-    override fun match(pos: Int, input: String): String? = if (input[pos] == char) char + "" else null
+    override fun match(pos: Int, input: String): String? {
+        return if (input[pos] == char) char + "" else null
+    }
 
     override fun toString() = "Char('$char')"
 
@@ -17,4 +19,6 @@ class Char(val char: Char) : Terminal {
     }
 
     override fun hashCode() = char.hashCode()
+
+
 }
