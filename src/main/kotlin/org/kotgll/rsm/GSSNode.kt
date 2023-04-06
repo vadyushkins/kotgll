@@ -4,16 +4,11 @@ import org.kotgll.rsm.grammar.RSMState
 import org.kotgll.rsm.sppf.SPPFNode
 import java.util.*
 
-class GSSNode(
-    val rsmState: RSMState,
-    val k: Int,
-) {
+class GSSNode(val rsmState: RSMState, val k: Int) {
     val edges: MutableMap<SPPFNode?, MutableSet<GSSNode>> = HashMap()
 
     fun addEdge(sppfNode: SPPFNode?, gssNode: GSSNode): Boolean {
-        if (!edges.containsKey(sppfNode)) {
-            edges[sppfNode] = HashSet()
-        }
+        if (!edges.containsKey(sppfNode)) edges[sppfNode] = HashSet()
         return edges[sppfNode]!!.add(gssNode)
     }
 

@@ -3,14 +3,10 @@ package org.kotgll.vanilla.sppf
 import org.kotgll.vanilla.grammar.Alternative
 import java.util.*
 
-class ItemSPPFNode(
-    leftExtent: Int,
-    rightExtent: Int,
-    val alternative: Alternative,
-    val dot: Int,
-) : ParentSPPFNode(leftExtent, rightExtent) {
+class ItemSPPFNode(leftExtent: Int, rightExtent: Int, val alternative: Alternative, val dot: Int) :
+    ParentSPPFNode(leftExtent, rightExtent) {
     override fun toString() = "ItemSPPFNode(" +
-            "leftExtent=$leftExtent," +
+            "leftExtent=$leftExtent, " +
             "rightExtent=$rightExtent, " +
             "alternative=$alternative, " +
             "dot=$dot)"

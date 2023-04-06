@@ -6,7 +6,7 @@ open class Regular(
     val symbol: Symbol,
     val suffix: String,
 ) : Nonterminal(symbol.toString() + suffix) {
-    override fun toString() = "$symbol$suffix"
+    override fun toString() = "${this.javaClass.name}($symbol$suffix)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

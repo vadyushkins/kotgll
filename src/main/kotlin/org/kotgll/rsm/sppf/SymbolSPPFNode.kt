@@ -10,7 +10,7 @@ class SymbolSPPFNode(
     val symbol: Nonterminal,
 ) : ParentSPPFNode(leftExtent, rightExtent) {
     override fun toString() = "SymbolSPPFNode(" +
-            "leftExtent=$leftExtent," +
+            "leftExtent=$leftExtent, " +
             "rightExtent=$rightExtent, " +
             "kids=$kids, " +
             "symbol=$symbol)"

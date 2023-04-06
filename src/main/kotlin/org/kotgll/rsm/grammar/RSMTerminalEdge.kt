@@ -3,10 +3,7 @@ package org.kotgll.rsm.grammar
 import org.kotgll.rsm.grammar.symbol.Terminal
 import java.util.*
 
-class RSMTerminalEdge(
-    val terminal: Terminal,
-    val head: RSMState,
-) {
+class RSMTerminalEdge(val terminal: Terminal, val head: RSMState) {
     override fun toString() = "RSMTerminalEdge(terminal=$terminal, head=$head)"
 
     override fun equals(other: Any?): Boolean {

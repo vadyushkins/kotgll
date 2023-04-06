@@ -5,7 +5,7 @@ import java.util.*
 
 class Nonterminal(val name: String) : Symbol {
     lateinit var startState: RSMState
-    override fun toString() = "Nonterminal(name='$name')"
+    override fun toString() = "Nonterminal($name)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

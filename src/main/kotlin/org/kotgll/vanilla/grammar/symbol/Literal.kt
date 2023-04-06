@@ -5,5 +5,5 @@ class Literal(val literal: String) : Terminal {
         return if (input.startsWith(literal, pos)) literal else null
     }
 
-    override fun toString() = literal
+    override fun toString() = "Literal($literal)"
 }

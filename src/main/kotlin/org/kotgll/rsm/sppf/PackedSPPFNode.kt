@@ -13,8 +13,7 @@ open class PackedSPPFNode(
             "pivot=$pivot, " +
             "rsmState=$rsmState, " +
             "leftSPPFNode=$leftSPPFNode, " +
-            "rightSPPFNode=$rightSPPFNode" +
-            ")"
+            "rightSPPFNode=$rightSPPFNode)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

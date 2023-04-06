@@ -1,22 +1,12 @@
 package org.kotgll.rsm.grammar
 
 import org.kotgll.rsm.grammar.symbol.Nonterminal
-import java.util.*
 
-class RSMState(
-    val id: Int,
-    val nonterminal: Nonterminal,
-    val isStart: Boolean = false,
-    val isFinal: Boolean = false,
-) {
+class RSMState(val id: Int, val nonterminal: Nonterminal, val isStart: Boolean = false, val isFinal: Boolean = false) {
     val outgoingTerminalEdges: MutableList<RSMTerminalEdge> = mutableListOf()
     val outgoingNonterminalEdges: MutableList<RSMNonterminalEdge> = mutableListOf()
 
-    override fun toString() = "RSMState(" +
-            "id=$id, " +
-            "nonterminal=$nonterminal, " +
-            "isStart=$isStart, " +
-            "isFinal=$isFinal)"
+    override fun toString() = "RSMState(id=$id, nonterminal=$nonterminal, isStart=$isStart, isFinal=$isFinal)"
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -31,9 +21,7 @@ class RSMState(
         return true
     }
 
-    override fun hashCode() = Objects.hash(
-        id, isStart, isFinal, outgoingTerminalEdges, outgoingNonterminalEdges,
-    )
+    override fun hashCode() = id
 
     fun addTerminalEdge(edge: RSMTerminalEdge) {
         outgoingTerminalEdges.add(edge)
