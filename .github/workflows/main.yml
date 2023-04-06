@@ -24,12 +24,14 @@ jobs:
           arguments: test --scan
 
       - name: Upload 'test' report artifact
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: TestReport
           path: build/reports/tests/test/index.html
 
       - name: Render 'test' report
+        if: always()
         uses: dorny/test-reporter@v1
         with:
           path: 'build/reports/tests/test/*'
