@@ -2,6 +2,9 @@ name: ContinuousIntegrationBuild
 
 on: [ push, pull_request, workflow_dispatch ]
 
+env:
+  GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
+
 jobs:
   build:
     strategy:
@@ -25,7 +28,12 @@ jobs:
           arguments: build --scan
           cache-read-only: |
             ${{ github.ref != 'refs/heads/main' && 
-                github.ref != 'refs/heads/dev' }}
+                github.ref != 'refs/heads/dev' &&
+                github.ref != 'refs/heads/ci' }}
+          gradle-home-cache-includes: |
+            caches
+            notifications
+            jdks
 
       - name: Upload `build` report
         if: always()
