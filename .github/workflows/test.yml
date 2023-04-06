@@ -1,4 +1,4 @@
-name: CI
+name: ContinuousIntegrationTest
 
 on: [ push, pull_request, workflow_dispatch ]
 
@@ -19,17 +19,15 @@ jobs:
           distribution: temurin
           java-version: 11
 
-      - name: Execute Gradle `build` task
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: build --scan
-
       - name: Execute Gradle `test` task
         uses: gradle/gradle-build-action@v2
         with:
           arguments: test --scan
+          cache-read-only: |
+            ${{ github.ref != 'refs/heads/main' && 
+                github.ref != 'refs/heads/dev' }}
 
-      - name: Upload `test` report artifact
+      - name: Upload `test` report
         if: always()
         uses: actions/upload-artifact@v3
         with:
