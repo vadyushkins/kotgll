@@ -18,11 +18,7 @@ jobs:
           java-version: '11'
           cache: 'gradle'
 
-      - name: Grant Permissions to gradlew
-        run: chmod +x gradlew
-
-      - name: Build
-        run: ./gradlew build --no-daemon
-
-      - name: Test
-        run: ./gradlew test --no-daemon --tests "*"
+      - name: Setup and execute Gradle 'test' task
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: test
