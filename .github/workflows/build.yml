@@ -28,8 +28,7 @@ jobs:
           arguments: build --scan
           cache-read-only: |
             ${{ github.ref != 'refs/heads/main' && 
-                github.ref != 'refs/heads/dev' &&
-                github.ref != 'refs/heads/ci' }}
+                github.ref != 'refs/heads/dev' }}
           gradle-home-cache-includes: |
             caches
             notifications
@@ -39,5 +38,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: BuildReport
+          name: BuildReport-${{ runner.os }}-${{ steps.system-info.outputs.release }}
           path: build/reports/
