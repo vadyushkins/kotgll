@@ -15,7 +15,7 @@ class TestHandCraftedFail {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf()))
 
-        assertNull(GLL(grammar, "a").parse())
+        assertNull(GLL(grammar, "").parse())
     }
 
     @Test
