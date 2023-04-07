@@ -10,12 +10,12 @@ import org.kotgll.cfg.graphinput.sppf.*
 class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
     val queue: DescriptorsQueue = DescriptorsQueue()
     val toPop: HashMap<GSSNode, HashSet<SPPFNode?>> = HashMap()
-    val gssNodes: HashSet<GSSNode> = HashSet()
-    val sppfNodes: HashSet<SPPFNode> = HashSet()
+    val gssNodes: HashMap<GSSNode, GSSNode> = HashMap()
+    val sppfNodes: HashMap<Int, SPPFNode> = HashMap()
 
-    val startGSSNodes: HashMap<GraphNode, GSSNode> = makeStartGSSNode()
+    val startGSSNodes: HashMap<GraphNode, GSSNode> = makeStartGSSNodes()
 
-    fun makeStartGSSNode(): HashMap<GraphNode, GSSNode> {
+    fun makeStartGSSNodes(): HashMap<GraphNode, GSSNode> {
         val s1 = Nonterminal("S'")
         val alternative = Alternative(listOf(startSymbol))
         s1.addAlternative(alternative)
@@ -29,8 +29,8 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
 
     fun makeGSSNode(alternative: Alternative, dot: Int, ci: GraphNode): GSSNode {
         val gssNode = GSSNode(alternative, dot, ci)
-        if (!gssNodes.contains(gssNode)) gssNodes.add(gssNode)
-        return gssNode
+        if (!gssNodes.containsKey(gssNode)) gssNodes[gssNode] = gssNode
+        return gssNodes[gssNode]!!
     }
 
     fun parse(): List<SPPFNode>? {
@@ -50,7 +50,7 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
         }
 
         val result: MutableList<SPPFNode> = mutableListOf()
-        for (sppfNode in sppfNodes) {
+        for (sppfNode in sppfNodes.values) {
             if (sppfNode.hasSymbol(startSymbol)
                 && sppfNode.leftExtent.isStart
                 && sppfNode.rightExtent.isFinal
@@ -71,8 +71,6 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
     }
 
     fun parseAt(alternative: Alternative, dot: Int, pos: GraphNode, cu: GSSNode, cn: SPPFNode?) {
-        var curGSSNode: GSSNode = cu
-
         if (dot < alternative.elements.size) {
             val curSymbol: Symbol = alternative.elements[dot]
 
@@ -87,11 +85,10 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
             }
 
             if (curSymbol is Nonterminal) {
-                curGSSNode = createGSSNode(alternative, dot + 1, curGSSNode, cn, pos)
+                val curGSSNode: GSSNode = createGSSNode(alternative, dot + 1, cu, cn, pos)
                 for (alt in curSymbol) {
                     queue.add(alt, 0, curGSSNode, pos, null)
                 }
-                return
             }
         } else {
             pop(cu, cn, pos)
@@ -132,8 +129,8 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
     }
 
     fun getNodeP(alternative: Alternative, dot: Int, sppfNode: SPPFNode?, nextSPPFNode: SPPFNode?): SPPFNode? {
-        if (dot == 1 && alternative.elements.size > 1) return nextSPPFNode
         if (nextSPPFNode == null) return null
+//        if (dot == 1 && alternative.elements.size > 1) return nextSPPFNode
 
         val k = nextSPPFNode.leftExtent
         val i = nextSPPFNode.rightExtent
@@ -154,25 +151,29 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
 
     fun getNodeT(terminal: Terminal, i: GraphNode, j: GraphNode): SPPFNode {
         val y = TerminalSPPFNode(i, j, terminal)
-        sppfNodes.add(y)
-        return y
+        val yHashCode = y.hashCode()
+        if (!sppfNodes.containsKey(yHashCode)) sppfNodes[yHashCode] = y
+        return sppfNodes[yHashCode]!!
     }
 
     fun getNodeE(i: GraphNode): SPPFNode {
         val y = EmptySPPFNode(i)
-        sppfNodes.add(y)
-        return y
+        val yHashCode = y.hashCode()
+        if (!sppfNodes.containsKey(yHashCode)) sppfNodes[yHashCode] = y
+        return sppfNodes[yHashCode]!!
     }
 
     fun makeItemSPPFNode(alternative: Alternative, dot: Int, i: GraphNode, j: GraphNode): ParentSPPFNode {
         val y = ItemSPPFNode(i, j, alternative, dot)
-        sppfNodes.add(y)
-        return y
+        val yHashCode = y.hashCode()
+        if (!sppfNodes.containsKey(yHashCode)) sppfNodes[yHashCode] = y
+        return sppfNodes[yHashCode]!! as ParentSPPFNode
     }
 
     fun makeSymbolSPPFNode(nonterminal: Nonterminal, i: GraphNode, j: GraphNode): ParentSPPFNode {
         val y = SymbolSPPFNode(i, j, nonterminal)
-        sppfNodes.add(y)
-        return y
+        val yHashCode = y.hashCode()
+        if (!sppfNodes.containsKey(yHashCode)) sppfNodes[yHashCode] = y
+        return sppfNodes[yHashCode]!! as ParentSPPFNode
     }
 }

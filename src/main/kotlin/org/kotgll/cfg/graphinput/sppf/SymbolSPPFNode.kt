@@ -13,7 +13,6 @@ class SymbolSPPFNode(
     override fun toString() = "SymbolSPPFNode(" +
             "leftExtent=$leftExtent, " +
             "rightExtent=$rightExtent, " +
-            "kids=$kids, " +
             "symbol=$symbol)"
 
     override fun equals(other: Any?): Boolean {
@@ -26,7 +25,7 @@ class SymbolSPPFNode(
         return true
     }
 
-    override fun hashCode() = Objects.hash(leftExtent, rightExtent, kids, symbol)
+    override fun hashCode() = Objects.hash(leftExtent, rightExtent, symbol)
 
     override fun hasSymbol(symbol: Symbol) = this.symbol == symbol
 }

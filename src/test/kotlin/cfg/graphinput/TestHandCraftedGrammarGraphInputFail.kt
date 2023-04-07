@@ -1,4 +1,4 @@
-package vanilla.stringinput
+package cfg.graphinput
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -6,16 +6,21 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.kotgll.cfg.grammar.Alternative
 import org.kotgll.cfg.grammar.symbol.*
 import org.kotgll.cfg.grammar.symbol.Char
-import org.kotgll.cfg.stringinput.GLL
+import org.kotgll.cfg.graphinput.GLL
+import org.kotgll.cfg.graphinput.graph.GraphEdge
+import org.kotgll.cfg.graphinput.graph.GraphNode
+import org.kotgll.cfg.graphinput.graph.makeGraphFromString
 import kotlin.test.assertNull
 
-class TestHandCraftedGrammarStringInputFail {
+class TestHandCraftedGrammarGraphInputFail {
     @Test
     fun `test 'empty' hand-crafted grammar`() {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf()))
 
-        assertNull(GLL(grammar, "a").parse())
+        val graph = GraphNode(id = 0)
+
+        assertNull(GLL(grammar, listOf(graph)).parse())
     }
 
     @Test
@@ -23,7 +28,7 @@ class TestHandCraftedGrammarStringInputFail {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Char('a'))))
 
-        assertNull(GLL(grammar, "b").parse())
+        assertNull(GLL(grammar, listOf(makeGraphFromString("b"))).parse())
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
@@ -32,7 +37,7 @@ class TestHandCraftedGrammarStringInputFail {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Char('a'), Char('b'))))
 
-        assertNull(GLL(grammar, input).parse())
+        assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
@@ -41,7 +46,7 @@ class TestHandCraftedGrammarStringInputFail {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Star(Char('a')))))
 
-        assertNull(GLL(grammar, input).parse())
+        assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
@@ -50,16 +55,31 @@ class TestHandCraftedGrammarStringInputFail {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Plus(Char('a')))))
 
-        assertNull(GLL(grammar, input).parse())
+        assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
-    @ValueSource(strings = ["aba", "ababa", "abababa"])
+    @ValueSource(strings = ["abac", "ababac", "abababac", "cc"])
     fun `test '(ab)-star' hand-crafted grammar`(input: String) {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Star(Literal("ab")))))
 
-        assertNull(GLL(grammar, input).parse())
+        val graph = GraphNode(id = 0, isStart = true)
+        var cur = graph
+        var i = 0
+        while (i < input.length) {
+            cur.addEdge(
+                GraphEdge(
+                    label = "" + input[i] + input[i + 1],
+                    head = GraphNode(id = i + 1)
+                )
+            )
+            cur = cur.outgoingEdges[0].head
+            i += 2
+        }
+        cur.isFinal = true
+
+        assertNull(GLL(grammar, listOf(graph)).parse())
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
@@ -78,16 +98,9 @@ class TestHandCraftedGrammarStringInputFail {
     fun `test 'dyck' hand-crafted grammar`(input: String) {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf()))
-        grammar.addAlternative(
-            Alternative(
-                listOf(
-                    Char('('), grammar,
-                    Char(')'), grammar,
-                )
-            )
-        )
+        grammar.addAlternative(Alternative(listOf(Char('('), grammar, Char(')'), grammar)))
 
-        assertNull(GLL(grammar, input).parse())
+        assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
@@ -97,7 +110,15 @@ class TestHandCraftedGrammarStringInputFail {
         grammar.addAlternative(Alternative(listOf(Literal("ab"))))
         grammar.addAlternative(Alternative(listOf(Literal("cd"))))
 
-        assertNull(GLL(grammar, input).parse())
+        val graph = GraphNode(id = 0, isStart = true)
+        graph.addEdge(
+            GraphEdge(
+                label = input,
+                head = GraphNode(id = 1, isFinal = true)
+            )
+        )
+
+        assertNull(GLL(grammar, listOf(graph)).parse())
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
@@ -106,7 +127,7 @@ class TestHandCraftedGrammarStringInputFail {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Optional(Char('a')))))
 
-        assertNull(GLL(grammar, input).parse())
+        assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
@@ -121,7 +142,7 @@ class TestHandCraftedGrammarStringInputFail {
         nonterminalA.addAlternative(Alternative(listOf(Char('a'), Char('b'))))
         nonterminalB.addAlternative(Alternative(listOf(Char('b'))))
 
-        assertNull(GLL(grammar, input).parse())
+        assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
@@ -147,6 +168,51 @@ class TestHandCraftedGrammarStringInputFail {
         nonterminalB.addAlternative(Alternative(listOf(Literal("ab"))))
         nonterminalB.addAlternative(Alternative(listOf(Literal("cd"))))
 
-        assertNull(GLL(grammar, input).parse())
+        val graph = GraphNode(id = 0, isStart = true)
+        graph.addEdge(
+            GraphEdge(
+                label = input,
+                head = GraphNode(id = 1, isFinal = true)
+            )
+        )
+
+        assertNull(GLL(grammar, listOf(graph)).parse())
+    }
+
+    @Test
+    fun `test 'dyck' hand-crafted grammar two cycle graph`() {
+        val grammar = Nonterminal("S")
+        grammar.addAlternative(Alternative(listOf()))
+        grammar.addAlternative(Alternative(listOf(Char('('), grammar, Char(')'), grammar)))
+
+        val graphNode0 = GraphNode(id = 0, isStart = true, isFinal = true)
+        val graphNode1 = GraphNode(id = 1, isStart = true, isFinal = true)
+        val graphNode2 = GraphNode(id = 2, isStart = true, isFinal = true)
+        val graphNode3 = GraphNode(id = 3, isStart = true)
+
+        graphNode0.addEdge(GraphEdge(label = "(", head = graphNode1))
+        graphNode1.addEdge(GraphEdge(label = "(", head = graphNode2))
+        graphNode2.addEdge(GraphEdge(label = "(", head = graphNode0))
+
+        graphNode2.addEdge(GraphEdge(label = ")", head = graphNode3))
+        graphNode3.addEdge(GraphEdge(label = ")", head = graphNode2))
+
+        assertNull(GLL(grammar, listOf(graphNode3)).parse())
+    }
+
+    @Test
+    fun `test 'a-plus' hand-crafted grammar one cycle graph`() {
+        val grammar = Nonterminal("S")
+        grammar.addAlternative(Alternative(listOf(Char('a'))))
+        grammar.addAlternative(Alternative(listOf(Char('a'), grammar)))
+
+        val graphNode0 = GraphNode(id = 0, isStart = true, isFinal = true)
+        val graphNode1 = GraphNode(id = 1, isStart = true)
+
+        graphNode0.addEdge(GraphEdge(label = "a", head = graphNode1))
+        graphNode1.addEdge(GraphEdge(label = "a", head = graphNode1))
+
+        assertNull(GLL(grammar, listOf(graphNode0)).parse())
+        assertNull(GLL(grammar, listOf(graphNode1)).parse())
     }
 }

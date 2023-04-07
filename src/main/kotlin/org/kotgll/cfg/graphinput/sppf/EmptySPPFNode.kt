@@ -13,5 +13,5 @@ class EmptySPPFNode(i: GraphNode) : SPPFNode(i, i) {
         return true
     }
 
-    override fun hashCode() = Objects.hash(leftExtent)
+    override fun hashCode() = Objects.hash(leftExtent, rightExtent)
 }
