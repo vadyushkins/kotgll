@@ -9,6 +9,7 @@ class TerminalSPPFNode(
     rightExtent: GraphNode,
     val terminal: Terminal,
 ) : SPPFNode(leftExtent, rightExtent) {
+    override val hashCode: Int = Objects.hash(leftExtent, rightExtent, terminal)
     override fun toString() = "TerminalSPPFNode(" +
             "leftExtent=$leftExtent, " +
             "rightExtent=$rightExtent, " +
@@ -24,5 +25,5 @@ class TerminalSPPFNode(
         return true
     }
 
-    override fun hashCode() = Objects.hash(leftExtent, rightExtent, terminal)
+    override fun hashCode() = hashCode
 }

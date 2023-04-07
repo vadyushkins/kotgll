@@ -10,6 +10,7 @@ class SymbolSPPFNode(
     rightExtent: GraphNode,
     val symbol: Nonterminal,
 ) : ParentSPPFNode(leftExtent, rightExtent) {
+    override val hashCode: Int = Objects.hash(leftExtent, rightExtent, symbol)
     override fun toString() = "SymbolSPPFNode(" +
             "leftExtent=$leftExtent, " +
             "rightExtent=$rightExtent, " +
@@ -25,7 +26,7 @@ class SymbolSPPFNode(
         return true
     }
 
-    override fun hashCode() = Objects.hash(leftExtent, rightExtent, symbol)
+    override fun hashCode() = hashCode
 
     override fun hasSymbol(symbol: Symbol) = this.symbol == symbol
 }
