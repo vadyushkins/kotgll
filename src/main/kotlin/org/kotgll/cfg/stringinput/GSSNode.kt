@@ -5,11 +5,18 @@ import org.kotgll.cfg.stringinput.sppf.SPPFNode
 import java.util.*
 
 class GSSNode(val alternative: Alternative, val dot: Int, val k: Int) {
-    val edges: MutableMap<SPPFNode?, MutableSet<GSSNode>> = HashMap()
+    val hashCode: Int = Objects.hash(alternative, dot, k)
+    val edges: HashMap<Int, HashMap<Int, GSSNode>> = HashMap()
 
     fun addEdge(sppfNode: SPPFNode?, gssNode: GSSNode): Boolean {
-        if (!edges.containsKey(sppfNode)) edges[sppfNode] = HashSet()
-        return edges[sppfNode]!!.add(gssNode)
+        if (!edges.containsKey(sppfNode.hashCode())) {
+            edges[sppfNode.hashCode()] = HashMap()
+        }
+        if (!edges[sppfNode.hashCode()]!!.containsKey(gssNode.hashCode)) {
+            edges[sppfNode.hashCode()]!![gssNode.hashCode] = gssNode
+            return true
+        }
+        return false
     }
 
     override fun toString() = "GSSNode(alternative=$alternative, dot=$dot, k=$k, edges=$edges)"
@@ -26,5 +33,5 @@ class GSSNode(val alternative: Alternative, val dot: Int, val k: Int) {
         return true
     }
 
-    override fun hashCode() = Objects.hash(alternative, dot, k)
+    override fun hashCode() = hashCode
 }

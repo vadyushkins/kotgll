@@ -3,6 +3,7 @@ package org.kotgll.cfg.grammar.symbol
 import kotlin.Char
 
 class Char(val char: Char) : Terminal {
+    val hashCode: Int = char.hashCode()
     override fun match(pos: Int, input: String): String? {
         return if (input[pos] == char) char + "" else null
     }
@@ -18,7 +19,7 @@ class Char(val char: Char) : Terminal {
         return true
     }
 
-    override fun hashCode() = char.hashCode()
+    override fun hashCode() = hashCode
 
 
 }

@@ -3,6 +3,7 @@ package org.kotgll.cfg.stringinput.sppf
 import java.util.*
 
 class EmptySPPFNode(i: Int) : SPPFNode(i, i) {
+    override val hashCode: Int = Objects.hash(leftExtent, rightExtent)
     override fun toString() = "EmptySPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent)"
 
     override fun equals(other: Any?): Boolean {
@@ -12,5 +13,5 @@ class EmptySPPFNode(i: Int) : SPPFNode(i, i) {
         return true
     }
 
-    override fun hashCode() = Objects.hash(leftExtent, rightExtent)
+    override fun hashCode() = hashCode
 }

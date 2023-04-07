@@ -1,14 +1,12 @@
 package org.kotgll.cfg.grammar.symbol
 
 import org.kotgll.cfg.grammar.Alternative
-import java.util.*
 
 open class Nonterminal(
     val name: String,
     val alternatives: MutableList<Alternative> = emptyList<Alternative>().toMutableList(),
-) : Symbol, Iterable<Alternative> {
-    override fun iterator(): Iterator<Alternative> = alternatives.iterator()
-
+) : Symbol {
+    open val hashCode: Int = name.hashCode()
     override fun toString() = "Nonterminal($name)"
 
     override fun equals(other: Any?): Boolean {
@@ -21,7 +19,7 @@ open class Nonterminal(
         return true
     }
 
-    override fun hashCode() = Objects.hash(name)
+    override fun hashCode() = hashCode
 
     fun addAlternative(alternative: Alternative) {
         alternatives.add(alternative)

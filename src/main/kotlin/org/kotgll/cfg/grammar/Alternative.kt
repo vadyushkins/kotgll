@@ -5,6 +5,7 @@ import org.kotgll.cfg.grammar.symbol.Symbol
 import java.util.*
 
 class Alternative(val elements: List<Symbol>) {
+    val hashCode = Objects.hashCode(elements)
     lateinit var nonterminal: Nonterminal
 
     override fun toString() = "Alternative($elements)"
@@ -19,5 +20,5 @@ class Alternative(val elements: List<Symbol>) {
         return true
     }
 
-    override fun hashCode() = Objects.hash(elements)
+    override fun hashCode() = hashCode
 }

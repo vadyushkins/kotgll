@@ -4,6 +4,7 @@ import org.kotgll.cfg.grammar.symbol.Symbol
 import java.util.*
 
 open class SPPFNode(val leftExtent: Int, val rightExtent: Int) {
+    open val hashCode: Int = Objects.hash(leftExtent, rightExtent)
     override fun toString() = "SPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent)"
 
     override fun equals(other: Any?): Boolean {
@@ -16,7 +17,7 @@ open class SPPFNode(val leftExtent: Int, val rightExtent: Int) {
         return true
     }
 
-    override fun hashCode() = Objects.hash(leftExtent, rightExtent)
+    override fun hashCode() = hashCode
 
     open fun hasSymbol(symbol: Symbol) = false
 }

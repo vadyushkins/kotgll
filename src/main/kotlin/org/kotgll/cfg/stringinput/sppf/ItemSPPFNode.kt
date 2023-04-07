@@ -3,8 +3,13 @@ package org.kotgll.cfg.stringinput.sppf
 import org.kotgll.cfg.grammar.Alternative
 import java.util.*
 
-class ItemSPPFNode(leftExtent: Int, rightExtent: Int, val alternative: Alternative, val dot: Int) :
-    ParentSPPFNode(leftExtent, rightExtent) {
+class ItemSPPFNode(
+    leftExtent: Int,
+    rightExtent: Int,
+    val alternative: Alternative,
+    val dot: Int
+) : ParentSPPFNode(leftExtent, rightExtent) {
+    override val hashCode: Int = Objects.hash(leftExtent, rightExtent, alternative, dot)
     override fun toString() = "ItemSPPFNode(" +
             "leftExtent=$leftExtent, " +
             "rightExtent=$rightExtent, " +
@@ -22,5 +27,5 @@ class ItemSPPFNode(leftExtent: Int, rightExtent: Int, val alternative: Alternati
         return true
     }
 
-    override fun hashCode() = Objects.hash(leftExtent, rightExtent, alternative, dot)
+    override fun hashCode() = hashCode
 }
