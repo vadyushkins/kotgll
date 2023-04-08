@@ -2,12 +2,7 @@ package org.kotgll.rsm.grammar
 
 import org.kotgll.rsm.grammar.symbol.Nonterminal
 
-class RSMState(
-  val id: Int,
-  val nonterminal: Nonterminal,
-  val isStart: Boolean = false,
-  val isFinal: Boolean = false
-) {
+class RSMState(val id: Int, val nonterminal: Nonterminal, val isStart: Boolean = false, val isFinal: Boolean = false) {
   val outgoingTerminalEdges: MutableList<RSMTerminalEdge> = mutableListOf()
   val outgoingNonterminalEdges: MutableList<RSMNonterminalEdge> = mutableListOf()
 
