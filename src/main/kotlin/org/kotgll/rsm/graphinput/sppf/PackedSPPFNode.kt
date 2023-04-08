@@ -10,7 +10,6 @@ open class PackedSPPFNode(
     val leftSPPFNode: SPPFNode? = null,
     val rightSPPFNode: SPPFNode? = null,
 ) {
-    open val hashCode: Int = Objects.hash(pivot, rsmState, leftSPPFNode, rightSPPFNode)
     override fun toString() = "PackedSPPFNode(" +
             "pivot=$pivot, " +
             "rsmState=$rsmState, " +
@@ -29,5 +28,6 @@ open class PackedSPPFNode(
         return true
     }
 
+    val hashCode: Int = Objects.hash(pivot, rsmState, leftSPPFNode, rightSPPFNode)
     override fun hashCode() = hashCode
 }

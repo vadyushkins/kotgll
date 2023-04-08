@@ -4,7 +4,6 @@ import org.kotgll.cfg.graphinput.graph.GraphNode
 import java.util.*
 
 open class ParentSPPFNode(leftExtent: GraphNode, rightExtent: GraphNode) : SPPFNode(leftExtent, rightExtent) {
-    override val hashCode: Int = Objects.hash(leftExtent, rightExtent)
     val kids: HashSet<PackedSPPFNode> = HashSet()
 
     override fun toString() = "ParentSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent)"
@@ -19,5 +18,6 @@ open class ParentSPPFNode(leftExtent: GraphNode, rightExtent: GraphNode) : SPPFN
         return true
     }
 
+    override val hashCode: Int = Objects.hash(leftExtent, rightExtent)
     override fun hashCode() = hashCode
 }

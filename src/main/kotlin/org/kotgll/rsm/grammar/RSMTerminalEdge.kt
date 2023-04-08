@@ -4,7 +4,6 @@ import org.kotgll.rsm.grammar.symbol.Terminal
 import java.util.*
 
 class RSMTerminalEdge(val terminal: Terminal, val head: RSMState) {
-    val hashCode: Int = Objects.hash(terminal)
     override fun toString() = "RSMTerminalEdge(terminal=$terminal, head=$head)"
 
     override fun equals(other: Any?): Boolean {
@@ -17,5 +16,6 @@ class RSMTerminalEdge(val terminal: Terminal, val head: RSMState) {
         return true
     }
 
+    val hashCode: Int = Objects.hash(terminal)
     override fun hashCode() = hashCode
 }

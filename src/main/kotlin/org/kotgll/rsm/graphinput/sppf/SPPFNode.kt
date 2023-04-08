@@ -5,7 +5,6 @@ import org.kotgll.rsm.graphinput.graph.GraphNode
 import java.util.*
 
 open class SPPFNode(val leftExtent: GraphNode, val rightExtent: GraphNode) {
-    open val hashCode: Int = Objects.hash(leftExtent, rightExtent)
     override fun toString() = "SPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent)"
 
     override fun equals(other: Any?): Boolean {
@@ -18,6 +17,7 @@ open class SPPFNode(val leftExtent: GraphNode, val rightExtent: GraphNode) {
         return true
     }
 
+    open val hashCode: Int = Objects.hash(leftExtent, rightExtent)
     override fun hashCode() = hashCode
 
     open fun hasSymbol(symbol: Symbol) = false

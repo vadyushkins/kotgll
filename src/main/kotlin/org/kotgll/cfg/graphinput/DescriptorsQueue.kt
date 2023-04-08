@@ -30,7 +30,6 @@ class DescriptorsQueue {
         val sppfNode: SPPFNode?,
         val pos: GraphNode,
     ) {
-        val hashCode: Int = Objects.hash(alternative, dot, gssNode, sppfNode, pos)
         override fun toString() = "Descriptor(" +
                 "alternative=$alternative, " +
                 "dot=$dot, " +
@@ -51,6 +50,7 @@ class DescriptorsQueue {
             return true
         }
 
+        val hashCode: Int = Objects.hash(alternative, dot, gssNode, sppfNode, pos)
         override fun hashCode() = hashCode
     }
 

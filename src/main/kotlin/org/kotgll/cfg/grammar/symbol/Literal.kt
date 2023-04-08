@@ -1,7 +1,6 @@
 package org.kotgll.cfg.grammar.symbol
 
 class Literal(val literal: String) : Terminal {
-    val hashCode: Int = literal.hashCode()
     override fun match(pos: Int, input: String): String? {
         return if (input.startsWith(literal, pos)) literal else null
     }
@@ -17,7 +16,6 @@ class Literal(val literal: String) : Terminal {
         return true
     }
 
+    val hashCode: Int = literal.hashCode()
     override fun hashCode() = hashCode
-
-
 }

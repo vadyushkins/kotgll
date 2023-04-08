@@ -5,7 +5,6 @@ import org.kotgll.cfg.stringinput.sppf.SPPFNode
 import java.util.*
 
 class GSSNode(val alternative: Alternative, val dot: Int, val k: Int) {
-    val hashCode: Int = Objects.hash(alternative, dot, k)
     val edges: HashMap<Int, HashMap<Int, GSSNode>> = HashMap()
 
     fun addEdge(sppfNode: SPPFNode?, gssNode: GSSNode): Boolean {
@@ -33,5 +32,6 @@ class GSSNode(val alternative: Alternative, val dot: Int, val k: Int) {
         return true
     }
 
+    val hashCode: Int = Objects.hash(alternative, dot, k)
     override fun hashCode() = hashCode
 }

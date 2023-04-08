@@ -1,7 +1,6 @@
 package org.kotgll.cfg.graphinput.graph
 
 class GraphEdge(val label: String, val head: GraphNode) {
-    val hashCode: Int = label.hashCode()
     override fun toString() = "GraphEdge(label=$label, head=$head)"
 
     override fun equals(other: Any?): Boolean {
@@ -14,5 +13,6 @@ class GraphEdge(val label: String, val head: GraphNode) {
         return true
     }
 
+    val hashCode: Int = label.hashCode()
     override fun hashCode() = hashCode
 }

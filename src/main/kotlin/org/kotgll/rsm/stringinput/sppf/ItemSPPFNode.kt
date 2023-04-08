@@ -8,7 +8,6 @@ class ItemSPPFNode(
     rightExtent: Int,
     val rsmState: RSMState
 ) : ParentSPPFNode(leftExtent, rightExtent) {
-    override val hashCode: Int = Objects.hash(leftExtent, rightExtent, rsmState)
     override fun toString() = "ItemSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, rsmState=$rsmState)"
 
     override fun equals(other: Any?): Boolean {
@@ -21,5 +20,6 @@ class ItemSPPFNode(
         return true
     }
 
+    override val hashCode: Int = Objects.hash(leftExtent, rightExtent, rsmState)
     override fun hashCode() = hashCode
 }

@@ -22,7 +22,6 @@ class DescriptorsQueue(size: Int) {
     fun isEmpty() = todo.isEmpty()
 
     class Descriptor(val rsmState: RSMState, val gssNode: GSSNode, val sppfNode: SPPFNode?, val pos: Int) {
-        val hashCode: Int = Objects.hash(rsmState, gssNode, sppfNode, pos)
         override fun toString() = "Descriptor(rsmState=$rsmState, gssNode=$gssNode, sppfNode=$sppfNode, pos=$pos)"
 
         override fun equals(other: Any?): Boolean {
@@ -37,7 +36,7 @@ class DescriptorsQueue(size: Int) {
             return true
         }
 
+        val hashCode: Int = Objects.hash(rsmState, gssNode, sppfNode, pos)
         override fun hashCode() = hashCode
     }
-
 }

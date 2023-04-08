@@ -6,7 +6,6 @@ open class Regular(
     val symbol: Symbol,
     val suffix: String,
 ) : Nonterminal(symbol.toString() + suffix) {
-    override val hashCode: Int = Objects.hash(symbol, suffix)
     override fun toString() = "${this.javaClass.name}($symbol$suffix)"
 
     override fun equals(other: Any?): Boolean {
@@ -20,5 +19,6 @@ open class Regular(
         return true
     }
 
+    override val hashCode: Int = Objects.hash(symbol, suffix)
     override fun hashCode() = hashCode
 }

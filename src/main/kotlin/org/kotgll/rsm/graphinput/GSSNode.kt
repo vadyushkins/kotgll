@@ -6,7 +6,6 @@ import org.kotgll.rsm.graphinput.sppf.SPPFNode
 import java.util.*
 
 class GSSNode(val rsmState: RSMState, val k: GraphNode) {
-    var hashCode = Objects.hash(rsmState, k)
     val edges: HashMap<Int, HashMap<Int, GSSNode>> = HashMap()
 
     fun addEdge(sppfNode: SPPFNode?, gssNode: GSSNode): Boolean {
@@ -33,5 +32,6 @@ class GSSNode(val rsmState: RSMState, val k: GraphNode) {
         return true
     }
 
+    val hashCode = Objects.hash(rsmState, k)
     override fun hashCode() = hashCode
 }

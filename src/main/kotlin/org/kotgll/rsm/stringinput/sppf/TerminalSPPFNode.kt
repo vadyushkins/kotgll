@@ -4,7 +4,6 @@ import org.kotgll.rsm.grammar.symbol.Terminal
 import java.util.*
 
 class TerminalSPPFNode(leftExtent: Int, rightExtent: Int, val terminal: Terminal) : SPPFNode(leftExtent, rightExtent) {
-    override val hashCode: Int = Objects.hash(leftExtent, rightExtent, terminal)
     override fun toString() = "TerminalSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, terminal=$terminal)"
 
     override fun equals(other: Any?): Boolean {
@@ -17,5 +16,6 @@ class TerminalSPPFNode(leftExtent: Int, rightExtent: Int, val terminal: Terminal
         return true
     }
 
+    override val hashCode: Int = Objects.hash(leftExtent, rightExtent, terminal)
     override fun hashCode() = hashCode
 }

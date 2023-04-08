@@ -6,7 +6,6 @@ open class Nonterminal(
     val name: String,
     val alternatives: MutableList<Alternative> = emptyList<Alternative>().toMutableList(),
 ) : Symbol {
-    open val hashCode: Int = name.hashCode()
     override fun toString() = "Nonterminal($name)"
 
     override fun equals(other: Any?): Boolean {
@@ -19,6 +18,7 @@ open class Nonterminal(
         return true
     }
 
+    open val hashCode: Int = name.hashCode()
     override fun hashCode() = hashCode
 
     fun addAlternative(alternative: Alternative) {
