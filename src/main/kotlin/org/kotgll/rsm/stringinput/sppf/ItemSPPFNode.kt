@@ -3,8 +3,12 @@ package org.kotgll.rsm.stringinput.sppf
 import org.kotgll.rsm.grammar.RSMState
 import java.util.*
 
-class ItemSPPFNode(leftExtent: Int, rightExtent: Int, val rsmState: RSMState) :
-    ParentSPPFNode(leftExtent, rightExtent) {
+class ItemSPPFNode(
+    leftExtent: Int,
+    rightExtent: Int,
+    val rsmState: RSMState
+) : ParentSPPFNode(leftExtent, rightExtent) {
+    override val hashCode: Int = Objects.hash(leftExtent, rightExtent, rsmState)
     override fun toString() = "ItemSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, rsmState=$rsmState)"
 
     override fun equals(other: Any?): Boolean {
@@ -17,5 +21,5 @@ class ItemSPPFNode(leftExtent: Int, rightExtent: Int, val rsmState: RSMState) :
         return true
     }
 
-    override fun hashCode() = Objects.hash(leftExtent, rightExtent, rsmState)
+    override fun hashCode() = hashCode
 }

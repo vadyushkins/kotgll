@@ -1,9 +1,9 @@
 package org.kotgll.rsm.grammar.symbol
 
 import org.kotgll.rsm.grammar.RSMState
-import java.util.*
 
 class Nonterminal(val name: String) : Symbol {
+    val hashCode: Int = name.hashCode()
     lateinit var startState: RSMState
     override fun toString() = "Nonterminal($name)"
 
@@ -16,5 +16,5 @@ class Nonterminal(val name: String) : Symbol {
         return true
     }
 
-    override fun hashCode() = Objects.hash(name)
+    override fun hashCode() = hashCode
 }

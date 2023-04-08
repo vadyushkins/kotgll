@@ -3,6 +3,7 @@ package org.kotgll.rsm.stringinput.sppf
 import java.util.*
 
 open class ParentSPPFNode(leftExtent: Int, rightExtent: Int) : SPPFNode(leftExtent, rightExtent) {
+    override val hashCode: Int = Objects.hash(leftExtent, rightExtent)
     val kids: MutableSet<PackedSPPFNode> = HashSet()
 
     override fun toString() = "ParentSPPFNode(" +
@@ -20,5 +21,5 @@ open class ParentSPPFNode(leftExtent: Int, rightExtent: Int) : SPPFNode(leftExte
         return true
     }
 
-    override fun hashCode() = Objects.hash(leftExtent, rightExtent, kids)
+    override fun hashCode() = hashCode
 }
