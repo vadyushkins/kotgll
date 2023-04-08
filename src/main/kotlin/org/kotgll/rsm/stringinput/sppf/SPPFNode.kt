@@ -1,4 +1,4 @@
-package org.kotgll.rsm.sppf
+package org.kotgll.rsm.stringinput.sppf
 
 import org.kotgll.rsm.grammar.symbol.Symbol
 import java.util.*

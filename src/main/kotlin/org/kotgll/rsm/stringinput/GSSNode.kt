@@ -1,7 +1,7 @@
-package org.kotgll.rsm
+package org.kotgll.rsm.stringinput
 
 import org.kotgll.rsm.grammar.RSMState
-import org.kotgll.rsm.sppf.SPPFNode
+import org.kotgll.rsm.stringinput.sppf.SPPFNode
 import java.util.*
 
 class GSSNode(val rsmState: RSMState, val k: Int) {

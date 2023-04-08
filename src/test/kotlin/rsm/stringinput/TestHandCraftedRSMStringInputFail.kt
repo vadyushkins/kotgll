@@ -1,17 +1,17 @@
-package rsm
+package rsm.stringinput
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import org.kotgll.rsm.GLL
 import org.kotgll.rsm.grammar.RSMNonterminalEdge
 import org.kotgll.rsm.grammar.RSMState
 import org.kotgll.rsm.grammar.RSMTerminalEdge
 import org.kotgll.rsm.grammar.symbol.Literal
 import org.kotgll.rsm.grammar.symbol.Nonterminal
+import org.kotgll.rsm.stringinput.GLL
 import kotlin.test.assertNull
 
-class TestHandCraftedFail {
+class TestHandCraftedRSMStringInputFail {
     @Test
     fun `test 'empty' hand-crafted grammar`() {
         val startNonterminal = Nonterminal("S")
@@ -27,7 +27,7 @@ class TestHandCraftedFail {
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
-    @ValueSource(strings = ["", "b", "bb"])
+    @ValueSource(strings = ["", "b", "bb", "ab", "aa"])
     fun `test 'a' hand-crafted grammar`(input: String) {
         val startNonterminal = Nonterminal("S")
         val rsm = RSMState(
@@ -51,7 +51,7 @@ class TestHandCraftedFail {
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
-    @ValueSource(strings = ["", "a", "b", "aba", "ababa"])
+    @ValueSource(strings = ["", "a", "b", "aba", "ababa", "aa", "b", "bb", "c", "cc"])
     fun `test 'ab' hand-crafted grammar`(input: String) {
         val startNonterminal = Nonterminal("S")
         val rsm = RSMState(
@@ -85,7 +85,7 @@ class TestHandCraftedFail {
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
-    @ValueSource(strings = ["b", "ab", "aab"])
+    @ValueSource(strings = ["b", "ab", "aab", "bb", "bbb"])
     fun `test 'a-star' hand-crafted grammar`(input: String) {
         val startNonterminal = Nonterminal("S")
         val rsm = RSMState(
@@ -117,7 +117,7 @@ class TestHandCraftedFail {
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
-    @ValueSource(strings = ["", "ab", "aab", "aaab"])
+    @ValueSource(strings = ["", "ab", "aab", "aaab", "b", "bb", "bbb"])
     fun `test 'a-plus' hand-crafted grammar`(input: String) {
         val startNonterminal = Nonterminal("S")
         val rsm = RSMState(
@@ -148,7 +148,7 @@ class TestHandCraftedFail {
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
-    @ValueSource(strings = ["aba", "ababa", "abababa"])
+    @ValueSource(strings = ["aba", "ababa", "abababa", "abac", "ababac", "abababac", "cc"])
     fun `test '(ab)-star' hand-crafted grammar`(input: String) {
         val startNonterminal = Nonterminal("S")
         val rsm = RSMState(

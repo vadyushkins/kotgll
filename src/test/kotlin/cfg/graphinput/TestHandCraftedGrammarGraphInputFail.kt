@@ -23,7 +23,8 @@ class TestHandCraftedGrammarGraphInputFail {
         assertNull(GLL(grammar, listOf(graph)).parse())
     }
 
-    @Test
+    @ParameterizedTest(name = "Should be Null for {0}")
+    @ValueSource(strings = ["", "b", "bb", "ab", "aa"])
     fun `test 'a' hand-crafted grammar`() {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Char('a'))))
@@ -32,7 +33,7 @@ class TestHandCraftedGrammarGraphInputFail {
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
-    @ValueSource(strings = ["", "a", "aa", "b", "bb", "c", "cc"])
+    @ValueSource(strings = ["", "a", "b", "aba", "ababa", "aa", "b", "bb", "c", "cc"])
     fun `test 'ab' hand-crafted grammar`(input: String) {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Char('a'), Char('b'))))
@@ -41,7 +42,7 @@ class TestHandCraftedGrammarGraphInputFail {
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
-    @ValueSource(strings = ["b", "bb", "bbb"])
+    @ValueSource(strings = ["b", "ab", "aab", "bb", "bbb"])
     fun `test 'a-star' hand-crafted grammar`(input: String) {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Star(Char('a')))))
@@ -50,7 +51,7 @@ class TestHandCraftedGrammarGraphInputFail {
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
-    @ValueSource(strings = ["", "b", "bb", "bbb"])
+    @ValueSource(strings = ["", "ab", "aab", "aaab", "b", "bb", "bbb"])
     fun `test 'a-plus' hand-crafted grammar`(input: String) {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Plus(Char('a')))))
@@ -104,7 +105,22 @@ class TestHandCraftedGrammarGraphInputFail {
     }
 
     @ParameterizedTest(name = "Should be Null for {0}")
-    @ValueSource(strings = ["ac", "bd", "ef"])
+    @ValueSource(strings = ["", "a", "b", "c", "ab", "ac", "abb", "bc", "abcd"])
+    fun `test 'abc' ambiguous hand-crafted grammar`(input: String) {
+        val grammar = Nonterminal("S")
+        val nonterminalA = Nonterminal("A")
+        val nonterminalB = Nonterminal("B")
+
+        grammar.addAlternative(Alternative(listOf(nonterminalA, Char('c'))))
+        grammar.addAlternative(Alternative(listOf(Char('a'), nonterminalB, Char('c'))))
+        nonterminalA.addAlternative(Alternative(listOf(Char('a'), Char('b'))))
+        nonterminalB.addAlternative(Alternative(listOf(Char('b'))))
+
+        assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
+    }
+
+    @ParameterizedTest(name = "Should be Null for {0}")
+    @ValueSource(strings = ["ac", "bd", "ef", "abc", "cda"])
     fun `test 'ab or cd' hand-crafted grammar`(input: String) {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Literal("ab"))))
@@ -126,21 +142,6 @@ class TestHandCraftedGrammarGraphInputFail {
     fun `test 'a-optional' hand-crafted grammar`(input: String) {
         val grammar = Nonterminal("S")
         grammar.addAlternative(Alternative(listOf(Optional(Char('a')))))
-
-        assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
-    }
-
-    @ParameterizedTest(name = "Should be Null for {0}")
-    @ValueSource(strings = ["", "a", "b", "c", "ab", "ac", "abb", "bc"])
-    fun `test 'abc' ambiguous hand-crafted grammar`(input: String) {
-        val grammar = Nonterminal("S")
-        val nonterminalA = Nonterminal("A")
-        val nonterminalB = Nonterminal("B")
-
-        grammar.addAlternative(Alternative(listOf(nonterminalA, Char('c'))))
-        grammar.addAlternative(Alternative(listOf(Char('a'), nonterminalB, Char('c'))))
-        nonterminalA.addAlternative(Alternative(listOf(Char('a'), Char('b'))))
-        nonterminalB.addAlternative(Alternative(listOf(Char('b'))))
 
         assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
     }

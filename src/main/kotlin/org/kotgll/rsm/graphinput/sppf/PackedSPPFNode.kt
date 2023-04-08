@@ -1,0 +1,33 @@
+package org.kotgll.rsm.graphinput.sppf
+
+import org.kotgll.rsm.grammar.RSMState
+import org.kotgll.rsm.graphinput.graph.GraphNode
+import java.util.*
+
+open class PackedSPPFNode(
+    val pivot: GraphNode,
+    val rsmState: RSMState,
+    val leftSPPFNode: SPPFNode? = null,
+    val rightSPPFNode: SPPFNode? = null,
+) {
+    open val hashCode: Int = Objects.hash(pivot, rsmState, leftSPPFNode, rightSPPFNode)
+    override fun toString() = "PackedSPPFNode(" +
+            "pivot=$pivot, " +
+            "rsmState=$rsmState, " +
+            "leftSPPFNode=$leftSPPFNode, " +
+            "rightSPPFNode=$rightSPPFNode)"
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is PackedSPPFNode) return false
+
+        if (pivot != other.pivot) return false
+        if (rsmState != other.rsmState) return false
+        if (leftSPPFNode != other.leftSPPFNode) return false
+        if (rightSPPFNode != other.rightSPPFNode) return false
+
+        return true
+    }
+
+    override fun hashCode() = hashCode
+}

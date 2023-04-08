@@ -1,9 +1,9 @@
-package org.kotgll.rsm
+package org.kotgll.rsm.stringinput
 
 import org.kotgll.rsm.grammar.RSMState
 import org.kotgll.rsm.grammar.symbol.Nonterminal
 import org.kotgll.rsm.grammar.symbol.Terminal
-import org.kotgll.rsm.sppf.*
+import org.kotgll.rsm.stringinput.sppf.*
 
 class GLL(val startState: RSMState, val input: String) {
     val queue: DescriptorsQueue = DescriptorsQueue(input.length + 1)
