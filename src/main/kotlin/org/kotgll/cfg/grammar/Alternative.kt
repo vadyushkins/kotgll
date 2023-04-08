@@ -5,20 +5,20 @@ import org.kotgll.cfg.grammar.symbol.Symbol
 import java.util.*
 
 class Alternative(val elements: List<Symbol>) {
-    lateinit var nonterminal: Nonterminal
+  lateinit var nonterminal: Nonterminal
 
-    override fun toString() = "Alternative($elements)"
+  override fun toString() = "Alternative($elements)"
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other !is Alternative) return false
+  override fun equals(other: Any?): Boolean {
+    if (this === other) return true
+    if (other !is Alternative) return false
 
-        if (elements != other.elements) return false
-        if (nonterminal != other.nonterminal) return false
+    if (elements != other.elements) return false
+    if (nonterminal != other.nonterminal) return false
 
-        return true
-    }
+    return true
+  }
 
-    val hashCode = Objects.hashCode(elements)
-    override fun hashCode() = hashCode
+  val hashCode = Objects.hashCode(elements)
+  override fun hashCode() = hashCode
 }
