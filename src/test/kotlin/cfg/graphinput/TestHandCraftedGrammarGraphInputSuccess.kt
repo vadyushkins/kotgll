@@ -78,21 +78,20 @@ class TestHandCraftedGrammarGraphInputSuccess {
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
   @ValueSource(
-    strings =
-      [
-        "",
-        "()",
-        "()()",
-        "()()()",
-        "(())",
-        "(())()",
-        "(())()()",
-        "(())(())",
-        "(())(())()",
-        "(())(())()()",
-        "(()())(()())",
-      ]
-  )
+      strings =
+          [
+              "",
+              "()",
+              "()()",
+              "()()()",
+              "(())",
+              "(())()",
+              "(())()()",
+              "(())(())",
+              "(())(())()",
+              "(())(())()()",
+              "(()())(()())",
+          ])
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf()))

@@ -3,8 +3,8 @@ package org.kotgll.cfg.grammar.symbol
 import java.util.*
 
 open class Regular(
-  val symbol: Symbol,
-  val suffix: String,
+    val symbol: Symbol,
+    val suffix: String,
 ) : Nonterminal(symbol.toString() + suffix) {
   override fun toString() = "${this.javaClass.name}($symbol$suffix)"
 

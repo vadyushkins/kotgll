@@ -4,9 +4,9 @@ import org.kotgll.cfg.grammar.Alternative
 import java.util.*
 
 class ItemSPPFNode(leftExtent: Int, rightExtent: Int, val alternative: Alternative, val dot: Int) :
-  ParentSPPFNode(leftExtent, rightExtent) {
+    ParentSPPFNode(leftExtent, rightExtent) {
   override fun toString() =
-    "ItemSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, alternative=$alternative, dot=$dot)"
+      "ItemSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, alternative=$alternative, dot=$dot)"
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

@@ -29,11 +29,10 @@ fun makeGraphFromString(input: String): GraphNode {
   var cur = result
   for (i in input.indices) {
     cur.addEdge(
-      GraphEdge(
-        label = input[i] + "",
-        head = GraphNode(id = i + 1),
-      )
-    )
+        GraphEdge(
+            label = input[i] + "",
+            head = GraphNode(id = i + 1),
+        ))
     cur = cur.outgoingEdges[0].head
   }
   cur.isFinal = true

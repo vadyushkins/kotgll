@@ -46,23 +46,20 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
         parse(descriptor.alternative, descriptor.pos, descriptor.gssNode, descriptor.sppfNode)
       } else {
         parseAt(
-          descriptor.alternative,
-          descriptor.dot,
-          descriptor.pos,
-          descriptor.gssNode,
-          descriptor.sppfNode
-        )
+            descriptor.alternative,
+            descriptor.dot,
+            descriptor.pos,
+            descriptor.gssNode,
+            descriptor.sppfNode)
       }
     }
 
     val result: MutableList<SPPFNode> = mutableListOf()
     for (sppfNode in sppfNodes.values) {
-      if (
-        sppfNode.hasSymbol(startSymbol) &&
+      if (sppfNode.hasSymbol(startSymbol) &&
           sppfNode.leftExtent.isStart &&
-          sppfNode.rightExtent.isFinal
-      )
-        result.add(sppfNode)
+          sppfNode.rightExtent.isFinal)
+          result.add(sppfNode)
     }
     if (result.isEmpty()) return null
     return result.toList()
@@ -117,11 +114,11 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
   }
 
   fun createGSSNode(
-    alternative: Alternative,
-    dot: Int,
-    gssNode: GSSNode,
-    sppfNode: SPPFNode?,
-    ci: GraphNode,
+      alternative: Alternative,
+      dot: Int,
+      gssNode: GSSNode,
+      sppfNode: SPPFNode?,
+      ci: GraphNode,
   ): GSSNode {
     val v: GSSNode = makeGSSNode(alternative, dot, ci)
 
@@ -129,12 +126,7 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
       if (toPop.containsKey(v.hashCode)) {
         for (z in toPop[v.hashCode]!!.values) {
           queue.add(
-            alternative,
-            dot,
-            gssNode,
-            z!!.rightExtent,
-            getNodeP(alternative, dot, sppfNode, z)
-          )
+              alternative, dot, gssNode, z!!.rightExtent, getNodeP(alternative, dot, sppfNode, z))
         }
       }
     }
@@ -143,10 +135,10 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
   }
 
   fun getNodeP(
-    alternative: Alternative,
-    dot: Int,
-    sppfNode: SPPFNode?,
-    nextSPPFNode: SPPFNode?
+      alternative: Alternative,
+      dot: Int,
+      sppfNode: SPPFNode?,
+      nextSPPFNode: SPPFNode?
   ): SPPFNode? {
     if (nextSPPFNode == null) return null
 
@@ -157,8 +149,8 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
     if (sppfNode != null) j = sppfNode.leftExtent
 
     val y: ParentSPPFNode =
-      if (dot == alternative.elements.size) makeSymbolSPPFNode(alternative.nonterminal, j, i)
-      else makeItemSPPFNode(alternative, dot, j, i)
+        if (dot == alternative.elements.size) makeSymbolSPPFNode(alternative.nonterminal, j, i)
+        else makeItemSPPFNode(alternative, dot, j, i)
 
     y.kids.add(PackedSPPFNode(k, alternative, dot, sppfNode, nextSPPFNode))
 
@@ -178,10 +170,10 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
   }
 
   fun makeItemSPPFNode(
-    alternative: Alternative,
-    dot: Int,
-    i: GraphNode,
-    j: GraphNode
+      alternative: Alternative,
+      dot: Int,
+      i: GraphNode,
+      j: GraphNode
   ): ParentSPPFNode {
     val y = ItemSPPFNode(i, j, alternative, dot)
     if (!sppfNodes.containsKey(y.hashCode)) sppfNodes[y.hashCode] = y

@@ -30,13 +30,11 @@ class TestHandCraftedGrammarStringInputSuccess {
   fun `test 'ab' hand-crafted grammar`() {
     val grammar = Nonterminal("S")
     grammar.addAlternative(
-      Alternative(
-        listOf(
-          Char('a'),
-          Char('b'),
-        )
-      )
-    )
+        Alternative(
+            listOf(
+                Char('a'),
+                Char('b'),
+            )))
 
     assertNotNull(GLL(grammar, "ab").parse())
   }
@@ -70,34 +68,31 @@ class TestHandCraftedGrammarStringInputSuccess {
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
   @ValueSource(
-    strings =
-      [
-        "",
-        "()",
-        "()()",
-        "()()()",
-        "(())",
-        "(())()",
-        "(())()()",
-        "(())(())",
-        "(())(())()",
-        "(())(())()()",
-        "(()())(()())",
-      ]
-  )
+      strings =
+          [
+              "",
+              "()",
+              "()()",
+              "()()()",
+              "(())",
+              "(())()",
+              "(())()()",
+              "(())(())",
+              "(())(())()",
+              "(())(())()()",
+              "(()())(()())",
+          ])
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf()))
     grammar.addAlternative(
-      Alternative(
-        listOf(
-          Char('('),
-          grammar,
-          Char(')'),
-          grammar,
-        )
-      )
-    )
+        Alternative(
+            listOf(
+                Char('('),
+                grammar,
+                Char(')'),
+                grammar,
+            )))
 
     assertNotNull(GLL(grammar, input).parse())
   }

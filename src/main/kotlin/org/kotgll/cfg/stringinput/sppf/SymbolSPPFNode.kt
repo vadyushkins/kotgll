@@ -5,12 +5,12 @@ import org.kotgll.cfg.grammar.symbol.Symbol
 import java.util.*
 
 class SymbolSPPFNode(
-  leftExtent: Int,
-  rightExtent: Int,
-  val symbol: Nonterminal,
+    leftExtent: Int,
+    rightExtent: Int,
+    val symbol: Nonterminal,
 ) : ParentSPPFNode(leftExtent, rightExtent) {
   override fun toString() =
-    "SymbolSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, symbol=$symbol)"
+      "SymbolSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, symbol=$symbol)"
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

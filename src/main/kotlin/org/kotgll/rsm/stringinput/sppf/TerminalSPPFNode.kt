@@ -4,9 +4,9 @@ import org.kotgll.rsm.grammar.symbol.Terminal
 import java.util.*
 
 class TerminalSPPFNode(leftExtent: Int, rightExtent: Int, val terminal: Terminal) :
-  SPPFNode(leftExtent, rightExtent) {
+    SPPFNode(leftExtent, rightExtent) {
   override fun toString() =
-    "TerminalSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, terminal=$terminal)"
+      "TerminalSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, terminal=$terminal)"
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

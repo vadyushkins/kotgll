@@ -6,9 +6,9 @@ import org.kotgll.rsm.graphinput.graph.GraphNode
 import java.util.*
 
 class SymbolSPPFNode(leftExtent: GraphNode, rightExtent: GraphNode, val symbol: Nonterminal) :
-  ParentSPPFNode(leftExtent, rightExtent) {
+    ParentSPPFNode(leftExtent, rightExtent) {
   override fun toString() =
-    "SymbolSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, symbol=$symbol)"
+      "SymbolSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, symbol=$symbol)"
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

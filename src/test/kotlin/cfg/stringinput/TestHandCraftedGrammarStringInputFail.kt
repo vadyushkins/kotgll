@@ -64,43 +64,40 @@ class TestHandCraftedGrammarStringInputFail {
 
   @ParameterizedTest(name = "Should be Null for {0}")
   @ValueSource(
-    strings =
-      [
-        "()(",
-        "()()(",
-        "()()()(",
-        "())",
-        "()())",
-        "()()())",
-        "(())(",
-        "(())()(",
-        "(())()()(",
-        "(()))",
-        "(())())",
-        "(())()())",
-        "(())(())(",
-        "(())(())()(",
-        "(())(())()()(",
-        "(())(()))",
-        "(())(())())",
-        "(())(())()())",
-        "(()())(()())(",
-        "(()())(()()))",
-      ]
-  )
+      strings =
+          [
+              "()(",
+              "()()(",
+              "()()()(",
+              "())",
+              "()())",
+              "()()())",
+              "(())(",
+              "(())()(",
+              "(())()()(",
+              "(()))",
+              "(())())",
+              "(())()())",
+              "(())(())(",
+              "(())(())()(",
+              "(())(())()()(",
+              "(())(()))",
+              "(())(())())",
+              "(())(())()())",
+              "(()())(()())(",
+              "(()())(()()))",
+          ])
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf()))
     grammar.addAlternative(
-      Alternative(
-        listOf(
-          Char('('),
-          grammar,
-          Char(')'),
-          grammar,
-        )
-      )
-    )
+        Alternative(
+            listOf(
+                Char('('),
+                grammar,
+                Char(')'),
+                grammar,
+            )))
 
     assertNull(GLL(grammar, input).parse())
   }
@@ -141,29 +138,28 @@ class TestHandCraftedGrammarStringInputFail {
 
   @ParameterizedTest(name = "Should be Null for {0}")
   @ValueSource(
-    strings =
-      [
-        "",
-        "a",
-        "b",
-        "c",
-        "d",
-        "aa",
-        "ac",
-        "ad",
-        "ba",
-        "bb",
-        "bc",
-        "bd",
-        "ca",
-        "cb",
-        "cc",
-        "da",
-        "db",
-        "dc",
-        "dd",
-      ]
-  )
+      strings =
+          [
+              "",
+              "a",
+              "b",
+              "c",
+              "d",
+              "aa",
+              "ac",
+              "ad",
+              "ba",
+              "bb",
+              "bc",
+              "bd",
+              "ca",
+              "cb",
+              "cc",
+              "da",
+              "db",
+              "dc",
+              "dd",
+          ])
   fun `test 'ab or cd' ambiguous hand-crafted grammar`(input: String) {
     val grammar = Nonterminal("S")
     val nonterminalA = Nonterminal("A")

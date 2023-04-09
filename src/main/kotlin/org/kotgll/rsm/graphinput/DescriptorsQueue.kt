@@ -24,13 +24,13 @@ class DescriptorsQueue {
   fun isEmpty() = todo.isEmpty()
 
   class Descriptor(
-    val rsmState: RSMState,
-    val gssNode: GSSNode,
-    val sppfNode: SPPFNode?,
-    val pos: GraphNode,
+      val rsmState: RSMState,
+      val gssNode: GSSNode,
+      val sppfNode: SPPFNode?,
+      val pos: GraphNode,
   ) {
     override fun toString() =
-      "Descriptor(rsmState=$rsmState, gssNode=$gssNode, sppfNode=$sppfNode, pos=$pos)"
+        "Descriptor(rsmState=$rsmState, gssNode=$gssNode, sppfNode=$sppfNode, pos=$pos)"
 
     override fun equals(other: Any?): Boolean {
       if (this === other) return true

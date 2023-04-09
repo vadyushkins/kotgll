@@ -28,12 +28,10 @@ class GLL(val startState: RSMState, val input: String) {
     }
 
     for (sppfNode in sppfNodes.values) {
-      if (
-        sppfNode.hasSymbol(startState.nonterminal) &&
+      if (sppfNode.hasSymbol(startState.nonterminal) &&
           sppfNode.leftExtent == 0 &&
-          sppfNode.rightExtent == input.length
-      )
-        return sppfNode
+          sppfNode.rightExtent == input.length)
+          return sppfNode
     }
     return null
   }
@@ -99,8 +97,8 @@ class GLL(val startState: RSMState, val input: String) {
     if (sppfNode != null) j = sppfNode.leftExtent
 
     val y: ParentSPPFNode =
-      if (state.isFinal) makeSymbolSPPFNode(state.nonterminal, j, i)
-      else makeItemSPPFNode(state, j, i)
+        if (state.isFinal) makeSymbolSPPFNode(state.nonterminal, j, i)
+        else makeItemSPPFNode(state, j, i)
 
     y.kids.add(PackedSPPFNode(k, state, sppfNode, nextSPPFNode))
 

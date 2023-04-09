@@ -5,9 +5,9 @@ import org.kotgll.rsm.grammar.symbol.Symbol
 import java.util.*
 
 class SymbolSPPFNode(leftExtent: Int, rightExtent: Int, val symbol: Nonterminal) :
-  ParentSPPFNode(leftExtent, rightExtent) {
+    ParentSPPFNode(leftExtent, rightExtent) {
   override fun toString() =
-    "SymbolSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, kids=$kids, symbol=$symbol)"
+      "SymbolSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, kids=$kids, symbol=$symbol)"
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

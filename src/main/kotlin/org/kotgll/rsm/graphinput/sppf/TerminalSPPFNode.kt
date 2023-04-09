@@ -5,12 +5,12 @@ import org.kotgll.rsm.graphinput.graph.GraphNode
 import java.util.*
 
 class TerminalSPPFNode(
-  leftExtent: GraphNode,
-  rightExtent: GraphNode,
-  val terminal: Terminal,
+    leftExtent: GraphNode,
+    rightExtent: GraphNode,
+    val terminal: Terminal,
 ) : SPPFNode(leftExtent, rightExtent) {
   override fun toString() =
-    "TerminalSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, terminal=$terminal)"
+      "TerminalSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, terminal=$terminal)"
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

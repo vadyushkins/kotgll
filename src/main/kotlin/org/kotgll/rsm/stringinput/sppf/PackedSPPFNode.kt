@@ -4,13 +4,13 @@ import org.kotgll.rsm.grammar.RSMState
 import java.util.*
 
 open class PackedSPPFNode(
-  val pivot: Int,
-  val rsmState: RSMState,
-  val leftSPPFNode: SPPFNode? = null,
-  val rightSPPFNode: SPPFNode? = null
+    val pivot: Int,
+    val rsmState: RSMState,
+    val leftSPPFNode: SPPFNode? = null,
+    val rightSPPFNode: SPPFNode? = null
 ) {
   override fun toString() =
-    "PackedSPPFNode(pivot=$pivot, rsmState=$rsmState, leftSPPFNode=$leftSPPFNode, rightSPPFNode=$rightSPPFNode)"
+      "PackedSPPFNode(pivot=$pivot, rsmState=$rsmState, leftSPPFNode=$leftSPPFNode, rightSPPFNode=$rightSPPFNode)"
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

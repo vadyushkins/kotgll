@@ -20,12 +20,12 @@ class TestHandCraftedRSMGraphInputFail {
   fun `test 'empty' hand-crafted grammar`() {
     val startNonterminal = Nonterminal("S")
     val rsm =
-      RSMState(
-        id = 0,
-        nonterminal = startNonterminal,
-        isStart = true,
-        isFinal = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = startNonterminal,
+            isStart = true,
+            isFinal = true,
+        )
     startNonterminal.startState = rsm
 
     val graph = GraphNode(id = 0, isStart = true)
@@ -38,23 +38,21 @@ class TestHandCraftedRSMGraphInputFail {
   fun `test 'a' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
-      RSMState(
-        id = 0,
-        nonterminal = startNonterminal,
-        isStart = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = startNonterminal,
+            isStart = true,
+        )
     startNonterminal.startState = rsm
     rsm.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('a'),
-        head =
-          RSMState(
-            id = 1,
-            nonterminal = startNonterminal,
-            isFinal = true,
-          )
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('a'),
+            head =
+                RSMState(
+                    id = 1,
+                    nonterminal = startNonterminal,
+                    isFinal = true,
+                )))
 
     assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
   }
@@ -64,34 +62,31 @@ class TestHandCraftedRSMGraphInputFail {
   fun `test 'ab' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
-      RSMState(
-        id = 0,
-        nonterminal = startNonterminal,
-        isStart = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = startNonterminal,
+            isStart = true,
+        )
     startNonterminal.startState = rsm
     val intermediateRSMState =
-      RSMState(
-        id = 1,
-        nonterminal = startNonterminal,
-      )
-    rsm.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('a'),
-        head = intermediateRSMState,
-      )
-    )
-    intermediateRSMState.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('b'),
-        head =
-          RSMState(
-            id = 2,
+        RSMState(
+            id = 1,
             nonterminal = startNonterminal,
-            isFinal = true,
-          )
-      )
-    )
+        )
+    rsm.addTerminalEdge(
+        RSMTerminalEdge(
+            terminal = Char('a'),
+            head = intermediateRSMState,
+        ))
+    intermediateRSMState.addTerminalEdge(
+        RSMTerminalEdge(
+            terminal = Char('b'),
+            head =
+                RSMState(
+                    id = 2,
+                    nonterminal = startNonterminal,
+                    isFinal = true,
+                )))
 
     assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
   }
@@ -101,31 +96,29 @@ class TestHandCraftedRSMGraphInputFail {
   fun `test 'a-star' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
-      RSMState(
-        id = 0,
-        nonterminal = startNonterminal,
-        isStart = true,
-        isFinal = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = startNonterminal,
+            isStart = true,
+            isFinal = true,
+        )
     startNonterminal.startState = rsm
     val finalRSMState =
-      RSMState(
-        id = 1,
-        nonterminal = startNonterminal,
-        isFinal = true,
-      )
+        RSMState(
+            id = 1,
+            nonterminal = startNonterminal,
+            isFinal = true,
+        )
     rsm.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('a'),
-        head = finalRSMState,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('a'),
+            head = finalRSMState,
+        ))
     finalRSMState.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('a'),
-        head = finalRSMState,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('a'),
+            head = finalRSMState,
+        ))
 
     assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
   }
@@ -135,30 +128,28 @@ class TestHandCraftedRSMGraphInputFail {
   fun `test 'a-plus' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
-      RSMState(
-        id = 0,
-        nonterminal = startNonterminal,
-        isStart = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = startNonterminal,
+            isStart = true,
+        )
     startNonterminal.startState = rsm
     val finalRSMState =
-      RSMState(
-        id = 1,
-        nonterminal = startNonterminal,
-        isFinal = true,
-      )
+        RSMState(
+            id = 1,
+            nonterminal = startNonterminal,
+            isFinal = true,
+        )
     rsm.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('a'),
-        head = finalRSMState,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('a'),
+            head = finalRSMState,
+        ))
     finalRSMState.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('a'),
-        head = finalRSMState,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('a'),
+            head = finalRSMState,
+        ))
 
     assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
   }
@@ -168,31 +159,29 @@ class TestHandCraftedRSMGraphInputFail {
   fun `test '(ab)-star' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
-      RSMState(
-        id = 0,
-        nonterminal = startNonterminal,
-        isStart = true,
-        isFinal = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = startNonterminal,
+            isStart = true,
+            isFinal = true,
+        )
     startNonterminal.startState = rsm
     val finalRSMState =
-      RSMState(
-        id = 1,
-        nonterminal = startNonterminal,
-        isFinal = true,
-      )
+        RSMState(
+            id = 1,
+            nonterminal = startNonterminal,
+            isFinal = true,
+        )
     rsm.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Literal("ab"),
-        head = finalRSMState,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Literal("ab"),
+            head = finalRSMState,
+        ))
     finalRSMState.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Literal("ab"),
-        head = finalRSMState,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Literal("ab"),
+            head = finalRSMState,
+        ))
 
     val graph = GraphNode(id = 0, isStart = true)
     var cur = graph
@@ -209,86 +198,81 @@ class TestHandCraftedRSMGraphInputFail {
 
   @ParameterizedTest(name = "Should be Null for {0}")
   @ValueSource(
-    strings =
-      [
-        "()(",
-        "()()(",
-        "()()()(",
-        "())",
-        "()())",
-        "()()())",
-        "(())(",
-        "(())()(",
-        "(())()()(",
-        "(()))",
-        "(())())",
-        "(())()())",
-        "(())(())(",
-        "(())(())()(",
-        "(())(())()()(",
-        "(())(()))",
-        "(())(())())",
-        "(())(())()())",
-        "(()())(()())(",
-        "(()())(()()))",
-      ]
-  )
+      strings =
+          [
+              "()(",
+              "()()(",
+              "()()()(",
+              "())",
+              "()())",
+              "()()())",
+              "(())(",
+              "(())()(",
+              "(())()()(",
+              "(()))",
+              "(())())",
+              "(())()())",
+              "(())(())(",
+              "(())(())()(",
+              "(())(())()()(",
+              "(())(()))",
+              "(())(())())",
+              "(())(())()())",
+              "(()())(()())(",
+              "(()())(()()))",
+          ])
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
-      RSMState(
-        id = 0,
-        nonterminal = startNonterminal,
-        isStart = true,
-        isFinal = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = startNonterminal,
+            isStart = true,
+            isFinal = true,
+        )
     startNonterminal.startState = rsm
     val intermediateRSMState1 =
-      RSMState(
-        id = 1,
-        nonterminal = startNonterminal,
-      )
+        RSMState(
+            id = 1,
+            nonterminal = startNonterminal,
+        )
     val intermediateRSMState2 =
-      RSMState(
-        id = 2,
-        nonterminal = startNonterminal,
-      )
+        RSMState(
+            id = 2,
+            nonterminal = startNonterminal,
+        )
     val intermediateRSMState3 =
-      RSMState(
-        id = 3,
-        nonterminal = startNonterminal,
-      )
+        RSMState(
+            id = 3,
+            nonterminal = startNonterminal,
+        )
     val finalRSMState =
-      RSMState(
-        id = 4,
-        nonterminal = startNonterminal,
-        isFinal = true,
-      )
+        RSMState(
+            id = 4,
+            nonterminal = startNonterminal,
+            isFinal = true,
+        )
 
     rsm.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('('),
-        head = intermediateRSMState1,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('('),
+            head = intermediateRSMState1,
+        ))
     intermediateRSMState1.addNonterminalEdge(
-      RSMNonterminalEdge(
-        nonterminal = startNonterminal,
-        head = intermediateRSMState2,
-      )
-    )
+        RSMNonterminalEdge(
+            nonterminal = startNonterminal,
+            head = intermediateRSMState2,
+        ))
     intermediateRSMState2.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char(')'),
-        head = intermediateRSMState3,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char(')'),
+            head = intermediateRSMState3,
+        ))
     intermediateRSMState3.addNonterminalEdge(
-      RSMNonterminalEdge(
-        nonterminal = startNonterminal,
-        head = finalRSMState,
-      )
-    )
+        RSMNonterminalEdge(
+            nonterminal = startNonterminal,
+            head = finalRSMState,
+        ))
 
     assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
   }
@@ -300,121 +284,113 @@ class TestHandCraftedRSMGraphInputFail {
     val nonterminalA = Nonterminal("A")
     val nonterminalB = Nonterminal("B")
     val rsm =
-      RSMState(
-        id = 0,
-        nonterminal = startNonterminal,
-        isStart = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = startNonterminal,
+            isStart = true,
+        )
     startNonterminal.startState = rsm
     val intermediateRSMState1 =
-      RSMState(
-        id = 1,
-        nonterminal = startNonterminal,
-      )
+        RSMState(
+            id = 1,
+            nonterminal = startNonterminal,
+        )
     val intermediateRSMState2 =
-      RSMState(
-        id = 2,
-        nonterminal = startNonterminal,
-      )
+        RSMState(
+            id = 2,
+            nonterminal = startNonterminal,
+        )
     val intermediateRSMState3 =
-      RSMState(
-        id = 3,
-        nonterminal = startNonterminal,
-        isFinal = true,
-      )
+        RSMState(
+            id = 3,
+            nonterminal = startNonterminal,
+            isFinal = true,
+        )
     val intermediateRSMState4 =
-      RSMState(
-        id = 4,
-        nonterminal = startNonterminal,
-      )
+        RSMState(
+            id = 4,
+            nonterminal = startNonterminal,
+        )
     val intermediateRSMState5 =
-      RSMState(
-        id = 5,
-        nonterminal = startNonterminal,
-        isFinal = true,
-      )
+        RSMState(
+            id = 5,
+            nonterminal = startNonterminal,
+            isFinal = true,
+        )
     val intermediateRSMState6 =
-      RSMState(
-        id = 6,
-        nonterminal = nonterminalA,
-        isStart = true,
-      )
+        RSMState(
+            id = 6,
+            nonterminal = nonterminalA,
+            isStart = true,
+        )
     nonterminalA.startState = intermediateRSMState6
     val intermediateRSMState7 =
-      RSMState(
-        id = 7,
-        nonterminal = nonterminalA,
-      )
+        RSMState(
+            id = 7,
+            nonterminal = nonterminalA,
+        )
     val intermediateRSMState8 =
-      RSMState(
-        id = 8,
-        nonterminal = nonterminalA,
-        isFinal = true,
-      )
+        RSMState(
+            id = 8,
+            nonterminal = nonterminalA,
+            isFinal = true,
+        )
     val intermediateRSMState9 =
-      RSMState(
-        id = 9,
-        nonterminal = nonterminalB,
-        isStart = true,
-      )
+        RSMState(
+            id = 9,
+            nonterminal = nonterminalB,
+            isStart = true,
+        )
     nonterminalB.startState = intermediateRSMState9
     val intermediateRSMState10 =
-      RSMState(
-        id = 10,
-        nonterminal = nonterminalB,
-        isFinal = true,
-      )
+        RSMState(
+            id = 10,
+            nonterminal = nonterminalB,
+            isFinal = true,
+        )
 
     rsm.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('a'),
-        head = intermediateRSMState1,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('a'),
+            head = intermediateRSMState1,
+        ))
     intermediateRSMState1.addNonterminalEdge(
-      RSMNonterminalEdge(
-        nonterminal = nonterminalB,
-        head = intermediateRSMState2,
-      )
-    )
+        RSMNonterminalEdge(
+            nonterminal = nonterminalB,
+            head = intermediateRSMState2,
+        ))
     intermediateRSMState2.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('c'),
-        head = intermediateRSMState3,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('c'),
+            head = intermediateRSMState3,
+        ))
     rsm.addNonterminalEdge(
-      RSMNonterminalEdge(
-        nonterminal = nonterminalA,
-        head = intermediateRSMState4,
-      )
-    )
+        RSMNonterminalEdge(
+            nonterminal = nonterminalA,
+            head = intermediateRSMState4,
+        ))
     intermediateRSMState4.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('c'),
-        head = intermediateRSMState5,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('c'),
+            head = intermediateRSMState5,
+        ))
 
     intermediateRSMState6.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('a'),
-        head = intermediateRSMState7,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('a'),
+            head = intermediateRSMState7,
+        ))
     intermediateRSMState7.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('b'),
-        head = intermediateRSMState8,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('b'),
+            head = intermediateRSMState8,
+        ))
 
     intermediateRSMState9.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('b'),
-        head = intermediateRSMState10,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('b'),
+            head = intermediateRSMState10,
+        ))
 
     assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
   }
@@ -424,45 +400,42 @@ class TestHandCraftedRSMGraphInputFail {
   fun `test 'ab or cd' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     val rsmState0 =
-      RSMState(
-        id = 0,
-        nonterminal = nonterminalS,
-        isStart = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = nonterminalS,
+            isStart = true,
+        )
     nonterminalS.startState = rsmState0
     val rsmState1 =
-      RSMState(
-        id = 1,
-        nonterminal = nonterminalS,
-        isFinal = true,
-      )
+        RSMState(
+            id = 1,
+            nonterminal = nonterminalS,
+            isFinal = true,
+        )
     val rsmState2 =
-      RSMState(
-        id = 2,
-        nonterminal = nonterminalS,
-        isFinal = true,
-      )
+        RSMState(
+            id = 2,
+            nonterminal = nonterminalS,
+            isFinal = true,
+        )
 
     rsmState0.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Literal("ab"),
-        head = rsmState1,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Literal("ab"),
+            head = rsmState1,
+        ))
     rsmState0.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Literal("cd"),
-        head = rsmState2,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Literal("cd"),
+            head = rsmState2,
+        ))
 
     val graph = GraphNode(id = 0, isStart = true)
     graph.addEdge(
-      GraphEdge(
-        label = input,
-        head = GraphNode(id = 1, isFinal = true),
-      )
-    )
+        GraphEdge(
+            label = input,
+            head = GraphNode(id = 1, isFinal = true),
+        ))
 
     assertNull(GLL(rsmState0, listOf(graph)).parse())
   }
@@ -472,167 +445,158 @@ class TestHandCraftedRSMGraphInputFail {
   fun `test 'a-optional' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     val rsmState0 =
-      RSMState(
-        id = 0,
-        nonterminal = nonterminalS,
-        isStart = true,
-        isFinal = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = nonterminalS,
+            isStart = true,
+            isFinal = true,
+        )
     nonterminalS.startState = rsmState0
     val rsmState1 =
-      RSMState(
-        id = 1,
-        nonterminal = nonterminalS,
-        isFinal = true,
-      )
+        RSMState(
+            id = 1,
+            nonterminal = nonterminalS,
+            isFinal = true,
+        )
 
     rsmState0.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('a'),
-        head = rsmState1,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('a'),
+            head = rsmState1,
+        ))
 
     assertNull(GLL(rsmState0, listOf(makeGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")
   @ValueSource(
-    strings =
-      [
-        "",
-        "a",
-        "b",
-        "c",
-        "d",
-        "aa",
-        "ac",
-        "ad",
-        "ba",
-        "bb",
-        "bc",
-        "bd",
-        "ca",
-        "cb",
-        "cc",
-        "da",
-        "db",
-        "dc",
-        "dd",
-      ]
-  )
+      strings =
+          [
+              "",
+              "a",
+              "b",
+              "c",
+              "d",
+              "aa",
+              "ac",
+              "ad",
+              "ba",
+              "bb",
+              "bc",
+              "bd",
+              "ca",
+              "cb",
+              "cc",
+              "da",
+              "db",
+              "dc",
+              "dd",
+          ])
   fun `test 'ab or cd' ambiguous hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     val nonterminalA = Nonterminal("A")
     val nonterminalB = Nonterminal("B")
 
     val rsmState0 =
-      RSMState(
-        id = 0,
-        nonterminal = nonterminalS,
-        isStart = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = nonterminalS,
+            isStart = true,
+        )
     nonterminalS.startState = rsmState0
     val rsmState1 =
-      RSMState(
-        id = 1,
-        nonterminal = nonterminalS,
-        isFinal = true,
-      )
+        RSMState(
+            id = 1,
+            nonterminal = nonterminalS,
+            isFinal = true,
+        )
     val rsmState2 =
-      RSMState(
-        id = 2,
-        nonterminal = nonterminalS,
-        isFinal = true,
-      )
+        RSMState(
+            id = 2,
+            nonterminal = nonterminalS,
+            isFinal = true,
+        )
     val rsmState3 =
-      RSMState(
-        id = 3,
-        nonterminal = nonterminalA,
-        isStart = true,
-      )
+        RSMState(
+            id = 3,
+            nonterminal = nonterminalA,
+            isStart = true,
+        )
     nonterminalA.startState = rsmState3
     val rsmState4 =
-      RSMState(
-        id = 4,
-        nonterminal = nonterminalA,
-        isFinal = true,
-      )
+        RSMState(
+            id = 4,
+            nonterminal = nonterminalA,
+            isFinal = true,
+        )
     val rsmState5 =
-      RSMState(
-        id = 5,
-        nonterminal = nonterminalA,
-        isFinal = true,
-      )
+        RSMState(
+            id = 5,
+            nonterminal = nonterminalA,
+            isFinal = true,
+        )
     val rsmState6 =
-      RSMState(
-        id = 6,
-        nonterminal = nonterminalB,
-        isStart = true,
-      )
+        RSMState(
+            id = 6,
+            nonterminal = nonterminalB,
+            isStart = true,
+        )
     nonterminalB.startState = rsmState6
     val rsmState7 = RSMState(id = 7, nonterminal = nonterminalB, isFinal = true)
     val rsmState8 =
-      RSMState(
-        id = 8,
-        nonterminal = nonterminalB,
-        isFinal = true,
-      )
+        RSMState(
+            id = 8,
+            nonterminal = nonterminalB,
+            isFinal = true,
+        )
 
     rsmState0.addNonterminalEdge(
-      RSMNonterminalEdge(
-        nonterminal = nonterminalA,
-        head = rsmState1,
-      )
-    )
+        RSMNonterminalEdge(
+            nonterminal = nonterminalA,
+            head = rsmState1,
+        ))
     rsmState0.addNonterminalEdge(
-      RSMNonterminalEdge(
-        nonterminal = nonterminalB,
-        head = rsmState2,
-      )
-    )
+        RSMNonterminalEdge(
+            nonterminal = nonterminalB,
+            head = rsmState2,
+        ))
     rsmState3.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Literal("ab"),
-        head = rsmState4,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Literal("ab"),
+            head = rsmState4,
+        ))
     rsmState3.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Literal("cd"),
-        head = rsmState5,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Literal("cd"),
+            head = rsmState5,
+        ))
     rsmState6.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Literal("ab"),
-        head = rsmState7,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Literal("ab"),
+            head = rsmState7,
+        ))
     rsmState6.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Literal("cd"),
-        head = rsmState8,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Literal("cd"),
+            head = rsmState8,
+        ))
 
     val graphNode0 =
-      GraphNode(
-        id = 0,
-        isStart = true,
-      )
+        GraphNode(
+            id = 0,
+            isStart = true,
+        )
     val graphNode1 =
-      GraphNode(
-        id = 1,
-        isFinal = true,
-      )
+        GraphNode(
+            id = 1,
+            isFinal = true,
+        )
 
     graphNode0.addEdge(
-      GraphEdge(
-        label = input,
-        head = graphNode1,
-      )
-    )
+        GraphEdge(
+            label = input,
+            head = graphNode1,
+        ))
 
     assertNull(GLL(rsmState0, listOf(graphNode0)).parse())
   }
@@ -641,59 +605,55 @@ class TestHandCraftedRSMGraphInputFail {
   fun `test 'dyck' hand-crafted grammar two cycle graph`() {
     val startNonterminal = Nonterminal("S")
     val rsm =
-      RSMState(
-        id = 0,
-        nonterminal = startNonterminal,
-        isStart = true,
-        isFinal = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = startNonterminal,
+            isStart = true,
+            isFinal = true,
+        )
     startNonterminal.startState = rsm
     val intermediateRSMState1 =
-      RSMState(
-        id = 1,
-        nonterminal = startNonterminal,
-      )
+        RSMState(
+            id = 1,
+            nonterminal = startNonterminal,
+        )
     val intermediateRSMState2 =
-      RSMState(
-        id = 2,
-        nonterminal = startNonterminal,
-      )
+        RSMState(
+            id = 2,
+            nonterminal = startNonterminal,
+        )
     val intermediateRSMState3 =
-      RSMState(
-        id = 3,
-        nonterminal = startNonterminal,
-      )
+        RSMState(
+            id = 3,
+            nonterminal = startNonterminal,
+        )
     val finalRSMState =
-      RSMState(
-        id = 4,
-        nonterminal = startNonterminal,
-        isFinal = true,
-      )
+        RSMState(
+            id = 4,
+            nonterminal = startNonterminal,
+            isFinal = true,
+        )
 
     rsm.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('('),
-        head = intermediateRSMState1,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('('),
+            head = intermediateRSMState1,
+        ))
     intermediateRSMState1.addNonterminalEdge(
-      RSMNonterminalEdge(
-        nonterminal = startNonterminal,
-        head = intermediateRSMState2,
-      )
-    )
+        RSMNonterminalEdge(
+            nonterminal = startNonterminal,
+            head = intermediateRSMState2,
+        ))
     intermediateRSMState2.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char(')'),
-        head = intermediateRSMState3,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char(')'),
+            head = intermediateRSMState3,
+        ))
     intermediateRSMState3.addNonterminalEdge(
-      RSMNonterminalEdge(
-        nonterminal = startNonterminal,
-        head = finalRSMState,
-      )
-    )
+        RSMNonterminalEdge(
+            nonterminal = startNonterminal,
+            head = finalRSMState,
+        ))
 
     val graphNode0 = GraphNode(id = 0, isStart = true, isFinal = true)
     val graphNode1 = GraphNode(id = 1, isStart = true, isFinal = true)
@@ -714,37 +674,35 @@ class TestHandCraftedRSMGraphInputFail {
   fun `test 'a-plus' hand-crafted grammar one cycle graph`() {
     val nonterminalS = Nonterminal("S")
     val rsmState0 =
-      RSMState(
-        id = 0,
-        nonterminal = nonterminalS,
-        isStart = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = nonterminalS,
+            isStart = true,
+        )
     nonterminalS.startState = rsmState0
     val rsmState1 =
-      RSMState(
-        id = 1,
-        nonterminal = nonterminalS,
-        isFinal = true,
-      )
+        RSMState(
+            id = 1,
+            nonterminal = nonterminalS,
+            isFinal = true,
+        )
     val rsmState2 =
-      RSMState(
-        id = 2,
-        nonterminal = nonterminalS,
-        isFinal = true,
-      )
+        RSMState(
+            id = 2,
+            nonterminal = nonterminalS,
+            isFinal = true,
+        )
 
     rsmState0.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Char('a'),
-        head = rsmState1,
-      )
-    )
+        RSMTerminalEdge(
+            terminal = Char('a'),
+            head = rsmState1,
+        ))
     rsmState1.addNonterminalEdge(
-      RSMNonterminalEdge(
-        nonterminal = nonterminalS,
-        head = rsmState2,
-      )
-    )
+        RSMNonterminalEdge(
+            nonterminal = nonterminalS,
+            head = rsmState2,
+        ))
 
     val graphNode0 = GraphNode(id = 0, isStart = true, isFinal = true)
     val graphNode1 = GraphNode(id = 1, isStart = true)

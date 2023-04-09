@@ -40,12 +40,10 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
 
     val result: MutableList<SPPFNode> = mutableListOf()
     for (sppfNode in sppfNodes.values) {
-      if (
-        sppfNode.hasSymbol(startState.nonterminal) &&
+      if (sppfNode.hasSymbol(startState.nonterminal) &&
           sppfNode.leftExtent.isStart &&
-          sppfNode.rightExtent.isFinal
-      )
-        result.add(sppfNode)
+          sppfNode.rightExtent.isFinal)
+          result.add(sppfNode)
     }
     if (result.isEmpty()) return null
     return result.toList()
@@ -88,10 +86,10 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
   }
 
   fun createGSSNode(
-    state: RSMState,
-    gssNode: GSSNode,
-    sppfNode: SPPFNode?,
-    ci: GraphNode
+      state: RSMState,
+      gssNode: GSSNode,
+      sppfNode: SPPFNode?,
+      ci: GraphNode
   ): GSSNode {
     val v: GSSNode = makeGSSNode(state, ci)
 
@@ -116,8 +114,8 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
     if (sppfNode != null) j = sppfNode.leftExtent
 
     val y: ParentSPPFNode =
-      if (state.isFinal) makeSymbolSPPFNode(state.nonterminal, j, i)
-      else makeItemSPPFNode(state, j, i)
+        if (state.isFinal) makeSymbolSPPFNode(state.nonterminal, j, i)
+        else makeItemSPPFNode(state, j, i)
 
     y.kids.add(PackedSPPFNode(k, state, sppfNode, nextSPPFNode))
 

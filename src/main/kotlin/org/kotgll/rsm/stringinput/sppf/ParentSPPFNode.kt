@@ -6,7 +6,7 @@ open class ParentSPPFNode(leftExtent: Int, rightExtent: Int) : SPPFNode(leftExte
   val kids: MutableSet<PackedSPPFNode> = HashSet()
 
   override fun toString() =
-    "ParentSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, kids=$kids)"
+      "ParentSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, kids=$kids)"
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
