@@ -1,4 +1,4 @@
-package org.kotgll.rsm.stringinput.sppf
+package org.kotgll.rsm.stringinput.withsppf.sppf
 
 import org.kotgll.rsm.grammar.symbol.Nonterminal
 import org.kotgll.rsm.grammar.symbol.Symbol

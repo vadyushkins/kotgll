@@ -1,4 +1,4 @@
-package rsm.stringinput
+package rsm.stringinput.withsppf
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -8,10 +8,10 @@ import org.kotgll.rsm.grammar.RSMState
 import org.kotgll.rsm.grammar.RSMTerminalEdge
 import org.kotgll.rsm.grammar.symbol.Literal
 import org.kotgll.rsm.grammar.symbol.Nonterminal
-import org.kotgll.rsm.stringinput.GLL
+import org.kotgll.rsm.stringinput.withsppf.GLL
 import kotlin.test.assertNull
 
-class TestHandCraftedRSMStringInputFail {
+class TestHandCraftedRSMStringInputWithSPPFFail {
   @Test
   fun `test 'empty' hand-crafted grammar`() {
     val startNonterminal = Nonterminal("S")

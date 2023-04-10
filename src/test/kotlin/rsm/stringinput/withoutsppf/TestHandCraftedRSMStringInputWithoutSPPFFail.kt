@@ -1,4 +1,4 @@
-package rsm.stringinput
+package rsm.stringinput.withoutsppf
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -6,13 +6,12 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.kotgll.rsm.grammar.RSMNonterminalEdge
 import org.kotgll.rsm.grammar.RSMState
 import org.kotgll.rsm.grammar.RSMTerminalEdge
-import org.kotgll.rsm.grammar.symbol.Char
 import org.kotgll.rsm.grammar.symbol.Literal
 import org.kotgll.rsm.grammar.symbol.Nonterminal
-import org.kotgll.rsm.stringinput.GLL
-import kotlin.test.assertNotNull
+import org.kotgll.rsm.stringinput.withoutsppf.GLL
+import kotlin.test.assertFalse
 
-class TestHandCraftedRSMStringInputSuccess {
+class TestHandCraftedRSMStringInputWithoutSPPFFail {
   @Test
   fun `test 'empty' hand-crafted grammar`() {
     val startNonterminal = Nonterminal("S")
@@ -25,11 +24,12 @@ class TestHandCraftedRSMStringInputSuccess {
         )
     startNonterminal.startState = rsm
 
-    assertNotNull(GLL(rsm, "").parse())
+    assertFalse(GLL(rsm, "a").parse())
   }
 
-  @Test
-  fun `test 'a' hand-crafted grammar`() {
+  @ParameterizedTest(name = "Should be Null for {0}")
+  @ValueSource(strings = ["", "b", "bb", "ab", "aa"])
+  fun `test 'a' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
         RSMState(
@@ -40,7 +40,7 @@ class TestHandCraftedRSMStringInputSuccess {
     startNonterminal.startState = rsm
     rsm.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('a'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('a'),
             head =
                 RSMState(
                     id = 1,
@@ -48,11 +48,12 @@ class TestHandCraftedRSMStringInputSuccess {
                     isFinal = true,
                 )))
 
-    assertNotNull(GLL(rsm, "a").parse())
+    assertFalse(GLL(rsm, input).parse())
   }
 
-  @Test
-  fun `test 'ab' hand-crafted grammar`() {
+  @ParameterizedTest(name = "Should be Null for {0}")
+  @ValueSource(strings = ["", "a", "b", "aba", "ababa", "aa", "b", "bb", "c", "cc"])
+  fun `test 'ab' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
         RSMState(
@@ -68,12 +69,12 @@ class TestHandCraftedRSMStringInputSuccess {
         )
     rsm.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('a'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('a'),
             head = intermediateRSMState,
         ))
     intermediateRSMState.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('b'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('b'),
             head =
                 RSMState(
                     id = 2,
@@ -81,11 +82,11 @@ class TestHandCraftedRSMStringInputSuccess {
                     isFinal = true,
                 )))
 
-    assertNotNull(GLL(rsm, "ab").parse())
+    assertFalse(GLL(rsm, input).parse())
   }
 
-  @ParameterizedTest(name = "Should be NotNull for {0}")
-  @ValueSource(strings = ["", "a", "aa", "aaa"])
+  @ParameterizedTest(name = "Should be Null for {0}")
+  @ValueSource(strings = ["b", "ab", "aab", "bb", "bbb"])
   fun `test 'a-star' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
@@ -104,20 +105,20 @@ class TestHandCraftedRSMStringInputSuccess {
         )
     rsm.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('a'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('a'),
             head = finalRSMState,
         ))
     finalRSMState.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('a'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('a'),
             head = finalRSMState,
         ))
 
-    assertNotNull(GLL(rsm, input).parse())
+    assertFalse(GLL(rsm, input).parse())
   }
 
-  @ParameterizedTest(name = "Should be NotNull for {0}")
-  @ValueSource(strings = ["a", "aa", "aaa"])
+  @ParameterizedTest(name = "Should be Null for {0}")
+  @ValueSource(strings = ["", "ab", "aab", "aaab", "b", "bb", "bbb"])
   fun `test 'a-plus' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
@@ -135,20 +136,20 @@ class TestHandCraftedRSMStringInputSuccess {
         )
     rsm.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('a'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('a'),
             head = finalRSMState,
         ))
     finalRSMState.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('a'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('a'),
             head = finalRSMState,
         ))
 
-    assertNotNull(GLL(rsm, input).parse())
+    assertFalse(GLL(rsm, input).parse())
   }
 
-  @ParameterizedTest(name = "Should be NotNull for {0}")
-  @ValueSource(strings = ["", "ab", "abab", "ababab"])
+  @ParameterizedTest(name = "Should be Null for {0}")
+  @ValueSource(strings = ["aba", "ababa", "abababa", "abac", "ababac", "abababac", "cc"])
   fun `test '(ab)-star' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
@@ -176,24 +177,47 @@ class TestHandCraftedRSMStringInputSuccess {
             head = finalRSMState,
         ))
 
-    assertNotNull(GLL(rsm, input).parse())
+    assertFalse(GLL(rsm, input).parse())
   }
 
-  @ParameterizedTest(name = "Should be NotNull for {0}")
+  @ParameterizedTest(name = "Should be Null for {0}")
   @ValueSource(
       strings =
           [
-              "",
-              "()",
-              "()()",
-              "()()()",
-              "(())",
-              "(())()",
-              "(())()()",
-              "(())(())",
-              "(())(())()",
-              "(())(())()()",
-              "(()())(()())",
+              "(",
+              "((",
+              "(((",
+              "((((",
+              ")",
+              "))",
+              ")))",
+              "))))",
+              "()(",
+              "(()",
+              "()()(",
+              "()(()",
+              "(()()",
+              "()()()(",
+              "()()(()",
+              "()(()()",
+              "(()()()",
+              "())",
+              "()())",
+              "()()())",
+              "(())(",
+              "(())()(",
+              "(())()()(",
+              "(()))",
+              "(())())",
+              "(())()())",
+              "(())(())(",
+              "(())(())()(",
+              "(())(())()()(",
+              "(())(()))",
+              "(())(())())",
+              "(())(())()())",
+              "(()())(()())(",
+              "(()())(()()))",
           ])
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
@@ -229,7 +253,7 @@ class TestHandCraftedRSMStringInputSuccess {
 
     rsm.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('('),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('('),
             head = intermediateRSMState1,
         ))
     intermediateRSMState1.addNonterminalEdge(
@@ -239,7 +263,7 @@ class TestHandCraftedRSMStringInputSuccess {
         ))
     intermediateRSMState2.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char(')'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char(')'),
             head = intermediateRSMState3,
         ))
     intermediateRSMState3.addNonterminalEdge(
@@ -248,11 +272,11 @@ class TestHandCraftedRSMStringInputSuccess {
             head = finalRSMState,
         ))
 
-    assertNotNull(GLL(rsm, input).parse())
+    assertFalse(GLL(rsm, input).parse())
   }
 
-  @ParameterizedTest(name = "Should be NotNull for {0}")
-  @ValueSource(strings = ["abc"])
+  @ParameterizedTest(name = "Should be Null for {0}")
+  @ValueSource(strings = ["", "a", "b", "c", "ab", "ac", "abb"])
   fun `test 'abc' ambiguous hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val nonterminalA = Nonterminal("A")
@@ -325,7 +349,7 @@ class TestHandCraftedRSMStringInputSuccess {
 
     rsm.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('a'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('a'),
             head = intermediateRSMState1,
         ))
     intermediateRSMState1.addNonterminalEdge(
@@ -335,7 +359,7 @@ class TestHandCraftedRSMStringInputSuccess {
         ))
     intermediateRSMState2.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('c'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('c'),
             head = intermediateRSMState3,
         ))
     rsm.addNonterminalEdge(
@@ -345,27 +369,27 @@ class TestHandCraftedRSMStringInputSuccess {
         ))
     intermediateRSMState4.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('c'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('c'),
             head = intermediateRSMState5,
         ))
 
     intermediateRSMState6.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('a'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('a'),
             head = intermediateRSMState7,
         ))
     intermediateRSMState7.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('b'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('b'),
             head = intermediateRSMState8,
         ))
 
     intermediateRSMState9.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('b'),
+            terminal = org.kotgll.rsm.grammar.symbol.Char('b'),
             head = intermediateRSMState10,
         ))
 
-    assertNotNull(GLL(rsm, input).parse())
+    assertFalse(GLL(rsm, input).parse())
   }
 }

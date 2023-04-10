@@ -1,4 +1,4 @@
-package org.kotgll.rsm.stringinput.sppf
+package org.kotgll.rsm.stringinput.withsppf.sppf
 
 import java.util.*
 
