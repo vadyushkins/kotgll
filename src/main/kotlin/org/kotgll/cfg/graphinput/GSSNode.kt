@@ -19,7 +19,7 @@ class GSSNode(val alternative: Alternative, val dot: Int, val k: GraphNode) {
     return false
   }
 
-  override fun toString() = "GSSNode(alternative=$alternative, dot=$dot, k=$k, edges=$edges)"
+  override fun toString() = "GSSNode(alternative=$alternative, dot=$dot, k=$k)"
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

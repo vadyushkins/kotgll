@@ -1,10 +1,10 @@
-package org.kotgll.cfg.stringinput
+package org.kotgll.cfg.stringinput.withsppf
 
 import org.kotgll.cfg.grammar.Alternative
 import org.kotgll.cfg.grammar.symbol.Nonterminal
 import org.kotgll.cfg.grammar.symbol.Symbol
 import org.kotgll.cfg.grammar.symbol.Terminal
-import org.kotgll.cfg.stringinput.sppf.*
+import org.kotgll.cfg.stringinput.withsppf.sppf.*
 
 class GLL(val startSymbol: Nonterminal, val input: String) {
   val queue: DescriptorsQueue = DescriptorsQueue(input.length + 1)

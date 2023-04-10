@@ -1,4 +1,4 @@
-package cfg.stringinput
+package cfg.stringinput.withoutsppf
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -6,16 +6,16 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.kotgll.cfg.grammar.Alternative
 import org.kotgll.cfg.grammar.symbol.*
 import org.kotgll.cfg.grammar.symbol.Char
-import org.kotgll.cfg.stringinput.GLL
-import kotlin.test.assertNull
+import org.kotgll.cfg.stringinput.withoutsppf.GLL
+import kotlin.test.assertTrue
 
-class TestHandCraftedGrammarStringInputFail {
+class TestHandCraftedGrammarStringInputWithoutSPPFSuccess {
   @Test
   fun `test 'empty' hand-crafted grammar`() {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf()))
 
-    assertNull(GLL(grammar, "a").parse())
+    assertTrue(GLL(grammar, "").parse())
   }
 
   @Test
@@ -23,69 +23,59 @@ class TestHandCraftedGrammarStringInputFail {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Char('a'))))
 
-    assertNull(GLL(grammar, "b").parse())
+    assertTrue(GLL(grammar, "a").parse())
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["", "a", "aa", "b", "bb", "c", "cc"])
-  fun `test 'ab' hand-crafted grammar`(input: String) {
+  @Test
+  fun `test 'ab' hand-crafted grammar`() {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Char('a'), Char('b'))))
 
-    assertNull(GLL(grammar, input).parse())
+    assertTrue(GLL(grammar, "ab").parse())
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["b", "bb", "bbb"])
+  @ParameterizedTest(name = "Should be NotNull for {0}")
+  @ValueSource(strings = ["", "a", "aa", "aaa"])
   fun `test 'a-star' hand-crafted grammar`(input: String) {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Star(Char('a')))))
 
-    assertNull(GLL(grammar, input).parse())
+    assertTrue(GLL(grammar, input).parse())
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["", "b", "bb", "bbb"])
+  @ParameterizedTest(name = "Should be NotNull for {0}")
+  @ValueSource(strings = ["a", "aa", "aaa"])
   fun `test 'a-plus' hand-crafted grammar`(input: String) {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Plus(Char('a')))))
 
-    assertNull(GLL(grammar, input).parse())
+    assertTrue(GLL(grammar, input).parse())
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["aba", "ababa", "abababa"])
+  @ParameterizedTest(name = "Should be NotNull for {0}")
+  @ValueSource(strings = ["", "ab", "abab", "ababab"])
   fun `test '(ab)-star' hand-crafted grammar`(input: String) {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Star(Literal("ab")))))
 
-    assertNull(GLL(grammar, input).parse())
+    assertTrue(GLL(grammar, input).parse())
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
+  @ParameterizedTest(name = "Should be NotNull for {0}")
   @ValueSource(
       strings =
           [
-              "()(",
-              "()()(",
-              "()()()(",
-              "())",
-              "()())",
-              "()()())",
-              "(())(",
-              "(())()(",
-              "(())()()(",
-              "(()))",
-              "(())())",
-              "(())()())",
-              "(())(())(",
-              "(())(())()(",
-              "(())(())()()(",
-              "(())(()))",
-              "(())(())())",
-              "(())(())()())",
-              "(()())(()())(",
-              "(()())(()()))",
+              "",
+              "()",
+              "()()",
+              "()()()",
+              "(())",
+              "(())()",
+              "(())()()",
+              "(())(())",
+              "(())(())()",
+              "(())(())()()",
+              "(()())(()())",
           ])
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val grammar = Nonterminal("S")
@@ -99,30 +89,30 @@ class TestHandCraftedGrammarStringInputFail {
                 grammar,
             )))
 
-    assertNull(GLL(grammar, input).parse())
+    assertTrue(GLL(grammar, input).parse())
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["ac", "bd", "ef"])
+  @ParameterizedTest(name = "Should be NotNull for {0}")
+  @ValueSource(strings = ["ab", "cd"])
   fun `test 'ab or cd' hand-crafted grammar`(input: String) {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Literal("ab"))))
     grammar.addAlternative(Alternative(listOf(Literal("cd"))))
 
-    assertNull(GLL(grammar, input).parse())
+    assertTrue(GLL(grammar, input).parse())
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["b", "bb"])
+  @ParameterizedTest(name = "Should be NotNull for {0}")
+  @ValueSource(strings = ["", "a"])
   fun `test 'a-optional' hand-crafted grammar`(input: String) {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Optional(Char('a')))))
 
-    assertNull(GLL(grammar, input).parse())
+    assertTrue(GLL(grammar, input).parse())
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["", "a", "b", "c", "ab", "ac", "abb", "bc"])
+  @ParameterizedTest(name = "Should be NotNull for {0}")
+  @ValueSource(strings = ["abc"])
   fun `test 'abc' ambiguous hand-crafted grammar`(input: String) {
     val grammar = Nonterminal("S")
     val nonterminalA = Nonterminal("A")
@@ -133,33 +123,11 @@ class TestHandCraftedGrammarStringInputFail {
     nonterminalA.addAlternative(Alternative(listOf(Char('a'), Char('b'))))
     nonterminalB.addAlternative(Alternative(listOf(Char('b'))))
 
-    assertNull(GLL(grammar, input).parse())
+    assertTrue(GLL(grammar, input).parse())
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(
-      strings =
-          [
-              "",
-              "a",
-              "b",
-              "c",
-              "d",
-              "aa",
-              "ac",
-              "ad",
-              "ba",
-              "bb",
-              "bc",
-              "bd",
-              "ca",
-              "cb",
-              "cc",
-              "da",
-              "db",
-              "dc",
-              "dd",
-          ])
+  @ParameterizedTest(name = "Should be NotNull for {0}")
+  @ValueSource(strings = ["ab", "cd"])
   fun `test 'ab or cd' ambiguous hand-crafted grammar`(input: String) {
     val grammar = Nonterminal("S")
     val nonterminalA = Nonterminal("A")
@@ -173,6 +141,6 @@ class TestHandCraftedGrammarStringInputFail {
     nonterminalB.addAlternative(Alternative(listOf(Literal("ab"))))
     nonterminalB.addAlternative(Alternative(listOf(Literal("cd"))))
 
-    assertNull(GLL(grammar, input).parse())
+    assertTrue(GLL(grammar, input).parse())
   }
 }
