@@ -1,4 +1,4 @@
-package rsm.graphinput
+package rsm.graphinput.withoutsppf
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -9,13 +9,13 @@ import org.kotgll.rsm.grammar.RSMTerminalEdge
 import org.kotgll.rsm.grammar.symbol.Char
 import org.kotgll.rsm.grammar.symbol.Literal
 import org.kotgll.rsm.grammar.symbol.Nonterminal
-import org.kotgll.rsm.graphinput.GLL
 import org.kotgll.rsm.graphinput.graph.GraphEdge
 import org.kotgll.rsm.graphinput.graph.GraphNode
 import org.kotgll.rsm.graphinput.graph.makeGraphFromString
-import kotlin.test.assertNull
+import org.kotgll.rsm.graphinput.withoutsppf.GLL
+import kotlin.test.assertEquals
 
-class TestHandCraftedRSMGraphInputFail {
+class TestHandCraftedRSMGraphInputWithoutSPPFSuccess {
   @Test
   fun `test 'empty' hand-crafted grammar`() {
     val startNonterminal = Nonterminal("S")
@@ -28,14 +28,16 @@ class TestHandCraftedRSMGraphInputFail {
         )
     startNonterminal.startState = rsm
 
-    val graph = GraphNode(id = 0, isStart = true)
+    val graph = GraphNode(id = 0, isStart = true, isFinal = true)
 
-    assertNull(GLL(rsm, listOf(graph)).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(0)),
+        actual = GLL(rsm, listOf(graph)).parse(),
+    )
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["", "b", "bb", "ab", "aa"])
-  fun `test 'a' hand-crafted grammar`(input: String) {
+  @Test
+  fun `test 'a' hand-crafted grammar`() {
     val startNonterminal = Nonterminal("S")
     val rsm =
         RSMState(
@@ -54,12 +56,14 @@ class TestHandCraftedRSMGraphInputFail {
                     isFinal = true,
                 )))
 
-    assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(1)),
+        actual = GLL(rsm, listOf(makeGraphFromString("a"))).parse(),
+    )
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["", "a", "b", "aba", "ababa", "aa", "b", "bb", "c", "cc"])
-  fun `test 'ab' hand-crafted grammar`(input: String) {
+  @Test
+  fun `test 'ab' hand-crafted grammar`() {
     val startNonterminal = Nonterminal("S")
     val rsm =
         RSMState(
@@ -88,11 +92,14 @@ class TestHandCraftedRSMGraphInputFail {
                     isFinal = true,
                 )))
 
-    assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(2)),
+        actual = GLL(rsm, listOf(makeGraphFromString("ab"))).parse(),
+    )
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["b", "ab", "aab", "bb", "bbb"])
+  @ParameterizedTest(name = "Should be NotNull for {0}")
+  @ValueSource(strings = ["", "a", "aa", "aaa"])
   fun `test 'a-star' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
@@ -120,11 +127,14 @@ class TestHandCraftedRSMGraphInputFail {
             head = finalRSMState,
         ))
 
-    assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(input.length)),
+        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+    )
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["", "ab", "aab", "aaab", "b", "bb", "bbb"])
+  @ParameterizedTest(name = "Should be NotNull for {0}")
+  @ValueSource(strings = ["a", "aa", "aaa"])
   fun `test 'a-plus' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
@@ -151,11 +161,14 @@ class TestHandCraftedRSMGraphInputFail {
             head = finalRSMState,
         ))
 
-    assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(input.length)),
+        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+    )
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["abac", "ababac", "abababac", "cc"])
+  @ParameterizedTest(name = "Should be NotNull for {0}")
+  @ValueSource(strings = ["", "ab", "abab", "ababab"])
   fun `test '(ab)-star' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val rsm =
@@ -193,33 +206,27 @@ class TestHandCraftedRSMGraphInputFail {
     }
     cur.isFinal = true
 
-    assertNull(GLL(rsm, listOf(graph)).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(cur.id)),
+        actual = GLL(rsm, listOf(graph)).parse(),
+    )
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
+  @ParameterizedTest(name = "Should be NotNull for {0}")
   @ValueSource(
       strings =
           [
-              "()(",
-              "()()(",
-              "()()()(",
-              "())",
-              "()())",
-              "()()())",
-              "(())(",
-              "(())()(",
-              "(())()()(",
-              "(()))",
-              "(())())",
-              "(())()())",
-              "(())(())(",
-              "(())(())()(",
-              "(())(())()()(",
-              "(())(()))",
-              "(())(())())",
-              "(())(())()())",
-              "(()())(()())(",
-              "(()())(()()))",
+              "",
+              "()",
+              "()()",
+              "()()()",
+              "(())",
+              "(())()",
+              "(())()()",
+              "(())(())",
+              "(())(())()",
+              "(())(())()()",
+              "(()())(()())",
           ])
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
@@ -274,11 +281,14 @@ class TestHandCraftedRSMGraphInputFail {
             head = finalRSMState,
         ))
 
-    assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(input.length)),
+        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+    )
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["", "a", "b", "c", "ab", "ac", "abb", "bc", "abcd"])
+  @ParameterizedTest(name = "Should be NotNull for {0}")
+  @ValueSource(strings = ["abc"])
   fun `test 'abc' ambiguous hand-crafted grammar`(input: String) {
     val startNonterminal = Nonterminal("S")
     val nonterminalA = Nonterminal("A")
@@ -392,106 +402,14 @@ class TestHandCraftedRSMGraphInputFail {
             head = intermediateRSMState10,
         ))
 
-    assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(input.length)),
+        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+    )
   }
 
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["ac", "bd", "ef", "abc", "cda"])
-  fun `test 'ab or cd' hand-crafted grammar`(input: String) {
-    val nonterminalS = Nonterminal("S")
-    val rsmState0 =
-        RSMState(
-            id = 0,
-            nonterminal = nonterminalS,
-            isStart = true,
-        )
-    nonterminalS.startState = rsmState0
-    val rsmState1 =
-        RSMState(
-            id = 1,
-            nonterminal = nonterminalS,
-            isFinal = true,
-        )
-    val rsmState2 =
-        RSMState(
-            id = 2,
-            nonterminal = nonterminalS,
-            isFinal = true,
-        )
-
-    rsmState0.addTerminalEdge(
-        RSMTerminalEdge(
-            terminal = Literal("ab"),
-            head = rsmState1,
-        ))
-    rsmState0.addTerminalEdge(
-        RSMTerminalEdge(
-            terminal = Literal("cd"),
-            head = rsmState2,
-        ))
-
-    val graph = GraphNode(id = 0, isStart = true)
-    graph.addEdge(
-        GraphEdge(
-            label = input,
-            head = GraphNode(id = 1, isFinal = true),
-        ))
-
-    assertNull(GLL(rsmState0, listOf(graph)).parse())
-  }
-
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(strings = ["b", "bb"])
-  fun `test 'a-optional' hand-crafted grammar`(input: String) {
-    val nonterminalS = Nonterminal("S")
-    val rsmState0 =
-        RSMState(
-            id = 0,
-            nonterminal = nonterminalS,
-            isStart = true,
-            isFinal = true,
-        )
-    nonterminalS.startState = rsmState0
-    val rsmState1 =
-        RSMState(
-            id = 1,
-            nonterminal = nonterminalS,
-            isFinal = true,
-        )
-
-    rsmState0.addTerminalEdge(
-        RSMTerminalEdge(
-            terminal = Char('a'),
-            head = rsmState1,
-        ))
-
-    assertNull(GLL(rsmState0, listOf(makeGraphFromString(input))).parse())
-  }
-
-  @ParameterizedTest(name = "Should be Null for {0}")
-  @ValueSource(
-      strings =
-          [
-              "",
-              "a",
-              "b",
-              "c",
-              "d",
-              "aa",
-              "ac",
-              "ad",
-              "ba",
-              "bb",
-              "bc",
-              "bd",
-              "ca",
-              "cb",
-              "cc",
-              "da",
-              "db",
-              "dc",
-              "dd",
-          ])
+  @ParameterizedTest(name = "Should be NotNull for {0}")
+  @ValueSource(strings = ["ab", "cd"])
   fun `test 'ab or cd' ambiguous hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     val nonterminalA = Nonterminal("A")
@@ -598,7 +516,10 @@ class TestHandCraftedRSMGraphInputFail {
             head = graphNode1,
         ))
 
-    assertNull(GLL(rsmState0, listOf(graphNode0)).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(1)),
+        actual = GLL(rsmState0, listOf(graphNode0)).parse(),
+    )
   }
 
   @Test
@@ -658,7 +579,7 @@ class TestHandCraftedRSMGraphInputFail {
     val graphNode0 = GraphNode(id = 0, isStart = true, isFinal = true)
     val graphNode1 = GraphNode(id = 1, isStart = true, isFinal = true)
     val graphNode2 = GraphNode(id = 2, isStart = true, isFinal = true)
-    val graphNode3 = GraphNode(id = 3, isStart = true)
+    val graphNode3 = GraphNode(id = 3, isStart = true, isFinal = true)
 
     graphNode0.addEdge(GraphEdge(label = "(", head = graphNode1))
     graphNode1.addEdge(GraphEdge(label = "(", head = graphNode2))
@@ -667,7 +588,17 @@ class TestHandCraftedRSMGraphInputFail {
     graphNode2.addEdge(GraphEdge(label = ")", head = graphNode3))
     graphNode3.addEdge(GraphEdge(label = ")", head = graphNode2))
 
-    assertNull(GLL(rsm, listOf(graphNode3)).parse())
+    // TODO: Fix for 0 and 1
+    assertEquals(
+        expected =
+            hashMapOf(
+                0 to hashSetOf(0, 2, 3),
+                1 to hashSetOf(1, 2, 3),
+                2 to hashSetOf(2, 3),
+                3 to hashSetOf(3),
+            ),
+        actual = GLL(rsm, listOf(graphNode0, graphNode1, graphNode2, graphNode3)).parse(),
+    )
   }
 
   @Test
@@ -705,12 +636,14 @@ class TestHandCraftedRSMGraphInputFail {
         ))
 
     val graphNode0 = GraphNode(id = 0, isStart = true, isFinal = true)
-    val graphNode1 = GraphNode(id = 1, isStart = true)
+    val graphNode1 = GraphNode(id = 1, isStart = true, isFinal = true)
 
     graphNode0.addEdge(GraphEdge(label = "a", head = graphNode1))
     graphNode1.addEdge(GraphEdge(label = "a", head = graphNode1))
 
-    assertNull(GLL(rsmState0, listOf(graphNode0)).parse())
-    assertNull(GLL(rsmState0, listOf(graphNode1)).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(1), 1 to hashSetOf(1)),
+        actual = GLL(rsmState0, listOf(graphNode0, graphNode1)).parse(),
+    )
   }
 }

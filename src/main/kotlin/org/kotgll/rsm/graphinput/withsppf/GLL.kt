@@ -1,10 +1,10 @@
-package org.kotgll.rsm.graphinput
+package org.kotgll.rsm.graphinput.withsppf
 
 import org.kotgll.rsm.grammar.RSMState
 import org.kotgll.rsm.grammar.symbol.Nonterminal
 import org.kotgll.rsm.grammar.symbol.Terminal
 import org.kotgll.rsm.graphinput.graph.GraphNode
-import org.kotgll.rsm.graphinput.sppf.*
+import org.kotgll.rsm.graphinput.withsppf.sppf.*
 
 class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
   val queue: DescriptorsQueue = DescriptorsQueue()

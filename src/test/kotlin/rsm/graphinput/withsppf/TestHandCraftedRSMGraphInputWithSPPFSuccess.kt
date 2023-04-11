@@ -1,4 +1,4 @@
-package rsm.graphinput
+package rsm.graphinput.withsppf
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -9,13 +9,13 @@ import org.kotgll.rsm.grammar.RSMTerminalEdge
 import org.kotgll.rsm.grammar.symbol.Char
 import org.kotgll.rsm.grammar.symbol.Literal
 import org.kotgll.rsm.grammar.symbol.Nonterminal
-import org.kotgll.rsm.graphinput.GLL
 import org.kotgll.rsm.graphinput.graph.GraphEdge
 import org.kotgll.rsm.graphinput.graph.GraphNode
 import org.kotgll.rsm.graphinput.graph.makeGraphFromString
+import org.kotgll.rsm.graphinput.withsppf.GLL
 import kotlin.test.assertNotNull
 
-class TestHandCraftedRSMGraphInputSuccess {
+class TestHandCraftedRSMGraphInputWithSPPFSuccess {
   @Test
   fun `test 'empty' hand-crafted grammar`() {
     val startNonterminal = Nonterminal("S")

@@ -1,4 +1,4 @@
-package org.kotgll.rsm.graphinput.sppf
+package org.kotgll.rsm.graphinput.withsppf.sppf
 
 import org.kotgll.rsm.grammar.RSMState
 import org.kotgll.rsm.graphinput.graph.GraphNode

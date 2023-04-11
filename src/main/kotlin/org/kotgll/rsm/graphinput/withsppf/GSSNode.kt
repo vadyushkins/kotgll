@@ -1,8 +1,8 @@
-package org.kotgll.rsm.graphinput
+package org.kotgll.rsm.graphinput.withsppf
 
 import org.kotgll.rsm.grammar.RSMState
 import org.kotgll.rsm.graphinput.graph.GraphNode
-import org.kotgll.rsm.graphinput.sppf.SPPFNode
+import org.kotgll.rsm.graphinput.withsppf.sppf.SPPFNode
 import java.util.*
 
 class GSSNode(val rsmState: RSMState, val k: GraphNode) {
