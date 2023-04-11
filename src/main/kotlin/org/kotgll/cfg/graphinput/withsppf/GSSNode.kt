@@ -1,8 +1,8 @@
-package org.kotgll.cfg.graphinput
+package org.kotgll.cfg.graphinput.withsppf
 
 import org.kotgll.cfg.grammar.Alternative
 import org.kotgll.cfg.graphinput.graph.GraphNode
-import org.kotgll.cfg.graphinput.sppf.SPPFNode
+import org.kotgll.cfg.graphinput.withsppf.sppf.SPPFNode
 import java.util.*
 
 class GSSNode(val alternative: Alternative, val dot: Int, val k: GraphNode) {

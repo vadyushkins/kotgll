@@ -1,4 +1,4 @@
-package org.kotgll.cfg.graphinput.sppf
+package org.kotgll.cfg.graphinput.withsppf.sppf
 
 import org.kotgll.cfg.grammar.symbol.Nonterminal
 import org.kotgll.cfg.grammar.symbol.Symbol

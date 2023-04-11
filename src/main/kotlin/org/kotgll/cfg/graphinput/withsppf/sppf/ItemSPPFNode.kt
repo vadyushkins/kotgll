@@ -1,4 +1,4 @@
-package org.kotgll.cfg.graphinput.sppf
+package org.kotgll.cfg.graphinput.withsppf.sppf
 
 import org.kotgll.cfg.grammar.Alternative
 import org.kotgll.cfg.graphinput.graph.GraphNode

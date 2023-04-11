@@ -1,4 +1,4 @@
-package cfg.graphinput
+package cfg.graphinput.withoutsppf
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -6,13 +6,13 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.kotgll.cfg.grammar.Alternative
 import org.kotgll.cfg.grammar.symbol.*
 import org.kotgll.cfg.grammar.symbol.Char
-import org.kotgll.cfg.graphinput.GLL
 import org.kotgll.cfg.graphinput.graph.GraphEdge
 import org.kotgll.cfg.graphinput.graph.GraphNode
 import org.kotgll.cfg.graphinput.graph.makeGraphFromString
-import kotlin.test.assertNotNull
+import org.kotgll.cfg.graphinput.withoutsppf.GLL
+import kotlin.test.assertEquals
 
-class TestHandCraftedGrammarGraphInputSuccess {
+class TestHandCraftedGrammarGraphInputWithoutSPPFSuccess {
   @Test
   fun `test 'empty' hand-crafted grammar`() {
     val grammar = Nonterminal("S")
@@ -20,7 +20,10 @@ class TestHandCraftedGrammarGraphInputSuccess {
 
     val graph = GraphNode(id = 0, isStart = true, isFinal = true)
 
-    assertNotNull(GLL(grammar, listOf(graph)).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(0)),
+        actual = GLL(grammar, listOf(graph)).parse(),
+    )
   }
 
   @Test
@@ -28,7 +31,10 @@ class TestHandCraftedGrammarGraphInputSuccess {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Char('a'))))
 
-    assertNotNull(GLL(grammar, listOf(makeGraphFromString("a"))).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(1)),
+        actual = GLL(grammar, listOf(makeGraphFromString("a"))).parse(),
+    )
   }
 
   @Test
@@ -36,7 +42,10 @@ class TestHandCraftedGrammarGraphInputSuccess {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Char('a'), Char('b'))))
 
-    assertNotNull(GLL(grammar, listOf(makeGraphFromString("ab"))).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(2)),
+        actual = GLL(grammar, listOf(makeGraphFromString("ab"))).parse(),
+    )
   }
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
@@ -45,7 +54,10 @@ class TestHandCraftedGrammarGraphInputSuccess {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Star(Char('a')))))
 
-    assertNotNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(input.length)),
+        actual = GLL(grammar, listOf(makeGraphFromString(input))).parse(),
+    )
   }
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
@@ -54,7 +66,10 @@ class TestHandCraftedGrammarGraphInputSuccess {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Plus(Char('a')))))
 
-    assertNotNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(input.length)),
+        actual = GLL(grammar, listOf(makeGraphFromString(input))).parse(),
+    )
   }
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
@@ -73,7 +88,10 @@ class TestHandCraftedGrammarGraphInputSuccess {
     }
     cur.isFinal = true
 
-    assertNotNull(GLL(grammar, listOf(graph)).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(cur.id)),
+        actual = GLL(grammar, listOf(graph)).parse(),
+    )
   }
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
@@ -97,7 +115,10 @@ class TestHandCraftedGrammarGraphInputSuccess {
     grammar.addAlternative(Alternative(listOf()))
     grammar.addAlternative(Alternative(listOf(Char('('), grammar, Char(')'), grammar)))
 
-    assertNotNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(input.length)),
+        actual = GLL(grammar, listOf(makeGraphFromString(input))).parse(),
+    )
   }
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
@@ -110,7 +131,10 @@ class TestHandCraftedGrammarGraphInputSuccess {
     val graph = GraphNode(id = 0, isStart = true)
     graph.addEdge(GraphEdge(label = input, head = GraphNode(id = 1, isFinal = true)))
 
-    assertNotNull(GLL(grammar, listOf(graph)).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(1)),
+        actual = GLL(grammar, listOf(graph)).parse(),
+    )
   }
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
@@ -119,7 +143,10 @@ class TestHandCraftedGrammarGraphInputSuccess {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Optional(Char('a')))))
 
-    assertNotNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(input.length)),
+        actual = GLL(grammar, listOf(makeGraphFromString(input))).parse(),
+    )
   }
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
@@ -134,7 +161,10 @@ class TestHandCraftedGrammarGraphInputSuccess {
     nonterminalA.addAlternative(Alternative(listOf(Char('a'), Char('b'))))
     nonterminalB.addAlternative(Alternative(listOf(Char('b'))))
 
-    assertNotNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(input.length)),
+        actual = GLL(grammar, listOf(makeGraphFromString(input))).parse(),
+    )
   }
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
@@ -155,14 +185,17 @@ class TestHandCraftedGrammarGraphInputSuccess {
     val graph = GraphNode(id = 0, isStart = true)
     graph.addEdge(GraphEdge(label = input, head = GraphNode(id = 1, isFinal = true)))
 
-    assertNotNull(GLL(grammar, listOf(graph)).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(1)),
+        actual = GLL(grammar, listOf(graph)).parse(),
+    )
   }
 
   @Test
   fun `test 'dyck' hand-crafted grammar two cycle graph`() {
     val grammar = Nonterminal("S")
-    grammar.addAlternative(Alternative(listOf()))
     grammar.addAlternative(Alternative(listOf(Char('('), grammar, Char(')'), grammar)))
+    grammar.addAlternative(Alternative(listOf()))
 
     val graphNode0 = GraphNode(id = 0, isStart = true, isFinal = true)
     val graphNode1 = GraphNode(id = 1, isStart = true, isFinal = true)
@@ -176,10 +209,15 @@ class TestHandCraftedGrammarGraphInputSuccess {
     graphNode2.addEdge(GraphEdge(label = ")", head = graphNode3))
     graphNode3.addEdge(GraphEdge(label = ")", head = graphNode2))
 
-    assertNotNull(GLL(grammar, listOf(graphNode0)).parse())
-    assertNotNull(GLL(grammar, listOf(graphNode1)).parse())
-    assertNotNull(GLL(grammar, listOf(graphNode2)).parse())
-    assertNotNull(GLL(grammar, listOf(graphNode3)).parse())
+    // TODO: fix for 0 and 1
+    assertEquals(
+        expected =
+            hashMapOf(
+                0 to hashSetOf(0, 2, 3),
+                1 to hashSetOf(1, 2, 3),
+                2 to hashSetOf(2, 3),
+                3 to hashSetOf(3)),
+        actual = GLL(grammar, listOf(graphNode0, graphNode1, graphNode2, graphNode3)).parse())
   }
 
   @Test
@@ -194,7 +232,9 @@ class TestHandCraftedGrammarGraphInputSuccess {
     graphNode0.addEdge(GraphEdge(label = "a", head = graphNode1))
     graphNode1.addEdge(GraphEdge(label = "a", head = graphNode1))
 
-    assertNotNull(GLL(grammar, listOf(graphNode0)).parse())
-    assertNotNull(GLL(grammar, listOf(graphNode1)).parse())
+    assertEquals(
+        expected = hashMapOf(0 to hashSetOf(1)),
+        actual = GLL(grammar, listOf(graphNode0)).parse(),
+    )
   }
 }

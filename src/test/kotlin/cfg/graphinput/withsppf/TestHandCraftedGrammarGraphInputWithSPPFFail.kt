@@ -1,4 +1,4 @@
-package cfg.graphinput
+package cfg.graphinput.withsppf
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -6,13 +6,13 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.kotgll.cfg.grammar.Alternative
 import org.kotgll.cfg.grammar.symbol.*
 import org.kotgll.cfg.grammar.symbol.Char
-import org.kotgll.cfg.graphinput.GLL
 import org.kotgll.cfg.graphinput.graph.GraphEdge
 import org.kotgll.cfg.graphinput.graph.GraphNode
 import org.kotgll.cfg.graphinput.graph.makeGraphFromString
+import org.kotgll.cfg.graphinput.withsppf.GLL
 import kotlin.test.assertNull
 
-class TestHandCraftedGrammarGraphInputFail {
+class TestHandCraftedGrammarGraphInputWithSPPFFail {
   @Test
   fun `test 'empty' hand-crafted grammar`() {
     val grammar = Nonterminal("S")
