@@ -48,9 +48,7 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
         parseResult[sppfNode.leftExtent.id]!![sppfNode.rightExtent.id] = sppfNode
       }
     }
-    if (HashMap<Int, HashMap<Int, SPPFNode>>() ==
-        parseResult)
-        return null
+    if (HashMap<Int, HashMap<Int, SPPFNode>>() == parseResult) return null
     return parseResult
   }
 
