@@ -11,7 +11,7 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
   val toPop: HashMap<Int, HashMap<Int, SPPFNode?>> = HashMap()
   val gssNodes: HashMap<Int, GSSNode> = HashMap()
   val sppfNodes: HashMap<Int, SPPFNode> = HashMap()
-
+  val parseResult: HashMap<Int, HashMap<Int, SPPFNode>> = HashMap()
   val startGSSNodes: HashMap<GraphNode, GSSNode> = makeStartGSSNodes()
 
   fun makeStartGSSNodes(): HashMap<GraphNode, GSSNode> {
@@ -28,7 +28,7 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
     return gssNodes[gssNode.hashCode]!!
   }
 
-  fun parse(): List<SPPFNode>? {
+  fun parse(): HashMap<Int, HashMap<Int, SPPFNode>>? {
     for (entry in startGSSNodes.entries) {
       queue.add(startState, entry.value, entry.key, null)
     }
@@ -38,15 +38,20 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
       parse(descriptor.rsmState, descriptor.pos, descriptor.gssNode, descriptor.sppfNode)
     }
 
-    val result: MutableList<SPPFNode> = mutableListOf()
     for (sppfNode in sppfNodes.values) {
       if (sppfNode.hasSymbol(startState.nonterminal) &&
           sppfNode.leftExtent.isStart &&
-          sppfNode.rightExtent.isFinal)
-          result.add(sppfNode)
+          sppfNode.rightExtent.isFinal) {
+        if (!parseResult.containsKey(sppfNode.leftExtent.id)) {
+          parseResult[sppfNode.leftExtent.id] = HashMap()
+        }
+        parseResult[sppfNode.leftExtent.id]!![sppfNode.rightExtent.id] = sppfNode
+      }
     }
-    if (result.isEmpty()) return null
-    return result.toList()
+    if (HashMap<Int, HashMap<Int, org.kotgll.cfg.graphinput.withsppf.sppf.SPPFNode>>() ==
+        parseResult)
+        return null
+    return parseResult
   }
 
   fun parse(state: RSMState, pos: GraphNode, cu: GSSNode, cn: SPPFNode?) {
