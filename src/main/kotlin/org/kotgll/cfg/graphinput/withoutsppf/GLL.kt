@@ -4,7 +4,7 @@ import org.kotgll.cfg.grammar.Alternative
 import org.kotgll.cfg.grammar.symbol.Nonterminal
 import org.kotgll.cfg.grammar.symbol.Symbol
 import org.kotgll.cfg.grammar.symbol.Terminal
-import org.kotgll.cfg.graphinput.graph.GraphNode
+import org.kotgll.graph.GraphNode
 
 class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
   val queue: DescriptorsQueue = DescriptorsQueue()

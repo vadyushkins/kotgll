@@ -1,7 +1,7 @@
 package org.kotgll.rsm.graphinput.withoutsppf
 
+import org.kotgll.graph.GraphNode
 import org.kotgll.rsm.grammar.RSMState
-import org.kotgll.rsm.graphinput.graph.GraphNode
 import java.util.*
 import kotlin.collections.ArrayDeque
 

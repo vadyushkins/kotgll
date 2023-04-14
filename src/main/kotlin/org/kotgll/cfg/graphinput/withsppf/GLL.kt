@@ -4,8 +4,8 @@ import org.kotgll.cfg.grammar.Alternative
 import org.kotgll.cfg.grammar.symbol.Nonterminal
 import org.kotgll.cfg.grammar.symbol.Symbol
 import org.kotgll.cfg.grammar.symbol.Terminal
-import org.kotgll.cfg.graphinput.graph.GraphNode
 import org.kotgll.cfg.graphinput.withsppf.sppf.*
+import org.kotgll.graph.GraphNode
 
 class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
   val queue: DescriptorsQueue = DescriptorsQueue()
@@ -117,11 +117,11 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
   }
 
   fun createGSSNode(
-      alternative: Alternative,
-      dot: Int,
-      gssNode: GSSNode,
-      sppfNode: SPPFNode?,
-      ci: GraphNode,
+    alternative: Alternative,
+    dot: Int,
+    gssNode: GSSNode,
+    sppfNode: SPPFNode?,
+    ci: GraphNode,
   ): GSSNode {
     val v: GSSNode = makeGSSNode(alternative, dot, ci)
 
@@ -173,10 +173,10 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
   }
 
   fun makeItemSPPFNode(
-      alternative: Alternative,
-      dot: Int,
-      i: GraphNode,
-      j: GraphNode
+    alternative: Alternative,
+    dot: Int,
+    i: GraphNode,
+    j: GraphNode,
   ): ParentSPPFNode {
     val y = ItemSPPFNode(i, j, alternative, dot)
     if (!sppfNodes.containsKey(y.hashCode)) sppfNodes[y.hashCode] = y

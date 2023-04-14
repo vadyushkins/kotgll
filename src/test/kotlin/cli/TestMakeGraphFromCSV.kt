@@ -1,9 +1,9 @@
 package cli
 
+import makeGraphFromCSV
 import org.junit.jupiter.api.Test
-import org.kotgll.cfg.graphinput.graph.GraphEdge
-import org.kotgll.cfg.graphinput.graph.GraphNode
-import org.kotgll.cfg.graphinput.graph.makeGraphFromCSV
+import org.kotgll.graph.GraphEdge
+import org.kotgll.graph.GraphNode
 import java.io.File
 import kotlin.test.assertEquals
 

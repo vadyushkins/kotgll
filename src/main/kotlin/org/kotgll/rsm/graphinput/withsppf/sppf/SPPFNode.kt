@@ -1,7 +1,7 @@
 package org.kotgll.rsm.graphinput.withsppf.sppf
 
+import org.kotgll.graph.GraphNode
 import org.kotgll.rsm.grammar.symbol.Symbol
-import org.kotgll.rsm.graphinput.graph.GraphNode
 import java.util.*
 
 open class SPPFNode(val leftExtent: GraphNode, val rightExtent: GraphNode) {

@@ -1,6 +1,6 @@
 package org.kotgll.rsm.graphinput.withsppf.sppf
 
-import org.kotgll.rsm.graphinput.graph.GraphNode
+import org.kotgll.graph.GraphNode
 import java.util.*
 
 open class ParentSPPFNode(leftExtent: GraphNode, rightExtent: GraphNode) :

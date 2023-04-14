@@ -1,15 +1,15 @@
 package cfg.graphinput.withsppf
 
+import makeGraphFromString
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.kotgll.cfg.grammar.Alternative
 import org.kotgll.cfg.grammar.symbol.*
 import org.kotgll.cfg.grammar.symbol.Char
-import org.kotgll.cfg.graphinput.graph.GraphEdge
-import org.kotgll.cfg.graphinput.graph.GraphNode
-import org.kotgll.cfg.graphinput.graph.makeGraphFromString
 import org.kotgll.cfg.graphinput.withsppf.GLL
+import org.kotgll.graph.GraphEdge
+import org.kotgll.graph.GraphNode
 import kotlin.test.assertNotNull
 
 class TestHandCraftedGrammarGraphInputWithSPPFSuccess {

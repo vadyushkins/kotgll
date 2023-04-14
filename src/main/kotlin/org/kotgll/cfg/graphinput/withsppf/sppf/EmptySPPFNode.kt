@@ -1,6 +1,6 @@
 package org.kotgll.cfg.graphinput.withsppf.sppf
 
-import org.kotgll.cfg.graphinput.graph.GraphNode
+import org.kotgll.graph.GraphNode
 import java.util.*
 
 class EmptySPPFNode(i: GraphNode) : SPPFNode(i, i) {

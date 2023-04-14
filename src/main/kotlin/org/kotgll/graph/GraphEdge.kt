@@ -1,4 +1,4 @@
-package org.kotgll.cfg.graphinput.graph
+package org.kotgll.graph
 
 class GraphEdge(val label: String, val head: GraphNode) {
   override fun toString() = "GraphEdge(label=$label, head=$head)"

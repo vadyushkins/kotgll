@@ -1,7 +1,7 @@
 package org.kotgll.rsm.graphinput.withoutsppf
 
+import org.kotgll.graph.GraphNode
 import org.kotgll.rsm.grammar.RSMState
-import org.kotgll.rsm.graphinput.graph.GraphNode
 
 class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
   val queue: DescriptorsQueue = DescriptorsQueue()

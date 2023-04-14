@@ -1,7 +1,7 @@
 package org.kotgll.cfg.graphinput.withoutsppf
 
 import org.kotgll.cfg.grammar.Alternative
-import org.kotgll.cfg.graphinput.graph.GraphNode
+import org.kotgll.graph.GraphNode
 import java.util.*
 import kotlin.collections.ArrayDeque
 
@@ -23,10 +23,10 @@ class DescriptorsQueue {
   fun isEmpty() = todo.isEmpty()
 
   class Descriptor(
-      val alternative: Alternative,
-      val dot: Int,
-      val gssNode: GSSNode,
-      val pos: GraphNode,
+    val alternative: Alternative,
+    val dot: Int,
+    val gssNode: GSSNode,
+    val pos: GraphNode,
   ) {
     override fun toString() =
         "Descriptor(alternative=$alternative, dot=$dot, gssNode=$gssNode, pos=$pos)"

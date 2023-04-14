@@ -1,17 +1,17 @@
 package rsm.graphinput.withoutsppf
 
+import makeGraphFromString
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import org.kotgll.graph.GraphEdge
+import org.kotgll.graph.GraphNode
 import org.kotgll.rsm.grammar.RSMNonterminalEdge
 import org.kotgll.rsm.grammar.RSMState
 import org.kotgll.rsm.grammar.RSMTerminalEdge
 import org.kotgll.rsm.grammar.symbol.Char
 import org.kotgll.rsm.grammar.symbol.Literal
 import org.kotgll.rsm.grammar.symbol.Nonterminal
-import org.kotgll.rsm.graphinput.graph.GraphEdge
-import org.kotgll.rsm.graphinput.graph.GraphNode
-import org.kotgll.rsm.graphinput.graph.makeGraphFromString
 import org.kotgll.rsm.graphinput.withoutsppf.GLL
 import kotlin.test.assertEquals
 

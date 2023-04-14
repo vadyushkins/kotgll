@@ -1,4 +1,4 @@
-package org.kotgll.rsm.graphinput.graph
+package org.kotgll.graph
 
 class GraphNode(val id: Int, var isStart: Boolean = false, var isFinal: Boolean = false) {
   val outgoingEdges: MutableList<GraphEdge> = mutableListOf()
@@ -24,17 +24,3 @@ class GraphNode(val id: Int, var isStart: Boolean = false, var isFinal: Boolean 
   }
 }
 
-fun makeGraphFromString(input: String): GraphNode {
-  val result = GraphNode(id = 0, isStart = true)
-  var cur = result
-  for (i in input.indices) {
-    cur.addEdge(
-        GraphEdge(
-            label = input[i] + "",
-            head = GraphNode(id = i + 1),
-        ))
-    cur = cur.outgoingEdges[0].head
-  }
-  cur.isFinal = true
-  return result
-}
