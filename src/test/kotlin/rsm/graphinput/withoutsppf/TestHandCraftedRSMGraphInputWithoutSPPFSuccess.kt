@@ -588,7 +588,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFSuccess {
     graphNode2.addEdge(GraphEdge(label = ")", head = graphNode3))
     graphNode3.addEdge(GraphEdge(label = ")", head = graphNode2))
 
-    // TODO: Fix for 0 and 1
+    // TODO: Fix for {0 to 3} and {1 to 2}
     assertEquals(
         expected =
             hashMapOf(

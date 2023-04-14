@@ -185,6 +185,10 @@ class TestHandCraftedRSMStringInputWithoutSPPFSuccess {
           [
               "",
               "()",
+              "(())",
+              "((()))",
+              "(((())))",
+              "((((()))))",
               "()()",
               "()()()",
               "(())",

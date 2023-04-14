@@ -11,16 +11,16 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
   val toPop: HashMap<Int, GSSNode> = HashMap()
   val gssNodes: HashMap<Int, GSSNode> = HashMap()
   val fakeStartSymbol: Nonterminal = Nonterminal("S'")
-  val startGSSNodes: HashMap<GraphNode, GSSNode> = makeStartGSSNodes()
+  val startGSSNodes: HashMap<GraphNode, Int> = makeStartGSSNodes()
   var parseSuccess: HashMap<Int, HashSet<Int>> = HashMap()
 
-  fun makeStartGSSNodes(): HashMap<GraphNode, GSSNode> {
+  fun makeStartGSSNodes(): HashMap<GraphNode, Int> {
     val alternative = Alternative(listOf(startSymbol))
     fakeStartSymbol.addAlternative(alternative)
 
-    val result: HashMap<GraphNode, GSSNode> = HashMap()
+    val result: HashMap<GraphNode, Int> = HashMap()
     for (node in startGraphNodes) {
-      result[node] = makeGSSNode(alternative, 1, node)
+      result[node] = makeGSSNode(alternative, 1, node).hashCode
     }
     return result
   }
@@ -34,7 +34,7 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
   fun parse(): HashMap<Int, HashSet<Int>> {
     for (alternative in startSymbol.alternatives) {
       for (entry in startGSSNodes.entries) {
-        queue.add(alternative, 0, entry.value, entry.key)
+        queue.add(alternative, 0, gssNodes[entry.value]!!, entry.key)
       }
     }
 
@@ -87,7 +87,7 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
       if (!parseSuccess.containsKey(gssNode.pos.id)) parseSuccess[gssNode.pos.id] = HashSet()
       parseSuccess[gssNode.pos.id]!!.add(ci.id)
     }
-    if (!startGSSNodes.values.contains(gssNode)) {
+    if (!startGSSNodes.values.contains(gssNode.hashCode)) {
       if (!toPop.containsKey(gssNode.hashCode)) toPop[gssNode.hashCode] = gssNode
       for (u in gssNode.edges.values) {
         queue.add(gssNode.alternative, gssNode.dot, u, ci)
@@ -100,9 +100,7 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
 
     if (v.addEdge(gssNode)) {
       if (toPop.containsKey(v.hashCode)) {
-        for (u in v.edges.values) {
-          queue.add(alternative, dot, u, ci)
-        }
+        queue.add(alternative, dot, gssNode, ci)
       }
     }
 

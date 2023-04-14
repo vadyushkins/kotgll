@@ -72,14 +72,14 @@ class GLL(val startSymbol: Nonterminal, val input: String) {
       }
 
       if (curSymbol is Nonterminal) {
-        curGSSNode = createGSSNode(alternative, curDot + 1, curGSSNode, curPos)
+        curGSSNode = createGSSNode(alternative, curDot + 1, cu, curPos)
         for (alt in curSymbol.alternatives) {
           queue.add(alt, 0, curGSSNode, curPos)
         }
         return
       }
     }
-    pop(curGSSNode, curPos)
+    pop(cu, curPos)
   }
 
   fun pop(gssNode: GSSNode, ci: Int) {

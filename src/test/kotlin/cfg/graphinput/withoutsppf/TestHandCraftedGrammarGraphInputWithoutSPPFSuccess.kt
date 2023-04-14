@@ -209,7 +209,7 @@ class TestHandCraftedGrammarGraphInputWithoutSPPFSuccess {
     graphNode2.addEdge(GraphEdge(label = ")", head = graphNode3))
     graphNode3.addEdge(GraphEdge(label = ")", head = graphNode2))
 
-    // TODO: fix for 0 and 1
+    // TODO: fix for {0 to 3} and {1 to 2}
     assertEquals(
         expected =
             hashMapOf(
@@ -233,8 +233,34 @@ class TestHandCraftedGrammarGraphInputWithoutSPPFSuccess {
     graphNode1.addEdge(GraphEdge(label = "a", head = graphNode1))
 
     assertEquals(
-        expected = hashMapOf(0 to hashSetOf(1)),
-        actual = GLL(grammar, listOf(graphNode0)).parse(),
+        expected =
+            hashMapOf(
+                0 to hashSetOf(1),
+                1 to hashSetOf(1),
+            ),
+        actual = GLL(grammar, listOf(graphNode0, graphNode1)).parse(),
+    )
+  }
+
+  @Test
+  fun `test 'a-star' hand-crafted grammar one cycle graph`() {
+    val grammar = Nonterminal("S")
+    grammar.addAlternative(Alternative(listOf(Char('a'), grammar)))
+    grammar.addAlternative(Alternative(listOf()))
+
+    val graphNode0 = GraphNode(id = 0, isStart = true, isFinal = true)
+    val graphNode1 = GraphNode(id = 1, isStart = true, isFinal = true)
+
+    graphNode0.addEdge(GraphEdge(label = "a", head = graphNode1))
+    graphNode1.addEdge(GraphEdge(label = "a", head = graphNode1))
+
+    assertEquals(
+        expected =
+            hashMapOf(
+                0 to hashSetOf(0, 1),
+                1 to hashSetOf(1),
+            ),
+        actual = GLL(grammar, listOf(graphNode0, graphNode1)).parse(),
     )
   }
 }
