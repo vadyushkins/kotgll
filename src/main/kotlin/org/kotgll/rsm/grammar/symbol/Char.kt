@@ -9,7 +9,7 @@ class Char(val char: Char) : Terminal {
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
-    if (other !is org.kotgll.cfg.grammar.symbol.Char) return false
+    if (other !is org.kotgll.rsm.grammar.symbol.Char) return false
 
     if (char != other.char) return false
 

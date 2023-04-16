@@ -3,8 +3,8 @@ package org.kotgll.cfg.grammar.symbol
 import org.kotgll.cfg.grammar.Alternative
 
 open class Nonterminal(
-  val name: String,
-  val alternatives: MutableList<Alternative> = emptyList<Alternative>().toMutableList(),
+    val name: String,
+    val alternatives: MutableList<Alternative> = emptyList<Alternative>().toMutableList(),
 ) : Symbol {
   override fun toString() = "Nonterminal($name)"
 
@@ -13,7 +13,6 @@ open class Nonterminal(
     if (other !is Nonterminal) return false
 
     if (name != other.name) return false
-    if (alternatives != other.alternatives) return false
 
     return true
   }
