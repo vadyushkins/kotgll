@@ -1,20 +1,20 @@
 package org.kotgll.rsm.graphinput.withsppf
 
+import org.kotgll.graph.GraphNode
 import org.kotgll.rsm.grammar.RSMState
-import org.kotgll.rsm.graphinput.graph.GraphNode
 import org.kotgll.rsm.graphinput.withsppf.sppf.SPPFNode
 import java.util.*
 import kotlin.collections.ArrayDeque
 
 class DescriptorsQueue {
   val todo: ArrayDeque<Descriptor> = ArrayDeque()
-  val done: HashMap<Int, HashSet<Int>> = HashMap()
+  val done: HashMap<Int, HashSet<Descriptor>> = HashMap()
 
   fun add(rsmState: RSMState, gssNode: GSSNode, pos: GraphNode, sppfNode: SPPFNode?) {
     val descriptor = Descriptor(rsmState, gssNode, sppfNode, pos)
-    if (!done.containsKey(pos.hashCode)) done[pos.hashCode] = HashSet()
-    if (!done[pos.hashCode]!!.contains(descriptor.hashCode)) {
-      done[pos.hashCode]!!.add(descriptor.hashCode)
+    if (!done.containsKey(pos.id)) done[pos.id] = HashSet()
+    if (!done[pos.id]!!.contains(descriptor)) {
+      done[pos.id]!!.add(descriptor)
       todo.add(descriptor)
     }
   }

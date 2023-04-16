@@ -13,7 +13,6 @@ open class Nonterminal(
     if (other !is Nonterminal) return false
 
     if (name != other.name) return false
-    if (alternatives != other.alternatives) return false
 
     return true
   }

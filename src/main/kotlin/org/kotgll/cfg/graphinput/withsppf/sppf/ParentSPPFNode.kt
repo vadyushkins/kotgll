@@ -1,6 +1,6 @@
 package org.kotgll.cfg.graphinput.withsppf.sppf
 
-import org.kotgll.cfg.graphinput.graph.GraphNode
+import org.kotgll.graph.GraphNode
 import java.util.*
 
 open class ParentSPPFNode(leftExtent: GraphNode, rightExtent: GraphNode) :
@@ -13,8 +13,6 @@ open class ParentSPPFNode(leftExtent: GraphNode, rightExtent: GraphNode) :
     if (this === other) return true
     if (other !is ParentSPPFNode) return false
     if (!super.equals(other)) return false
-
-    if (kids != other.kids) return false
 
     return true
   }

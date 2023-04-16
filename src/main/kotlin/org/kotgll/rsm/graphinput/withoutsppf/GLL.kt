@@ -1,14 +1,14 @@
 package org.kotgll.rsm.graphinput.withoutsppf
 
+import org.kotgll.graph.GraphNode
 import org.kotgll.rsm.grammar.RSMState
-import org.kotgll.rsm.graphinput.graph.GraphNode
 
 class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
   val queue: DescriptorsQueue = DescriptorsQueue()
-  val toPop: HashMap<Int, GSSNode> = HashMap()
-  val gssNodes: HashMap<Int, GSSNode> = HashMap()
+  val toPop: HashMap<GSSNode, HashSet<GraphNode>> = HashMap()
+  val gssNodes: HashMap<GSSNode, GSSNode> = HashMap()
   val parseSuccess: HashMap<Int, HashSet<Int>> = HashMap()
-  val startGSSNodes: HashMap<GraphNode, GSSNode> = makeStartGSSNodes()
+  val startGSSNodes: MutableMap<GraphNode, GSSNode> = makeStartGSSNodes()
 
   fun makeStartGSSNodes(): HashMap<GraphNode, GSSNode> {
     val result: HashMap<GraphNode, GSSNode> = HashMap()
@@ -20,8 +20,8 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
 
   fun makeGSSNode(state: RSMState, ci: GraphNode): GSSNode {
     val gssNode = GSSNode(state, ci)
-    if (!gssNodes.containsKey(gssNode.hashCode)) gssNodes[gssNode.hashCode] = gssNode
-    return gssNodes[gssNode.hashCode]!!
+    if (!gssNodes.containsKey(gssNode)) gssNodes[gssNode] = gssNode
+    return gssNodes[gssNode]!!
   }
 
   fun parse(): HashMap<Int, HashSet<Int>> {
@@ -64,8 +64,9 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
       parseSuccess[gssNode.pos.id]!!.add(ci.id)
     }
     if (!startGSSNodes.values.contains(gssNode)) {
-      if (!toPop.containsKey(gssNode.hashCode)) toPop[gssNode.hashCode] = gssNode
-      for (u in gssNode.edges.values) {
+      if (!toPop.containsKey(gssNode)) toPop[gssNode] = HashSet()
+      toPop[gssNode]!!.add(ci)
+      for (u in gssNode.edges) {
         queue.add(gssNode.rsmState, u, ci)
       }
     }
@@ -75,9 +76,9 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
     val v: GSSNode = makeGSSNode(state, ci)
 
     if (v.addEdge(gssNode)) {
-      if (toPop.containsKey(v.hashCode)) {
-        for (u in v.edges.values) {
-          queue.add(state, u, ci)
+      if (toPop.containsKey(v)) {
+        for (z in toPop[v]!!) {
+          queue.add(state, gssNode, z)
         }
       }
     }

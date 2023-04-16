@@ -1,7 +1,7 @@
 package org.kotgll.cfg.graphinput.withsppf.sppf
 
 import org.kotgll.cfg.grammar.symbol.Terminal
-import org.kotgll.cfg.graphinput.graph.GraphNode
+import org.kotgll.graph.GraphNode
 import java.util.*
 
 class TerminalSPPFNode(

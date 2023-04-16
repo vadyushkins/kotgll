@@ -1,22 +1,18 @@
 package org.kotgll.cfg.graphinput.withsppf
 
 import org.kotgll.cfg.grammar.Alternative
-import org.kotgll.cfg.graphinput.graph.GraphNode
 import org.kotgll.cfg.graphinput.withsppf.sppf.SPPFNode
+import org.kotgll.graph.GraphNode
 import java.util.*
 
 class GSSNode(val alternative: Alternative, val dot: Int, val k: GraphNode) {
-  val edges: HashMap<Int, HashMap<Int, GSSNode>> = HashMap()
+  val edges: HashMap<SPPFNode?, HashSet<GSSNode>> = HashMap()
 
   fun addEdge(sppfNode: SPPFNode?, gssNode: GSSNode): Boolean {
-    if (!edges.containsKey(sppfNode.hashCode())) {
-      edges[sppfNode.hashCode()] = HashMap()
+    if (!edges.containsKey(sppfNode)) {
+      edges[sppfNode] = HashSet()
     }
-    if (!edges[sppfNode.hashCode()]!!.containsKey(gssNode.hashCode)) {
-      edges[sppfNode.hashCode()]!![gssNode.hashCode] = gssNode
-      return true
-    }
-    return false
+    return edges[sppfNode]!!.add(gssNode)
   }
 
   override fun toString() = "GSSNode(alternative=$alternative, dot=$dot, k=$k)"
@@ -28,7 +24,6 @@ class GSSNode(val alternative: Alternative, val dot: Int, val k: GraphNode) {
     if (alternative != other.alternative) return false
     if (dot != other.dot) return false
     if (k != other.k) return false
-    if (edges != other.edges) return false
 
     return true
   }

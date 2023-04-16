@@ -1,22 +1,18 @@
 package org.kotgll.rsm.graphinput.withsppf
 
+import org.kotgll.graph.GraphNode
 import org.kotgll.rsm.grammar.RSMState
-import org.kotgll.rsm.graphinput.graph.GraphNode
 import org.kotgll.rsm.graphinput.withsppf.sppf.SPPFNode
 import java.util.*
 
 class GSSNode(val rsmState: RSMState, val k: GraphNode) {
-  val edges: HashMap<Int, HashMap<Int, GSSNode>> = HashMap()
+  val edges: HashMap<SPPFNode?, HashSet<GSSNode>> = HashMap()
 
   fun addEdge(sppfNode: SPPFNode?, gssNode: GSSNode): Boolean {
-    if (!edges.containsKey(sppfNode.hashCode())) {
-      edges[sppfNode.hashCode()] = HashMap()
+    if (!edges.containsKey(sppfNode)) {
+      edges[sppfNode] = HashSet()
     }
-    if (!edges[sppfNode.hashCode()]!!.containsKey(gssNode.hashCode)) {
-      edges[sppfNode.hashCode()]!![gssNode.hashCode] = gssNode
-      return true
-    }
-    return false
+    return edges[sppfNode]!!.add(gssNode)
   }
 
   override fun toString() = "GSSNode(rsmState=$rsmState, k=$k, edges=$edges)"
@@ -27,7 +23,6 @@ class GSSNode(val rsmState: RSMState, val k: GraphNode) {
 
     if (rsmState != other.rsmState) return false
     if (k != other.k) return false
-    if (edges != other.edges) return false
 
     return true
   }

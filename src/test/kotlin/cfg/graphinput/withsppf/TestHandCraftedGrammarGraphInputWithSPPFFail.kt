@@ -6,10 +6,10 @@ import org.junit.jupiter.params.provider.ValueSource
 import org.kotgll.cfg.grammar.Alternative
 import org.kotgll.cfg.grammar.symbol.*
 import org.kotgll.cfg.grammar.symbol.Char
-import org.kotgll.cfg.graphinput.graph.GraphEdge
-import org.kotgll.cfg.graphinput.graph.GraphNode
-import org.kotgll.cfg.graphinput.graph.makeGraphFromString
 import org.kotgll.cfg.graphinput.withsppf.GLL
+import org.kotgll.graph.GraphEdge
+import org.kotgll.graph.GraphNode
+import readGraphFromString
 import kotlin.test.assertNull
 
 class TestHandCraftedGrammarGraphInputWithSPPFFail {
@@ -29,7 +29,7 @@ class TestHandCraftedGrammarGraphInputWithSPPFFail {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Char('a'))))
 
-    assertNull(GLL(grammar, listOf(makeGraphFromString("b"))).parse())
+    assertNull(GLL(grammar, listOf(readGraphFromString("b"))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")
@@ -38,7 +38,7 @@ class TestHandCraftedGrammarGraphInputWithSPPFFail {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Char('a'), Char('b'))))
 
-    assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
+    assertNull(GLL(grammar, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")
@@ -47,7 +47,7 @@ class TestHandCraftedGrammarGraphInputWithSPPFFail {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Star(Char('a')))))
 
-    assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
+    assertNull(GLL(grammar, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")
@@ -56,7 +56,7 @@ class TestHandCraftedGrammarGraphInputWithSPPFFail {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Plus(Char('a')))))
 
-    assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
+    assertNull(GLL(grammar, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")
@@ -108,7 +108,7 @@ class TestHandCraftedGrammarGraphInputWithSPPFFail {
     grammar.addAlternative(Alternative(listOf()))
     grammar.addAlternative(Alternative(listOf(Char('('), grammar, Char(')'), grammar)))
 
-    assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
+    assertNull(GLL(grammar, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")
@@ -123,7 +123,7 @@ class TestHandCraftedGrammarGraphInputWithSPPFFail {
     nonterminalA.addAlternative(Alternative(listOf(Char('a'), Char('b'))))
     nonterminalB.addAlternative(Alternative(listOf(Char('b'))))
 
-    assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
+    assertNull(GLL(grammar, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")
@@ -145,7 +145,7 @@ class TestHandCraftedGrammarGraphInputWithSPPFFail {
     val grammar = Nonterminal("S")
     grammar.addAlternative(Alternative(listOf(Optional(Char('a')))))
 
-    assertNull(GLL(grammar, listOf(makeGraphFromString(input))).parse())
+    assertNull(GLL(grammar, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")

@@ -4,11 +4,11 @@ import org.kotgll.cfg.grammar.Alternative
 import org.kotgll.cfg.grammar.symbol.Nonterminal
 import org.kotgll.cfg.grammar.symbol.Symbol
 import org.kotgll.cfg.grammar.symbol.Terminal
-import org.kotgll.cfg.graphinput.graph.GraphNode
+import org.kotgll.graph.GraphNode
 
 class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
   val queue: DescriptorsQueue = DescriptorsQueue()
-  val toPop: HashMap<Int, GSSNode> = HashMap()
+  val toPop: HashMap<Int, HashMap<Int, GraphNode>> = HashMap()
   val gssNodes: HashMap<Int, GSSNode> = HashMap()
   val fakeStartSymbol: Nonterminal = Nonterminal("S'")
   val startGSSNodes: HashMap<GraphNode, Int> = makeStartGSSNodes()
@@ -88,7 +88,8 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
       parseSuccess[gssNode.pos.id]!!.add(ci.id)
     }
     if (!startGSSNodes.values.contains(gssNode.hashCode)) {
-      if (!toPop.containsKey(gssNode.hashCode)) toPop[gssNode.hashCode] = gssNode
+      if (!toPop.containsKey(gssNode.hashCode)) toPop[gssNode.hashCode] = HashMap()
+      toPop[gssNode.hashCode]!![ci.id] = ci
       for (u in gssNode.edges.values) {
         queue.add(gssNode.alternative, gssNode.dot, u, ci)
       }
@@ -100,7 +101,9 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
 
     if (v.addEdge(gssNode)) {
       if (toPop.containsKey(v.hashCode)) {
-        queue.add(alternative, dot, gssNode, ci)
+        for (z in toPop[v.hashCode]!!.values) {
+          queue.add(alternative, dot, gssNode, z)
+        }
       }
     }
 
