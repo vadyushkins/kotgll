@@ -23,4 +23,3 @@ class GraphNode(val id: Int, var isStart: Boolean = false, var isFinal: Boolean 
     outgoingEdges.add(edge)
   }
 }
-

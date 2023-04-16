@@ -1,6 +1,5 @@
 package rsm.graphinput.withsppf
 
-import makeGraphFromString
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -13,6 +12,7 @@ import org.kotgll.rsm.grammar.symbol.Char
 import org.kotgll.rsm.grammar.symbol.Literal
 import org.kotgll.rsm.grammar.symbol.Nonterminal
 import org.kotgll.rsm.graphinput.withsppf.GLL
+import readGraphFromString
 import kotlin.test.assertNull
 
 class TestHandCraftedRSMGraphInputWithSPPFFail {
@@ -54,7 +54,7 @@ class TestHandCraftedRSMGraphInputWithSPPFFail {
                     isFinal = true,
                 )))
 
-    assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertNull(GLL(rsm, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")
@@ -88,7 +88,7 @@ class TestHandCraftedRSMGraphInputWithSPPFFail {
                     isFinal = true,
                 )))
 
-    assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertNull(GLL(rsm, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")
@@ -120,7 +120,7 @@ class TestHandCraftedRSMGraphInputWithSPPFFail {
             head = finalRSMState,
         ))
 
-    assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertNull(GLL(rsm, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")
@@ -151,7 +151,7 @@ class TestHandCraftedRSMGraphInputWithSPPFFail {
             head = finalRSMState,
         ))
 
-    assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertNull(GLL(rsm, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")
@@ -274,7 +274,7 @@ class TestHandCraftedRSMGraphInputWithSPPFFail {
             head = finalRSMState,
         ))
 
-    assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertNull(GLL(rsm, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")
@@ -392,7 +392,7 @@ class TestHandCraftedRSMGraphInputWithSPPFFail {
             head = intermediateRSMState10,
         ))
 
-    assertNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertNull(GLL(rsm, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")
@@ -465,7 +465,7 @@ class TestHandCraftedRSMGraphInputWithSPPFFail {
             head = rsmState1,
         ))
 
-    assertNull(GLL(rsmState0, listOf(makeGraphFromString(input))).parse())
+    assertNull(GLL(rsmState0, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Null for {0}")

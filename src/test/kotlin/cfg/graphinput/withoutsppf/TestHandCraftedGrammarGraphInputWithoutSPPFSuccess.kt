@@ -1,6 +1,5 @@
 package cfg.graphinput.withoutsppf
 
-import makeGraphFromString
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -10,6 +9,7 @@ import org.kotgll.cfg.grammar.symbol.Char
 import org.kotgll.cfg.graphinput.withoutsppf.GLL
 import org.kotgll.graph.GraphEdge
 import org.kotgll.graph.GraphNode
+import readGraphFromString
 import kotlin.test.assertEquals
 
 class TestHandCraftedGrammarGraphInputWithoutSPPFSuccess {
@@ -33,7 +33,7 @@ class TestHandCraftedGrammarGraphInputWithoutSPPFSuccess {
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(1)),
-        actual = GLL(grammar, listOf(makeGraphFromString("a"))).parse(),
+        actual = GLL(grammar, listOf(readGraphFromString("a"))).parse(),
     )
   }
 
@@ -44,7 +44,7 @@ class TestHandCraftedGrammarGraphInputWithoutSPPFSuccess {
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(2)),
-        actual = GLL(grammar, listOf(makeGraphFromString("ab"))).parse(),
+        actual = GLL(grammar, listOf(readGraphFromString("ab"))).parse(),
     )
   }
 
@@ -56,7 +56,7 @@ class TestHandCraftedGrammarGraphInputWithoutSPPFSuccess {
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(input.length)),
-        actual = GLL(grammar, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(grammar, listOf(readGraphFromString(input))).parse(),
     )
   }
 
@@ -68,7 +68,7 @@ class TestHandCraftedGrammarGraphInputWithoutSPPFSuccess {
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(input.length)),
-        actual = GLL(grammar, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(grammar, listOf(readGraphFromString(input))).parse(),
     )
   }
 
@@ -117,7 +117,7 @@ class TestHandCraftedGrammarGraphInputWithoutSPPFSuccess {
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(input.length)),
-        actual = GLL(grammar, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(grammar, listOf(readGraphFromString(input))).parse(),
     )
   }
 
@@ -145,7 +145,7 @@ class TestHandCraftedGrammarGraphInputWithoutSPPFSuccess {
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(input.length)),
-        actual = GLL(grammar, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(grammar, listOf(readGraphFromString(input))).parse(),
     )
   }
 
@@ -163,7 +163,7 @@ class TestHandCraftedGrammarGraphInputWithoutSPPFSuccess {
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(input.length)),
-        actual = GLL(grammar, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(grammar, listOf(readGraphFromString(input))).parse(),
     )
   }
 

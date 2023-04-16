@@ -7,14 +7,14 @@ import kotlin.collections.ArrayDeque
 
 class DescriptorsQueue {
   val todo: ArrayDeque<Descriptor> = ArrayDeque()
-  val done: HashMap<Int, HashSet<Int>> = HashMap()
+  val done: HashMap<Int, HashSet<Descriptor>> = HashMap()
 
   fun add(alternative: Alternative, dot: Int, gssNode: GSSNode, pos: GraphNode) {
     val descriptor = Descriptor(alternative, dot, gssNode, pos)
-    if (!done.containsKey(pos.hashCode)) done[pos.hashCode] = HashSet()
-    if (!done[pos.hashCode]!!.contains(descriptor.hashCode)) {
-      done[pos.hashCode]!!.add(descriptor.hashCode)
-      todo.add(descriptor)
+    if (!done.containsKey(pos.id)) done[pos.id] = HashSet()
+    if (!done[pos.id]!!.contains(descriptor)) {
+      done[pos.id]!!.add(descriptor)
+      todo.addLast(descriptor)
     }
   }
 
@@ -23,10 +23,10 @@ class DescriptorsQueue {
   fun isEmpty() = todo.isEmpty()
 
   class Descriptor(
-    val alternative: Alternative,
-    val dot: Int,
-    val gssNode: GSSNode,
-    val pos: GraphNode,
+      val alternative: Alternative,
+      val dot: Int,
+      val gssNode: GSSNode,
+      val pos: GraphNode,
   ) {
     override fun toString() =
         "Descriptor(alternative=$alternative, dot=$dot, gssNode=$gssNode, pos=$pos)"
@@ -43,7 +43,7 @@ class DescriptorsQueue {
       return true
     }
 
-    val hashCode: Int = Objects.hash(alternative, dot, gssNode, pos)
+    val hashCode: Int = Objects.hash(alternative, dot, gssNode)
     override fun hashCode() = hashCode
   }
 }

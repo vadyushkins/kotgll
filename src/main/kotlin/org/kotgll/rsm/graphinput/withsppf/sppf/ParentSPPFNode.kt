@@ -14,8 +14,6 @@ open class ParentSPPFNode(leftExtent: GraphNode, rightExtent: GraphNode) :
     if (other !is ParentSPPFNode) return false
     if (!super.equals(other)) return false
 
-    if (kids != other.kids) return false
-
     return true
   }
 

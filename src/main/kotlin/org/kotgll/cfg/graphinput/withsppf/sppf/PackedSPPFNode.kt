@@ -5,11 +5,11 @@ import org.kotgll.graph.GraphNode
 import java.util.*
 
 open class PackedSPPFNode(
-  val pivot: GraphNode,
-  val alternative: Alternative,
-  val dot: Int,
-  val leftSPPFNode: SPPFNode? = null,
-  val rightSPPFNode: SPPFNode? = null,
+    val pivot: GraphNode,
+    val alternative: Alternative,
+    val dot: Int,
+    val leftSPPFNode: SPPFNode? = null,
+    val rightSPPFNode: SPPFNode? = null,
 ) {
   override fun toString() =
       "PackedSPPFNode(pivot=$pivot, alternative=$alternative, dot=$dot, leftSPPFNode=$leftSPPFNode, rightSPPFNode=$rightSPPFNode)"

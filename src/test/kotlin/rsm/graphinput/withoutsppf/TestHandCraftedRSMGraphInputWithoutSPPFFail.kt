@@ -1,6 +1,5 @@
 package rsm.graphinput.withoutsppf
 
-import makeGraphFromString
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -13,6 +12,7 @@ import org.kotgll.rsm.grammar.symbol.Char
 import org.kotgll.rsm.grammar.symbol.Literal
 import org.kotgll.rsm.grammar.symbol.Nonterminal
 import org.kotgll.rsm.graphinput.withoutsppf.GLL
+import readGraphFromString
 import kotlin.test.assertEquals
 
 class TestHandCraftedRSMGraphInputWithoutSPPFFail {
@@ -59,7 +59,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFFail {
 
     assertEquals(
         expected = hashMapOf(),
-        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(rsm, listOf(readGraphFromString(input))).parse(),
     )
   }
 
@@ -96,7 +96,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFFail {
 
     assertEquals(
         expected = hashMapOf(),
-        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(rsm, listOf(readGraphFromString(input))).parse(),
     )
   }
 
@@ -131,7 +131,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFFail {
 
     assertEquals(
         expected = hashMapOf(),
-        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(rsm, listOf(readGraphFromString(input))).parse(),
     )
   }
 
@@ -165,7 +165,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFFail {
 
     assertEquals(
         expected = hashMapOf(),
-        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(rsm, listOf(readGraphFromString(input))).parse(),
     )
   }
 
@@ -294,7 +294,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFFail {
 
     assertEquals(
         expected = hashMapOf(),
-        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(rsm, listOf(readGraphFromString(input))).parse(),
     )
   }
 
@@ -415,7 +415,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFFail {
 
     assertEquals(
         expected = hashMapOf(),
-        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(rsm, listOf(readGraphFromString(input))).parse(),
     )
   }
 
@@ -494,7 +494,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFFail {
 
     assertEquals(
         expected = hashMapOf(),
-        actual = GLL(rsmState0, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(rsmState0, listOf(readGraphFromString(input))).parse(),
     )
   }
 

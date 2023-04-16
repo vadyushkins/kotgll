@@ -19,10 +19,6 @@ class RSMState(
     if (other !is RSMState) return false
 
     if (id != other.id) return false
-    if (isStart != other.isStart) return false
-    if (isFinal != other.isFinal) return false
-    if (outgoingTerminalEdges != other.outgoingTerminalEdges) return false
-    if (outgoingNonterminalEdges != other.outgoingNonterminalEdges) return false
 
     return true
   }

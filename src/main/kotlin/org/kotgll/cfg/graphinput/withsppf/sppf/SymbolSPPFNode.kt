@@ -6,9 +6,9 @@ import org.kotgll.graph.GraphNode
 import java.util.*
 
 class SymbolSPPFNode(
-  leftExtent: GraphNode,
-  rightExtent: GraphNode,
-  val symbol: Nonterminal,
+    leftExtent: GraphNode,
+    rightExtent: GraphNode,
+    val symbol: Nonterminal,
 ) : ParentSPPFNode(leftExtent, rightExtent) {
   override fun toString() =
       "SymbolSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, symbol=$symbol)"

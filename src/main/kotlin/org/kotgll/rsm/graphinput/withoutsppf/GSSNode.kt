@@ -5,17 +5,13 @@ import org.kotgll.rsm.grammar.RSMState
 import java.util.*
 
 class GSSNode(val rsmState: RSMState, val pos: GraphNode) {
-  val edges: HashMap<Int, GSSNode> = HashMap()
+  val edges: HashSet<GSSNode> = HashSet()
 
   fun addEdge(gssNode: GSSNode): Boolean {
-    if (!edges.containsKey(gssNode.hashCode)) {
-      edges[gssNode.hashCode] = gssNode
-      return true
-    }
-    return false
+    return edges.add(gssNode)
   }
 
-  override fun toString() = "GSSNode(rsmState=$rsmState, k=$pos, edges=$edges)"
+  override fun toString() = "GSSNode(rsmState=$rsmState, k=$pos)"
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
@@ -23,7 +19,6 @@ class GSSNode(val rsmState: RSMState, val pos: GraphNode) {
 
     if (rsmState != other.rsmState) return false
     if (pos != other.pos) return false
-    if (edges != other.edges) return false
 
     return true
   }

@@ -24,7 +24,6 @@ class GSSNode(val alternative: Alternative, val dot: Int, val pos: GraphNode) {
     if (alternative != other.alternative) return false
     if (dot != other.dot) return false
     if (pos != other.pos) return false
-    if (edges != other.edges) return false
 
     return true
   }

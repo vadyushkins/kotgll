@@ -1,6 +1,5 @@
 package rsm.graphinput.withsppf
 
-import makeGraphFromString
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -13,6 +12,7 @@ import org.kotgll.rsm.grammar.symbol.Char
 import org.kotgll.rsm.grammar.symbol.Literal
 import org.kotgll.rsm.grammar.symbol.Nonterminal
 import org.kotgll.rsm.graphinput.withsppf.GLL
+import readGraphFromString
 import kotlin.test.assertNotNull
 
 class TestHandCraftedRSMGraphInputWithSPPFSuccess {
@@ -53,7 +53,7 @@ class TestHandCraftedRSMGraphInputWithSPPFSuccess {
                     isFinal = true,
                 )))
 
-    assertNotNull(GLL(rsm, listOf(makeGraphFromString("a"))).parse())
+    assertNotNull(GLL(rsm, listOf(readGraphFromString("a"))).parse())
   }
 
   @Test
@@ -86,7 +86,7 @@ class TestHandCraftedRSMGraphInputWithSPPFSuccess {
                     isFinal = true,
                 )))
 
-    assertNotNull(GLL(rsm, listOf(makeGraphFromString("ab"))).parse())
+    assertNotNull(GLL(rsm, listOf(readGraphFromString("ab"))).parse())
   }
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
@@ -118,7 +118,7 @@ class TestHandCraftedRSMGraphInputWithSPPFSuccess {
             head = finalRSMState,
         ))
 
-    assertNotNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertNotNull(GLL(rsm, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
@@ -149,7 +149,7 @@ class TestHandCraftedRSMGraphInputWithSPPFSuccess {
             head = finalRSMState,
         ))
 
-    assertNotNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertNotNull(GLL(rsm, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
@@ -263,7 +263,7 @@ class TestHandCraftedRSMGraphInputWithSPPFSuccess {
             head = finalRSMState,
         ))
 
-    assertNotNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertNotNull(GLL(rsm, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
@@ -381,7 +381,7 @@ class TestHandCraftedRSMGraphInputWithSPPFSuccess {
             head = intermediateRSMState10,
         ))
 
-    assertNotNull(GLL(rsm, listOf(makeGraphFromString(input))).parse())
+    assertNotNull(GLL(rsm, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be NotNull for {0}")

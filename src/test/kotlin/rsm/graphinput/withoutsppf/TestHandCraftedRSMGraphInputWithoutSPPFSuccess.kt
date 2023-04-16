@@ -1,6 +1,5 @@
 package rsm.graphinput.withoutsppf
 
-import makeGraphFromString
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
@@ -13,6 +12,7 @@ import org.kotgll.rsm.grammar.symbol.Char
 import org.kotgll.rsm.grammar.symbol.Literal
 import org.kotgll.rsm.grammar.symbol.Nonterminal
 import org.kotgll.rsm.graphinput.withoutsppf.GLL
+import readGraphFromString
 import kotlin.test.assertEquals
 
 class TestHandCraftedRSMGraphInputWithoutSPPFSuccess {
@@ -58,7 +58,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFSuccess {
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(1)),
-        actual = GLL(rsm, listOf(makeGraphFromString("a"))).parse(),
+        actual = GLL(rsm, listOf(readGraphFromString("a"))).parse(),
     )
   }
 
@@ -94,7 +94,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFSuccess {
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(2)),
-        actual = GLL(rsm, listOf(makeGraphFromString("ab"))).parse(),
+        actual = GLL(rsm, listOf(readGraphFromString("ab"))).parse(),
     )
   }
 
@@ -129,7 +129,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFSuccess {
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(input.length)),
-        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(rsm, listOf(readGraphFromString(input))).parse(),
     )
   }
 
@@ -163,7 +163,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFSuccess {
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(input.length)),
-        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(rsm, listOf(readGraphFromString(input))).parse(),
     )
   }
 
@@ -283,7 +283,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFSuccess {
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(input.length)),
-        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(rsm, listOf(readGraphFromString(input))).parse(),
     )
   }
 
@@ -404,7 +404,7 @@ class TestHandCraftedRSMGraphInputWithoutSPPFSuccess {
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(input.length)),
-        actual = GLL(rsm, listOf(makeGraphFromString(input))).parse(),
+        actual = GLL(rsm, listOf(readGraphFromString(input))).parse(),
     )
   }
 

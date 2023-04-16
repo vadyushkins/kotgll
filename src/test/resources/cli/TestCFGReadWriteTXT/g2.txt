@@ -1,0 +1,3 @@
+StartNonterminal("S")
+Nonterminal("S") -> Literal("subClassOf_r") Nonterminal("S") Literal("subClassOf")
+Nonterminal("S") -> Literal("subClassOf")

@@ -5,9 +5,9 @@ import org.kotgll.graph.GraphNode
 import java.util.*
 
 class TerminalSPPFNode(
-  leftExtent: GraphNode,
-  rightExtent: GraphNode,
-  val terminal: Terminal,
+    leftExtent: GraphNode,
+    rightExtent: GraphNode,
+    val terminal: Terminal,
 ) : SPPFNode(leftExtent, rightExtent) {
   override fun toString() =
       "TerminalSPPFNode(leftExtent=$leftExtent, rightExtent=$rightExtent, terminal=$terminal)"
