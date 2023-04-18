@@ -4,11 +4,14 @@ on:
   release:
     types: [ created ]
 
+env:
+  GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
+
 jobs:
   publish:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       packages: write
     steps:
       - name: Checkout
@@ -24,5 +27,17 @@ jobs:
         uses: gradle/gradle-build-action@v2
         with:
           arguments: publish
+          cache-read-only: |
+            ${{ github.ref != 'refs/heads/main' && 
+                github.ref != 'refs/heads/dev' }}
+          gradle-home-cache-includes: |
+            caches
+            notifications
+            jdks
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: build/libs/kotgll-*.jar

@@ -4,7 +4,7 @@ plugins {
   `maven-publish`
 }
 
-group = "me.vadyushkins"
+group = "vadyushkins"
 
 version = "1.0.0"
 
@@ -34,6 +34,34 @@ tasks.withType<Jar> {
 }
 
 publishing {
+  publications {
+    create<MavenPublication>("kotgll") {
+      from(components["java"])
+
+      versionMapping {
+        usage("java-api") { fromResolutionOf("runtimeClasspath") }
+        usage("java-runtime") { fromResolutionResult() }
+      }
+
+      pom {
+        name.set("kotgll")
+        url.set("https://github.com/vadyushkins/kotgll")
+        licenses {
+          license {
+            name.set("MIT License")
+            url.set("https://github.com/vadyushkins/kotgll/blob/main/LICENSE")
+          }
+        }
+        developers {
+          developer {
+            id.set("vadyushkins")
+            name.set("Vadim Abzalov")
+            email.set("vadim.i.abzalov@gmail.com")
+          }
+        }
+      }
+    }
+  }
   repositories {
     maven {
       name = "GitHubPackages"
