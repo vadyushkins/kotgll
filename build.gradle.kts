@@ -1,6 +1,7 @@
 plugins {
   kotlin("jvm") version "1.8.0"
   application
+  `maven-publish`
 }
 
 group = "me.vadyushkins"
@@ -30,4 +31,17 @@ tasks.withType<Jar> {
       configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) } +
           sourcesMain.output
   from(contents)
+}
+
+publishing {
+  repositories {
+    maven {
+      name = "GitHubPackages"
+      url = uri("https://maven.pkg.github.com/vadyushkins/kotgll")
+      credentials {
+        username = System.getenv("GITHUB_ACTOR")
+        password = System.getenv("GITHUB_TOKEN")
+      }
+    }
+  }
 }
