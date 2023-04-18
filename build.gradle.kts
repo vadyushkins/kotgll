@@ -34,6 +34,11 @@ tasks.withType<Jar> {
 }
 
 publishing {
+  publications {
+    create<MavenPublication>("kotgll") {
+      from(components["java"])
+    }
+  }
   repositories {
     maven {
       name = "GitHubPackages"
