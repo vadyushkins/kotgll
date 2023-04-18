@@ -1,13 +1,29 @@
 # kotgll
-* About
-* Usage
+* [About](https://github.com/vadyushkins/kotgll#about)
+* [Usage](https://github.com/vadyushkins/kotgll#usage)
+  * [From sources](https://github.com/vadyushkins/kotgll#from-sources)
+  * [Using JAR](https://github.com/vadyushkins/kotgll#using-jar)
 
 ## About
 GLL implementation in Kotlin
 
 ## Usage
 
-### Run from sources
+### Command Line Interface
+
+```text
+Usage: kotgll options_list
+Options: 
+    --input -> Input format (always required) { Value should be one of [string, graph] }
+    --grammar -> Grammar format (always required) { Value should be one of [cfg, rsm] }
+    --sppf [ON] -> Sppf mode { Value should be one of [on, off] }
+    --inputPath -> Path to input txt file (always required) { String }
+    --grammarPath -> Path to grammar txt file (always required) { String }
+    --outputPath -> Path to output txt file (always required) { String }
+    --help, -h -> Usage info
+```
+
+### From sources
 
 #### Step 1. Clone repository
 
@@ -29,19 +45,7 @@ or
 
 `gradle run --args="--help"`
 
-You will see the following message.
-
-```text
-Usage: kotgll options_list
-Options: 
-    --input -> Input format (always required) { Value should be one of [string, graph] }
-    --grammar -> Grammar format (always required) { Value should be one of [cfg, rsm] }
-    --sppf [ON] -> Sppf mode { Value should be one of [on, off] }
-    --inputPath -> Path to input txt file (always required) { String }
-    --grammarPath -> Path to grammar txt file (always required) { String }
-    --outputPath -> Path to output txt file (always required) { String }
-    --help, -h -> Usage info
-```
+You will see the ["Options list"](https://github.com/vadyushkins/kotgll#command-line-interface) message.
 
 #### Example
 
@@ -49,16 +53,16 @@ Options:
 gradle run --args="--input graph --grammar rsm --sppf off --inputPath src/test/resources/cli/TestGraphReadWriteCSV/dyck.csv --grammarPath src/test/resources/cli/TestRSMReadWriteTXT/dyck.txt --outputPath ./result.txt"
 ```
 
-In file `result.txt` you will see the following.
+### Using JAR
+
+#### Step 1. Download the latest JAR
 
 ```text
-0 0
-0 2
-0 3
-1 1
-1 2
-1 3
-2 2
-2 3
-3 3
+curl -L -O https://github.com/vadyushkins/kotgll/releases/download/v1.0.0/kotgll-1.0.0.jar
+```
+
+#### Step 2. Run JAR with Java
+
+```text
+java -jar kotgll-1.0.0.jar --input graph --grammar rsm --sppf off --inputPath src/test/resources/cli/TestGraphReadWriteCSV/dyck.csv --grammarPath src/test/resources/cli/TestRSMReadWriteTXT/dyck.txt --outputPath ./result.txt
 ```
