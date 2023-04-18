@@ -4,7 +4,7 @@ plugins {
   `maven-publish`
 }
 
-group = "me.vadyushkins"
+group = "vadyushkins"
 
 version = "1.0.0"
 
