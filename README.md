@@ -31,7 +31,7 @@ or
 
 You will see the following message.
 
-```
+```text
 Usage: kotgll options_list
 Options: 
     --input -> Input format (always required) { Value should be one of [string, graph] }
@@ -41,4 +41,24 @@ Options:
     --grammarPath -> Path to grammar txt file (always required) { String }
     --outputPath -> Path to output txt file (always required) { String }
     --help, -h -> Usage info
+```
+
+#### Example
+
+```text
+gradle run --args="--input graph --grammar rsm --sppf off --inputPath src/test/resources/cli/TestGraphReadWriteCSV/dyck.csv --grammarPath src/test/resources/cli/TestRSMReadWriteTXT/dyck.txt --outputPath ./result.txt"
+```
+
+In file `result.txt` you will see the following.
+
+```text
+0 0
+0 2
+0 3
+1 1
+1 2
+1 3
+2 2
+2 3
+3 3
 ```
