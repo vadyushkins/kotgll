@@ -7,13 +7,13 @@ import kotlin.collections.ArrayDeque
 
 class DescriptorsQueue(size: Int) {
   val todo: ArrayDeque<Descriptor> = ArrayDeque()
-  val done: Array<HashMap<Int, Descriptor>> = Array(size) { HashMap() }
+  val created: Array<HashSet<Descriptor>> = Array(size) { HashSet() }
 
-  fun add(rsmState: RSMState, gssNode: GSSNode, pos: Int, sppfNode: SPPFNode?) {
+  fun add(rsmState: RSMState, gssNode: GSSNode, sppfNode: SPPFNode?, pos: Int) {
     val descriptor = Descriptor(rsmState, gssNode, sppfNode, pos)
-    if (!done[pos].containsKey(descriptor.hashCode)) {
-      done[pos][descriptor.hashCode] = descriptor
-      todo.add(descriptor)
+    if (!created[pos].contains(descriptor)) {
+      created[pos].add(descriptor)
+      todo.addLast(descriptor)
     }
   }
 
@@ -25,7 +25,7 @@ class DescriptorsQueue(size: Int) {
       val rsmState: RSMState,
       val gssNode: GSSNode,
       val sppfNode: SPPFNode?,
-      val pos: Int
+      val pos: Int,
   ) {
     override fun toString() =
         "Descriptor(rsmState=$rsmState, gssNode=$gssNode, sppfNode=$sppfNode, pos=$pos)"
@@ -42,7 +42,7 @@ class DescriptorsQueue(size: Int) {
       return true
     }
 
-    val hashCode: Int = Objects.hash(rsmState, gssNode, sppfNode, pos)
+    val hashCode: Int = Objects.hash(rsmState, gssNode, sppfNode)
     override fun hashCode() = hashCode
   }
 }

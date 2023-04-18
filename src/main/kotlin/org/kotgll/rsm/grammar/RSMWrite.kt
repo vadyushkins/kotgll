@@ -1,7 +1,5 @@
 package org.kotgll.rsm.grammar
 
-import org.kotgll.rsm.grammar.symbol.Char
-import org.kotgll.rsm.grammar.symbol.Literal
 import java.io.File
 
 fun writeRSMToTXT(rsm: RSMState, pathToTXT: String) {
@@ -48,25 +46,14 @@ fun writeRSMToTXT(rsm: RSMState, pathToTXT: String) {
     states.forEach { state ->
       edges[state]?.forEach { edge ->
         if (edge is RSMTerminalEdge) {
-          if (edge.terminal is Char) {
-            out.println(
-                """CharEdge(
+          out.println(
+              """TerminalEdge(
       |tail=${state.id},
       |head=${edge.head.id},
-      |char=Char('${edge.terminal.char}')
+      |terminal=Terminal("${edge.terminal.value}")
       |)"""
-                    .trimMargin()
-                    .replace("\n", ""))
-          } else if (edge.terminal is Literal) {
-            out.println(
-                """LiteralEdge(
-      |tail=${state.id},
-      |head=${edge.head.id},
-      |literal=Literal("${edge.terminal.literal}")
-      |)"""
-                    .trimMargin()
-                    .replace("\n", ""))
-          }
+                  .trimMargin()
+                  .replace("\n", ""))
         } else if (edge is RSMNonterminalEdge) {
           out.println(
               """NonterminalEdge(

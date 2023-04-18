@@ -8,14 +8,14 @@ import kotlin.collections.ArrayDeque
 
 class DescriptorsQueue {
   val todo: ArrayDeque<Descriptor> = ArrayDeque()
-  val done: HashMap<Int, HashSet<Descriptor>> = HashMap()
+  val created: HashMap<GraphNode, HashSet<Descriptor>> = HashMap()
 
-  fun add(rsmState: RSMState, gssNode: GSSNode, pos: GraphNode, sppfNode: SPPFNode?) {
+  fun add(rsmState: RSMState, gssNode: GSSNode, sppfNode: SPPFNode?, pos: GraphNode) {
     val descriptor = Descriptor(rsmState, gssNode, sppfNode, pos)
-    if (!done.containsKey(pos.id)) done[pos.id] = HashSet()
-    if (!done[pos.id]!!.contains(descriptor)) {
-      done[pos.id]!!.add(descriptor)
-      todo.add(descriptor)
+    if (!created.containsKey(pos)) created[pos] = HashSet()
+    if (!created[pos]!!.contains(descriptor)) {
+      created[pos]!!.add(descriptor)
+      todo.addLast(descriptor)
     }
   }
 
@@ -44,7 +44,7 @@ class DescriptorsQueue {
       return true
     }
 
-    val hashCode: Int = Objects.hash(rsmState, gssNode, sppfNode, pos)
+    val hashCode: Int = Objects.hash(rsmState, gssNode, sppfNode)
     override fun hashCode() = hashCode
   }
 }

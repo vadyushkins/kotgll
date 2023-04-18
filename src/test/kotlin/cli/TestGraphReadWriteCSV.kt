@@ -5,7 +5,6 @@ import org.kotgll.graph.GraphEdge
 import org.kotgll.graph.GraphNode
 import org.kotgll.graph.writeGraphToCSV
 import readGraphFromCSV
-import java.io.File
 import kotlin.test.assertEquals
 
 class TestGraphReadWriteCSV {
@@ -18,7 +17,7 @@ class TestGraphReadWriteCSV {
 
     val pathToCSV = "src/test/resources/cli/TestGraphReadWriteCSV/OneEdgeGraph.csv"
     writeGraphToCSV(expectedGraphNodes, pathToCSV)
-    val actualGraphNodes = readGraphFromCSV(File(pathToCSV).inputStream())
+    val actualGraphNodes = readGraphFromCSV(pathToCSV)
 
     assertEquals(expected = expectedGraphNodes, actual = actualGraphNodes)
   }
@@ -34,7 +33,7 @@ class TestGraphReadWriteCSV {
 
     val pathToCSV = "src/test/resources/cli/TestGraphReadWriteCSV/TwoEdgesGraph.csv"
     writeGraphToCSV(expectedGraphNodes, pathToCSV)
-    val actualGraphNodes = readGraphFromCSV(File(pathToCSV).inputStream())
+    val actualGraphNodes = readGraphFromCSV(pathToCSV)
 
     assertEquals(expected = expectedGraphNodes, actual = actualGraphNodes)
   }
@@ -51,7 +50,7 @@ class TestGraphReadWriteCSV {
 
     val pathToCSV = "src/test/resources/cli/TestGraphReadWriteCSV/OneCycleGraph.csv"
     writeGraphToCSV(expectedGraphNodes, pathToCSV)
-    val actualGraphNodes = readGraphFromCSV(File(pathToCSV).inputStream())
+    val actualGraphNodes = readGraphFromCSV(pathToCSV)
 
     assertEquals(expected = expectedGraphNodes, actual = actualGraphNodes)
   }
@@ -73,7 +72,7 @@ class TestGraphReadWriteCSV {
 
     val pathToCSV = "src/test/resources/cli/TestGraphReadWriteCSV/dyck.csv"
     writeGraphToCSV(expectedGraphNodes, pathToCSV)
-    val actualGraphNodes = readGraphFromCSV(File(pathToCSV).inputStream())
+    val actualGraphNodes = readGraphFromCSV(pathToCSV)
 
     assertEquals(expected = expectedGraphNodes, actual = actualGraphNodes)
   }

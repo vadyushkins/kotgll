@@ -9,12 +9,12 @@ import org.kotgll.graph.GraphNode
 
 class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
   val queue: DescriptorsQueue = DescriptorsQueue()
-  val toPop: HashMap<GSSNode, HashSet<SPPFNode?>> = HashMap()
-  val gssNodes: HashMap<GSSNode, GSSNode> = HashMap()
-  val sppfNodes: HashMap<SPPFNode, SPPFNode> = HashMap()
-  val parseResult: HashMap<Int, HashMap<Int, SPPFNode>> = HashMap()
+  val poppedGSSNodes: HashMap<GSSNode, HashSet<SPPFNode?>> = HashMap()
+  val createdGSSNodes: HashMap<GSSNode, GSSNode> = HashMap()
+  val createdSPPFNodes: HashMap<SPPFNode, SPPFNode> = HashMap()
   val fakeStartSymbol: Nonterminal = Nonterminal("S'")
   val startGSSNodes: HashMap<GraphNode, GSSNode> = makeStartGSSNodes()
+  val parseResult: HashMap<Int, HashMap<Int, SPPFNode>> = HashMap()
 
   fun makeStartGSSNodes(): HashMap<GraphNode, GSSNode> {
     val alternative = Alternative(listOf(startSymbol))
@@ -22,99 +22,100 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
 
     val result: HashMap<GraphNode, GSSNode> = HashMap()
     for (node in startGraphNodes) {
-      result[node] = makeGSSNode(alternative, 1, node)
+      result[node] = getOrCreateGSSNode(alternative, 1, node, true)
     }
     return result
   }
 
-  fun makeGSSNode(alternative: Alternative, dot: Int, ci: GraphNode): GSSNode {
-    val gssNode = GSSNode(alternative, dot, ci)
-    if (!gssNodes.contains(gssNode)) gssNodes[gssNode] = gssNode
-    return gssNodes[gssNode]!!
+  fun getOrCreateGSSNode(
+      alternative: Alternative,
+      dot: Int,
+      ci: GraphNode,
+      isStart: Boolean = false,
+  ): GSSNode {
+    val gssNode = GSSNode(alternative, dot, ci, isStart)
+    if (!createdGSSNodes.contains(gssNode)) createdGSSNodes[gssNode] = gssNode
+    return createdGSSNodes[gssNode]!!
   }
 
-  fun parse(): HashMap<Int, HashMap<Int, SPPFNode>>? {
+  fun parse(): HashMap<Int, HashMap<Int, SPPFNode>> {
     for (alternative in startSymbol.alternatives) {
       for (entry in startGSSNodes.entries) {
-        queue.add(alternative, 0, entry.value, entry.key, null)
+        queue.add(alternative, 0, entry.value, null, entry.key)
       }
     }
 
     while (!queue.isEmpty()) {
       val descriptor: DescriptorsQueue.Descriptor = queue.next()
-      if (descriptor.dot == 0) {
-        parse(descriptor.alternative, descriptor.pos, descriptor.gssNode, descriptor.sppfNode)
+      if (descriptor.dot == 0 && descriptor.alternative.elements.isEmpty()) {
+        pop(
+            descriptor.gssNode,
+            getNodeP(
+                descriptor.alternative,
+                0,
+                descriptor.sppfNode,
+                getOrCreateItemSPPFNode(descriptor.alternative, 0, descriptor.pos, descriptor.pos)),
+            descriptor.pos)
       } else {
-        parseAt(
+        parse(
             descriptor.alternative,
             descriptor.dot,
-            descriptor.pos,
             descriptor.gssNode,
-            descriptor.sppfNode)
+            descriptor.sppfNode,
+            descriptor.pos)
       }
     }
 
-    for (sppfNode in sppfNodes.values) {
-      if (sppfNode.hasSymbol(startSymbol) &&
-          sppfNode.leftExtent.isStart &&
-          sppfNode.rightExtent.isFinal) {
-        if (!parseResult.containsKey(sppfNode.leftExtent.id)) {
-          parseResult[sppfNode.leftExtent.id] = HashMap()
-        }
-        parseResult[sppfNode.leftExtent.id]!![sppfNode.rightExtent.id] = sppfNode
-      }
-    }
-    if (HashMap<Int, HashMap<Int, SPPFNode>>() == parseResult) return null
     return parseResult
   }
 
-  fun parse(alternative: Alternative, pos: GraphNode, cu: GSSNode, cn: SPPFNode?) {
-    if (alternative.elements.isEmpty()) {
-      val cr: SPPFNode = getNodeE(alternative, 0, pos)
-      val ncn: SPPFNode = getNodeP(alternative, 0, cn, cr)
-      pop(cu, ncn, pos)
-    } else {
-      parseAt(alternative, 0, pos, cu, cn)
-    }
-  }
-
-  fun parseAt(alternative: Alternative, dot: Int, pos: GraphNode, cu: GSSNode, cn: SPPFNode?) {
+  fun parse(
+      alternative: Alternative,
+      dot: Int,
+      gssNode: GSSNode,
+      sppfNode: SPPFNode?,
+      pos: GraphNode
+  ) {
     if (dot < alternative.elements.size) {
       val curSymbol: Symbol = alternative.elements[dot]
 
       if (curSymbol is Terminal) {
         for (edge in pos.outgoingEdges) {
-          val value: String? = curSymbol.match(0, edge.label)
-          if (value == edge.label) {
-            val cr: SPPFNode = getNodeT(curSymbol, pos, edge.head)
-            queue.add(alternative, dot + 1, cu, edge.head, getNodeP(alternative, dot + 1, cn, cr))
+          if (curSymbol.value == edge.label) {
+            val nextSPPFNode: SPPFNode = getOrCreateTerminalSPPFNode(curSymbol, pos, edge.head)
+            queue.add(
+                alternative,
+                dot + 1,
+                gssNode,
+                getNodeP(alternative, dot + 1, sppfNode, nextSPPFNode),
+                edge.head)
           }
         }
       }
 
       if (curSymbol is Nonterminal) {
-        val curGSSNode: GSSNode = createGSSNode(alternative, dot + 1, cu, cn, pos)
+        val curGSSNode: GSSNode = createGSSNode(alternative, dot + 1, gssNode, sppfNode, pos)
         for (alt in curSymbol.alternatives) {
-          queue.add(alt, 0, curGSSNode, pos, null)
+          queue.add(alt, 0, curGSSNode, null, pos)
         }
       }
     } else {
-      pop(cu, cn, pos)
+      pop(gssNode, sppfNode, pos)
     }
   }
 
-  fun pop(gssNode: GSSNode, sppfNode: SPPFNode?, ci: GraphNode) {
+  fun pop(gssNode: GSSNode, sppfNode: SPPFNode?, pos: GraphNode) {
     if (!startGSSNodes.values.contains(gssNode)) {
-      if (!toPop.containsKey(gssNode)) toPop[gssNode] = HashSet()
-      toPop[gssNode]!!.add(sppfNode)
+      if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
+      poppedGSSNodes[gssNode]!!.add(sppfNode)
       for (e in gssNode.edges.entries) {
         for (u in e.value) {
           queue.add(
               gssNode.alternative,
               gssNode.dot,
               u,
-              ci,
-              getNodeP(gssNode.alternative, gssNode.dot, sppfNodes[e.key], sppfNode!!),
+              getNodeP(gssNode.alternative, gssNode.dot, createdSPPFNodes[e.key], sppfNode!!),
+              pos,
           )
         }
       }
@@ -126,15 +127,15 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
       dot: Int,
       gssNode: GSSNode,
       sppfNode: SPPFNode?,
-      ci: GraphNode,
+      pos: GraphNode,
   ): GSSNode {
-    val v: GSSNode = makeGSSNode(alternative, dot, ci)
+    val v: GSSNode = getOrCreateGSSNode(alternative, dot, pos)
 
     if (v.addEdge(sppfNode, gssNode)) {
-      if (toPop.containsKey(v)) {
-        for (z in toPop[v]!!) {
+      if (poppedGSSNodes.containsKey(v)) {
+        for (z in poppedGSSNodes[v]!!) {
           queue.add(
-              alternative, dot, gssNode, z!!.rightExtent, getNodeP(alternative, dot, sppfNode, z))
+              alternative, dot, gssNode, getNodeP(alternative, dot, sppfNode, z!!), z.rightExtent)
         }
       }
     }
@@ -148,50 +149,52 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
       sppfNode: SPPFNode?,
       nextSPPFNode: SPPFNode,
   ): SPPFNode {
-    var k = nextSPPFNode.leftExtent
-    val i = nextSPPFNode.rightExtent
-    var j = k
-
-    if (sppfNode != null) {
-      j = sppfNode.leftExtent
-      k = sppfNode.rightExtent
-    }
+    val leftExtent = sppfNode?.leftExtent ?: nextSPPFNode.leftExtent
+    val rightExtent = nextSPPFNode.rightExtent
 
     val y =
-        if (dot == alternative.elements.size) makeSymbolSPPFNode(alternative.nonterminal, j, i)
-        else makeItemSPPFNode(alternative, dot, j, i)
+        if (dot == alternative.elements.size)
+            getOrCreateSymbolSPPFNode(alternative.nonterminal, leftExtent, rightExtent)
+        else getOrCreateItemSPPFNode(alternative, dot, leftExtent, rightExtent)
 
-    y.kids.add(PackedSPPFNode(k, alternative, dot, sppfNode, nextSPPFNode))
+    y.kids.add(PackedSPPFNode(nextSPPFNode.leftExtent, alternative, dot, sppfNode, nextSPPFNode))
 
     return y
   }
 
-  fun getNodeT(terminal: Terminal, i: GraphNode, j: GraphNode): SPPFNode {
-    val y = TerminalSPPFNode(i, j, terminal)
-    if (!sppfNodes.containsKey(y)) sppfNodes[y] = y
-    return sppfNodes[y]!!
+  fun getOrCreateTerminalSPPFNode(
+      terminal: Terminal,
+      leftExtent: GraphNode,
+      rightExtent: GraphNode
+  ): SPPFNode {
+    val y = TerminalSPPFNode(leftExtent, rightExtent, terminal)
+    if (!createdSPPFNodes.containsKey(y)) createdSPPFNodes[y] = y
+    return createdSPPFNodes[y]!!
   }
 
-  fun getNodeE(alternative: Alternative, dot: Int, i: GraphNode): SPPFNode {
-    val y = ItemSPPFNode(i, i, alternative, dot)
-    if (!sppfNodes.containsKey(y)) sppfNodes[y] = y
-    return sppfNodes[y]!!
-  }
-
-  fun makeItemSPPFNode(
+  fun getOrCreateItemSPPFNode(
       alternative: Alternative,
       dot: Int,
-      i: GraphNode,
-      j: GraphNode,
+      leftExtent: GraphNode,
+      rightExtent: GraphNode,
   ): ItemSPPFNode {
-    val y = ItemSPPFNode(i, j, alternative, dot)
-    if (!sppfNodes.containsKey(y)) sppfNodes[y] = y
-    return sppfNodes[y]!! as ItemSPPFNode
+    val y = ItemSPPFNode(leftExtent, rightExtent, alternative, dot)
+    if (!createdSPPFNodes.containsKey(y)) createdSPPFNodes[y] = y
+    return createdSPPFNodes[y]!! as ItemSPPFNode
   }
 
-  fun makeSymbolSPPFNode(nonterminal: Nonterminal, i: GraphNode, j: GraphNode): SymbolSPPFNode {
-    val y = SymbolSPPFNode(i, j, nonterminal)
-    if (!sppfNodes.containsKey(y)) sppfNodes[y] = y
-    return sppfNodes[y]!! as SymbolSPPFNode
+  fun getOrCreateSymbolSPPFNode(
+      nonterminal: Nonterminal,
+      leftExtent: GraphNode,
+      rightExtent: GraphNode,
+  ): SymbolSPPFNode {
+    val y = SymbolSPPFNode(leftExtent, rightExtent, nonterminal)
+    if (!createdSPPFNodes.containsKey(y)) createdSPPFNodes[y] = y
+    val result = createdSPPFNodes[y]!! as SymbolSPPFNode
+    if (nonterminal == startSymbol && leftExtent.isStart && rightExtent.isFinal) {
+      if (!parseResult.containsKey(leftExtent.id)) parseResult[leftExtent.id] = HashMap()
+      parseResult[leftExtent.id]!![rightExtent.id] = result
+    }
+    return result
   }
 }

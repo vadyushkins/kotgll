@@ -4,18 +4,18 @@ import org.kotgll.cfg.grammar.Alternative
 import org.kotgll.graph.GraphNode
 import java.util.*
 
-class GSSNode(val alternative: Alternative, val dot: Int, val pos: GraphNode) {
-  val edges: HashMap<Int, GSSNode> = HashMap()
+class GSSNode(
+    val alternative: Alternative,
+    val dot: Int,
+    val pos: GraphNode,
+    var isStart: Boolean = false,
+) {
+  val edges: HashSet<GSSNode> = HashSet()
 
-  fun addEdge(gssNode: GSSNode): Boolean {
-    if (!edges.containsKey(gssNode.hashCode)) {
-      edges[gssNode.hashCode] = gssNode
-      return true
-    }
-    return false
-  }
+  fun addEdge(gssNode: GSSNode) = edges.add(gssNode)
 
-  override fun toString() = "GSSNode(alternative=$alternative, dot=$dot, pos=$pos)"
+  override fun toString() =
+      "GSSNode(alternative=$alternative, dot=$dot, pos=$pos, isStart=$isStart)"
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true

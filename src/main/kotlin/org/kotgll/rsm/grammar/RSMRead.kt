@@ -1,8 +1,7 @@
 package org.kotgll.rsm.grammar
 
-import org.kotgll.rsm.grammar.symbol.Char
-import org.kotgll.rsm.grammar.symbol.Literal
 import org.kotgll.rsm.grammar.symbol.Nonterminal
+import org.kotgll.rsm.grammar.symbol.Terminal
 import java.io.File
 
 fun readRSMFromTXT(pathToTXT: String): RSMState {
@@ -46,20 +45,11 @@ fun readRSMFromTXT(pathToTXT: String): RSMState {
           .trimMargin()
           .replace("\n", "")
           .toRegex()
-  val charRSMTerminalEdgeRegex =
-      """^CharEdge\(
+  val rsmTerminalEdgeRegex =
+      """^TerminalEdge\(
         |tail=(?<tailId>.*),
         |head=(?<headId>.*),
-        |char=Char\('(?<charValue>.*)'\)
-        |\)$"""
-          .trimMargin()
-          .replace("\n", "")
-          .toRegex()
-  val literalRSMTerminalEdgeRegex =
-      """^LiteralEdge\(
-        |tail=(?<tailId>.*),
-        |head=(?<headId>.*),
-        |literal=Literal\("(?<literalValue>.*)"\)
+        |terminal=Terminal\("(?<literalValue>.*)"\)
         |\)$"""
           .trimMargin()
           .replace("\n", "")
@@ -103,19 +93,12 @@ fun readRSMFromTXT(pathToTXT: String): RSMState {
               isFinal = isFinalValue == "true",
           )
       if (tmpRSMState.isStart) tmpNonterminal.startState = tmpRSMState
-    } else if (charRSMTerminalEdgeRegex.matches(line)) {
-      val (tailId, headId, charValue) = charRSMTerminalEdgeRegex.matchEntire(line)!!.destructured
+    } else if (rsmTerminalEdgeRegex.matches(line)) {
+      val (tailId, headId, terminalValue) = rsmTerminalEdgeRegex.matchEntire(line)!!.destructured
       val tailRSMState = rsmStates[tailId.toInt()]!!
       val headRSMState = rsmStates[headId.toInt()]!!
       tailRSMState.addTerminalEdge(
-          RSMTerminalEdge(terminal = Char(charValue[0]), head = headRSMState))
-    } else if (literalRSMTerminalEdgeRegex.matches(line)) {
-      val (tailId, headId, literalValue) =
-          literalRSMTerminalEdgeRegex.matchEntire(line)!!.destructured
-      val tailRSMState = rsmStates[tailId.toInt()]!!
-      val headRSMState = rsmStates[headId.toInt()]!!
-      tailRSMState.addTerminalEdge(
-          RSMTerminalEdge(terminal = Literal(literalValue), head = headRSMState))
+          RSMTerminalEdge(terminal = Terminal(terminalValue), head = headRSMState))
     } else if (rsmNonterminalEdgeRegex.matches(line)) {
       val (tailId, headId, nonterminalValue) =
           rsmNonterminalEdgeRegex.matchEntire(line)!!.destructured

@@ -1,12 +1,11 @@
 package org.kotgll.cfg.grammar
 
-import org.kotgll.cfg.grammar.symbol.Char
-import org.kotgll.cfg.grammar.symbol.Literal
 import org.kotgll.cfg.grammar.symbol.Nonterminal
 import org.kotgll.cfg.grammar.symbol.Symbol
-import java.io.InputStream
+import org.kotgll.cfg.grammar.symbol.Terminal
+import java.io.File
 
-fun readCFGFromText(inputStream: InputStream): Nonterminal {
+fun readCFGFromTXT(pathToTXT: String): Nonterminal {
   var startNonterminal = Nonterminal("S")
   val nonterminals: HashMap<Nonterminal, Nonterminal> = HashMap()
   fun makeNonterminal(name: String): Nonterminal {
@@ -16,11 +15,10 @@ fun readCFGFromText(inputStream: InputStream): Nonterminal {
   }
 
   val startNonterminalRegex = """^StartNonterminal\("(?<value>.*)"\)$""".toRegex()
+  val terminalRegex = """^Terminal\("(?<value>.*)"\)$""".toRegex()
   val nonterminalRegex = """^Nonterminal\("(?<value>.*)"\)$""".toRegex()
-  val charRegex = """^Char\('(?<value>.*)'\)$""".toRegex()
-  val literalRegex = """^Literal\("(?<value>.*)"\)$""".toRegex()
 
-  val reader = inputStream.bufferedReader()
+  val reader = File(pathToTXT).inputStream().bufferedReader()
   while (true) {
     val line = reader.readLine() ?: break
 
@@ -38,19 +36,16 @@ fun readCFGFromText(inputStream: InputStream): Nonterminal {
 
       val elements: MutableList<Symbol> = mutableListOf()
       for (element in alternativeElements.split(' ')) {
-        if (charRegex.matches(element)) {
-          val elementValue = charRegex.matchEntire(element)!!.groups["value"]!!.value
-          elements.add(Char(elementValue[0]))
-        } else if (literalRegex.matches(element)) {
-          val elementValue = literalRegex.matchEntire(element)!!.groups["value"]!!.value
-          elements.add(Literal(elementValue))
+        if (terminalRegex.matches(element)) {
+          val elementValue = terminalRegex.matchEntire(element)!!.groups["value"]!!.value
+          elements.add(Terminal(elementValue))
         } else if (nonterminalRegex.matches(element)) {
           val elementValue = nonterminalRegex.matchEntire(element)!!.groups["value"]!!.value
           val tmpNonterminal = makeNonterminal(elementValue)
           elements.add(tmpNonterminal)
         }
       }
-      nonterminals[nonterminal]!!.addAlternative(Alternative(elements.toList()))
+      nonterminals[nonterminal]!!.addAlternative(Alternative(elements))
     }
   }
   return nonterminals[startNonterminal]!!

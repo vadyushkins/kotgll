@@ -2,23 +2,21 @@ package cli
 
 import org.junit.jupiter.api.Test
 import org.kotgll.cfg.grammar.Alternative
-import org.kotgll.cfg.grammar.readCFGFromText
-import org.kotgll.cfg.grammar.symbol.Char
-import org.kotgll.cfg.grammar.symbol.Literal
+import org.kotgll.cfg.grammar.readCFGFromTXT
 import org.kotgll.cfg.grammar.symbol.Nonterminal
+import org.kotgll.cfg.grammar.symbol.Terminal
 import org.kotgll.cfg.grammar.writeCFGToTXT
-import java.io.File
 import kotlin.test.assertEquals
 
 class TestCFGReadWriteTXT {
   @Test
   fun `'a' cfg`() {
     val nonterminalS = Nonterminal("S")
-    nonterminalS.addAlternative(Alternative(listOf(Char('a'))))
+    nonterminalS.addAlternative(Alternative(listOf(Terminal("a"))))
 
     val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/a.txt"
     writeCFGToTXT(nonterminalS, pathToTXT)
-    val actualNonterminal = readCFGFromText(File(pathToTXT).inputStream())
+    val actualNonterminal = readCFGFromTXT(pathToTXT)
 
     assertEquals(expected = nonterminalS, actual = actualNonterminal)
     assertEquals(expected = nonterminalS.alternatives, actual = actualNonterminal.alternatives)
@@ -27,12 +25,12 @@ class TestCFGReadWriteTXT {
   @Test
   fun `'a-star' cfg`() {
     val nonterminalS = Nonterminal("S")
-    nonterminalS.addAlternative(Alternative(listOf(Char('a'))))
-    nonterminalS.addAlternative(Alternative(listOf(Char('a'), nonterminalS)))
+    nonterminalS.addAlternative(Alternative(listOf(Terminal("a"))))
+    nonterminalS.addAlternative(Alternative(listOf(Terminal("a"), nonterminalS)))
 
     val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/a_star.txt"
     writeCFGToTXT(nonterminalS, pathToTXT)
-    val actualNonterminal = readCFGFromText(File(pathToTXT).inputStream())
+    val actualNonterminal = readCFGFromTXT(pathToTXT)
 
     assertEquals(expected = nonterminalS, actual = actualNonterminal)
     assertEquals(expected = nonterminalS.alternatives, actual = actualNonterminal.alternatives)
@@ -42,12 +40,12 @@ class TestCFGReadWriteTXT {
   fun `'dyck' cfg`() {
     val nonterminalS = Nonterminal("S")
     nonterminalS.addAlternative(
-        Alternative(listOf(Char('('), nonterminalS, Char(')'), nonterminalS)))
+        Alternative(listOf(Terminal("("), nonterminalS, Terminal(")"), nonterminalS)))
     nonterminalS.addAlternative(Alternative(listOf()))
 
     val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/dyck.txt"
     writeCFGToTXT(nonterminalS, pathToTXT)
-    val actualNonterminal = readCFGFromText(File(pathToTXT).inputStream())
+    val actualNonterminal = readCFGFromTXT(pathToTXT)
 
     assertEquals(expected = nonterminalS, actual = actualNonterminal)
     assertEquals(expected = nonterminalS.alternatives, actual = actualNonterminal.alternatives)
@@ -59,33 +57,33 @@ class TestCFGReadWriteTXT {
     nonterminalS.addAlternative(
         Alternative(
             listOf(
-                Literal("subClassOf_r"),
+                Terminal("subClassOf_r"),
                 nonterminalS,
-                Literal("subClassOf"),
+                Terminal("subClassOf"),
             )))
     nonterminalS.addAlternative(
         Alternative(
             listOf(
-                Literal("subClassOf_r"),
-                Literal("subClassOf"),
+                Terminal("subClassOf_r"),
+                Terminal("subClassOf"),
             )))
     nonterminalS.addAlternative(
         Alternative(
             listOf(
-                Literal("type_r"),
+                Terminal("type_r"),
                 nonterminalS,
-                Literal("type"),
+                Terminal("type"),
             )))
     nonterminalS.addAlternative(
         Alternative(
             listOf(
-                Literal("type_r"),
-                Literal("type"),
+                Terminal("type_r"),
+                Terminal("type"),
             )))
 
     val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/g1.txt"
     writeCFGToTXT(nonterminalS, pathToTXT)
-    val actualNonterminal = readCFGFromText(File(pathToTXT).inputStream())
+    val actualNonterminal = readCFGFromTXT(pathToTXT)
 
     assertEquals(expected = nonterminalS, actual = actualNonterminal)
     assertEquals(expected = nonterminalS.alternatives, actual = actualNonterminal.alternatives)
@@ -97,19 +95,19 @@ class TestCFGReadWriteTXT {
     nonterminalS.addAlternative(
         Alternative(
             listOf(
-                Literal("subClassOf_r"),
+                Terminal("subClassOf_r"),
                 nonterminalS,
-                Literal("subClassOf"),
+                Terminal("subClassOf"),
             )))
     nonterminalS.addAlternative(
         Alternative(
             listOf(
-                Literal("subClassOf"),
+                Terminal("subClassOf"),
             )))
 
     val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/g2.txt"
     writeCFGToTXT(nonterminalS, pathToTXT)
-    val actualNonterminal = readCFGFromText(File(pathToTXT).inputStream())
+    val actualNonterminal = readCFGFromTXT(pathToTXT)
 
     assertEquals(expected = nonterminalS, actual = actualNonterminal)
     assertEquals(expected = nonterminalS.alternatives, actual = actualNonterminal.alternatives)
@@ -121,20 +119,20 @@ class TestCFGReadWriteTXT {
     nonterminalS.addAlternative(
         Alternative(
             listOf(
-                Literal("broaderTransitive"),
+                Terminal("broaderTransitive"),
                 nonterminalS,
-                Literal("broaderTransitive_r"),
+                Terminal("broaderTransitive_r"),
             )))
     nonterminalS.addAlternative(
         Alternative(
             listOf(
-                Literal("broaderTransitive"),
-                Literal("broaderTransitive_r"),
+                Terminal("broaderTransitive"),
+                Terminal("broaderTransitive_r"),
             )))
 
     val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/geo.txt"
     writeCFGToTXT(nonterminalS, pathToTXT)
-    val actualNonterminal = readCFGFromText(File(pathToTXT).inputStream())
+    val actualNonterminal = readCFGFromTXT(pathToTXT)
 
     assertEquals(expected = nonterminalS, actual = actualNonterminal)
     assertEquals(expected = nonterminalS.alternatives, actual = actualNonterminal.alternatives)

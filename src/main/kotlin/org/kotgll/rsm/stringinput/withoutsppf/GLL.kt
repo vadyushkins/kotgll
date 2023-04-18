@@ -4,17 +4,15 @@ import org.kotgll.rsm.grammar.RSMState
 
 class GLL(val startState: RSMState, val input: String) {
   val queue: DescriptorsQueue = DescriptorsQueue(input.length + 1)
-  val toPop: HashMap<Int, GSSNode> = HashMap()
-  val gssNodes: HashMap<Int, GSSNode> = HashMap()
+  val poppedGSSNodes: HashMap<GSSNode, HashSet<Int>> = HashMap()
+  val createdGSSNodes: HashMap<GSSNode, GSSNode> = HashMap()
+  val startGSSNode: GSSNode = getOrCreateGSSNode(startState, 0, true)
+  var parseResult: Boolean = false
 
-  val startGSSNode: GSSNode = makeGSSNode(startState, 0)
-
-  var parseSuccess: Boolean = false
-
-  fun makeGSSNode(state: RSMState, ci: Int): GSSNode {
-    val gssNode = GSSNode(state, ci)
-    if (!gssNodes.containsKey(gssNode.hashCode)) gssNodes[gssNode.hashCode] = gssNode
-    return gssNodes[gssNode.hashCode]!!
+  fun getOrCreateGSSNode(state: RSMState, ci: Int, isStart: Boolean = false): GSSNode {
+    val gssNode = GSSNode(state, ci, isStart)
+    if (!createdGSSNodes.containsKey(gssNode)) createdGSSNodes[gssNode] = gssNode
+    return createdGSSNodes[gssNode]!!
   }
 
   fun parse(): Boolean {
@@ -22,53 +20,51 @@ class GLL(val startState: RSMState, val input: String) {
 
     while (!queue.isEmpty()) {
       val descriptor: DescriptorsQueue.Descriptor = queue.next()
-      parse(descriptor.rsmState, descriptor.pos, descriptor.gssNode)
+      parse(descriptor.rsmState, descriptor.gssNode, descriptor.pos)
     }
 
-    return parseSuccess
+    return parseResult
   }
 
-  fun parse(state: RSMState, pos: Int, cu: GSSNode) {
-    var curGSSNode: GSSNode
-
+  fun parse(state: RSMState, gssNode: GSSNode, pos: Int) {
     for (rsmEdge in state.outgoingTerminalEdges) {
       if (pos >= input.length) break
-      val value: String? = rsmEdge.terminal.match(pos, input)
-      if (value != null) {
-        val skip: Int = value.length
-        queue.add(rsmEdge.head, cu, pos + skip)
+      if (rsmEdge.terminal.match(pos, input)) {
+        queue.add(rsmEdge.head, gssNode, pos + rsmEdge.terminal.size)
       }
     }
 
     for (rsmEdge in state.outgoingNonterminalEdges) {
-      curGSSNode = createGSSNode(rsmEdge.head, cu, pos)
+      val curGSSNode = createGSSNode(rsmEdge.head, gssNode, pos)
       queue.add(rsmEdge.nonterminal.startState, curGSSNode, pos)
     }
 
-    if (state.isFinal) pop(cu, pos)
+    if (state.isFinal) pop(gssNode, pos)
   }
 
-  fun pop(gssNode: GSSNode, ci: Int) {
-    if (gssNode.rsmState.id == startState.id &&
+  fun pop(gssNode: GSSNode, pos: Int) {
+    if (!parseResult &&
+        gssNode.rsmState.id == startState.id &&
         gssNode.rsmState.nonterminal == startState.nonterminal &&
         gssNode.pos == 0 &&
-        ci == input.length)
-        parseSuccess = true
-    if (gssNode != startGSSNode) {
-      if (!toPop.containsKey(gssNode.hashCode)) toPop[gssNode.hashCode] = gssNode
-      for (u in gssNode.edges.values) {
-        queue.add(gssNode.rsmState, u, ci)
+        pos == input.length)
+        parseResult = true
+    if (!gssNode.isStart) {
+      if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
+      poppedGSSNodes[gssNode]!!.add(pos)
+      for (u in gssNode.edges) {
+        queue.add(gssNode.rsmState, u, pos)
       }
     }
   }
 
-  fun createGSSNode(state: RSMState, gssNode: GSSNode, ci: Int): GSSNode {
-    val v: GSSNode = makeGSSNode(state, ci)
+  fun createGSSNode(state: RSMState, gssNode: GSSNode, pos: Int): GSSNode {
+    val v: GSSNode = getOrCreateGSSNode(state, pos)
 
     if (v.addEdge(gssNode)) {
-      if (toPop.containsKey(v.hashCode)) {
-        for (u in v.edges.values) {
-          queue.add(state, u, ci)
+      if (poppedGSSNodes.containsKey(v)) {
+        for (z in poppedGSSNodes[v]!!) {
+          queue.add(state, gssNode, z)
         }
       }
     }
