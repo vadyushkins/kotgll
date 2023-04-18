@@ -1,4 +1,4 @@
 StartState(id=0,nonterminal=Nonterminal("S"),isStart=true,isFinal=false)
 State(id=0,nonterminal=Nonterminal("S"),isStart=true,isFinal=false)
 State(id=1,nonterminal=Nonterminal("S"),isStart=false,isFinal=true)
-CharEdge(tail=0,head=1,char=Char('a'))
+TerminalEdge(tail=0,head=1,terminal=Terminal("a"))

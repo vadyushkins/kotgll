@@ -2,9 +2,8 @@ package cli
 
 import org.junit.jupiter.api.Test
 import org.kotgll.rsm.grammar.*
-import org.kotgll.rsm.grammar.symbol.Char
-import org.kotgll.rsm.grammar.symbol.Literal
 import org.kotgll.rsm.grammar.symbol.Nonterminal
+import org.kotgll.rsm.grammar.symbol.Terminal
 import kotlin.test.assertEquals
 
 class TestRSMReadWriteTXT {
@@ -13,7 +12,7 @@ class TestRSMReadWriteTXT {
     val nonterminalS = Nonterminal("S")
     val rsmState0 = RSMState(id = 0, nonterminal = nonterminalS, isStart = true)
     val rsmState1 = RSMState(id = 1, nonterminal = nonterminalS, isFinal = true)
-    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Char('a'), head = rsmState1))
+    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState1))
 
     val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/a.txt"
     writeRSMToTXT(rsmState0, pathToTXT)
@@ -32,8 +31,8 @@ class TestRSMReadWriteTXT {
     val nonterminalS = Nonterminal("S")
     val rsmState0 = RSMState(id = 0, nonterminal = nonterminalS, isStart = true)
     val rsmState1 = RSMState(id = 1, nonterminal = nonterminalS, isFinal = true)
-    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Char('a'), head = rsmState1))
-    rsmState1.addTerminalEdge(RSMTerminalEdge(terminal = Char('a'), head = rsmState1))
+    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState1))
+    rsmState1.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState1))
 
     val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/a_star.txt"
     writeRSMToTXT(rsmState0, pathToTXT)
@@ -82,7 +81,7 @@ class TestRSMReadWriteTXT {
 
     rsmState0.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('('),
+            terminal = Terminal("("),
             head = rsmState1,
         ))
     rsmState1.addNonterminalEdge(
@@ -92,7 +91,7 @@ class TestRSMReadWriteTXT {
         ))
     rsmState2.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char(')'),
+            terminal = Terminal(")"),
             head = rsmState3,
         ))
     rsmState3.addNonterminalEdge(
@@ -186,7 +185,7 @@ class TestRSMReadWriteTXT {
 
     rsmState0.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('a'),
+            terminal = Terminal("a"),
             head = rsmState1,
         ))
     rsmState1.addNonterminalEdge(
@@ -196,7 +195,7 @@ class TestRSMReadWriteTXT {
         ))
     rsmState2.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('c'),
+            terminal = Terminal("c"),
             head = rsmState3,
         ))
     rsmState0.addNonterminalEdge(
@@ -206,24 +205,24 @@ class TestRSMReadWriteTXT {
         ))
     rsmState4.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('c'),
+            terminal = Terminal("c"),
             head = rsmState5,
         ))
 
     rsmState6.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('a'),
+            terminal = Terminal("a"),
             head = rsmState7,
         ))
     rsmState7.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('b'),
+            terminal = Terminal("b"),
             head = rsmState8,
         ))
 
     rsmState9.addTerminalEdge(
         RSMTerminalEdge(
-            terminal = Char('b'),
+            terminal = Terminal("b"),
             head = rsmState10,
         ))
 
@@ -252,17 +251,18 @@ class TestRSMReadWriteTXT {
 
     nonterminalS.startState = rsmState0
 
-    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Literal("subClassOf_r"), head = rsmState1))
+    rsmState0.addTerminalEdge(
+        RSMTerminalEdge(terminal = Terminal("subClassOf_r"), head = rsmState1))
     rsmState1.addNonterminalEdge(RSMNonterminalEdge(nonterminal = nonterminalS, head = rsmState2))
-    rsmState2.addTerminalEdge(RSMTerminalEdge(terminal = Literal("subClassOf"), head = rsmState3))
+    rsmState2.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("subClassOf"), head = rsmState3))
 
-    rsmState1.addTerminalEdge(RSMTerminalEdge(terminal = Literal("subClassOf"), head = rsmState3))
+    rsmState1.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("subClassOf"), head = rsmState3))
 
-    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Literal("type_r"), head = rsmState4))
+    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type_r"), head = rsmState4))
     rsmState4.addNonterminalEdge(RSMNonterminalEdge(nonterminal = nonterminalS, head = rsmState5))
-    rsmState5.addTerminalEdge(RSMTerminalEdge(terminal = Literal("type"), head = rsmState6))
+    rsmState5.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type"), head = rsmState6))
 
-    rsmState4.addTerminalEdge(RSMTerminalEdge(terminal = Literal("subClassOf"), head = rsmState6))
+    rsmState4.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("subClassOf"), head = rsmState6))
 
     val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/g1.txt"
     writeRSMToTXT(rsmState0, pathToTXT)
@@ -286,11 +286,12 @@ class TestRSMReadWriteTXT {
 
     nonterminalS.startState = rsmState0
 
-    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Literal("subClassOf_r"), head = rsmState1))
+    rsmState0.addTerminalEdge(
+        RSMTerminalEdge(terminal = Terminal("subClassOf_r"), head = rsmState1))
     rsmState1.addNonterminalEdge(RSMNonterminalEdge(nonterminal = nonterminalS, head = rsmState2))
-    rsmState2.addTerminalEdge(RSMTerminalEdge(terminal = Literal("subClassOf"), head = rsmState3))
+    rsmState2.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("subClassOf"), head = rsmState3))
 
-    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Literal("subClassOf"), head = rsmState3))
+    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("subClassOf"), head = rsmState3))
 
     val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/g2.txt"
     writeRSMToTXT(rsmState0, pathToTXT)
@@ -315,13 +316,13 @@ class TestRSMReadWriteTXT {
     nonterminalS.startState = rsmState0
 
     rsmState0.addTerminalEdge(
-        RSMTerminalEdge(terminal = Literal("broaderTransitive"), head = rsmState1))
+        RSMTerminalEdge(terminal = Terminal("broaderTransitive"), head = rsmState1))
     rsmState1.addNonterminalEdge(RSMNonterminalEdge(nonterminal = nonterminalS, head = rsmState2))
     rsmState2.addTerminalEdge(
-        RSMTerminalEdge(terminal = Literal("broaderTransitive_r"), head = rsmState3))
+        RSMTerminalEdge(terminal = Terminal("broaderTransitive_r"), head = rsmState3))
 
     rsmState1.addTerminalEdge(
-        RSMTerminalEdge(terminal = Literal("broaderTransitive_r"), head = rsmState3))
+        RSMTerminalEdge(terminal = Terminal("broaderTransitive_r"), head = rsmState3))
 
     val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/geo.txt"
     writeRSMToTXT(rsmState0, pathToTXT)

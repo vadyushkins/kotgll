@@ -1,6 +1,6 @@
 import org.kotgll.graph.GraphEdge
 import org.kotgll.graph.GraphNode
-import java.io.InputStream
+import java.io.File
 
 fun readGraphFromString(input: String): GraphNode {
   val result = GraphNode(id = 0, isStart = true)
@@ -17,7 +17,7 @@ fun readGraphFromString(input: String): GraphNode {
   return result
 }
 
-fun readGraphFromCSV(inputStream: InputStream): List<GraphNode> {
+fun readGraphFromCSV(pathToCSV: String): List<GraphNode> {
   val graphNodes: HashMap<Int, GraphNode> = HashMap()
   fun makeGraphNode(id: Int, isStart: Boolean = false, isFinal: Boolean = false): GraphNode {
     val y = GraphNode(id, isStart, isFinal)
@@ -25,7 +25,7 @@ fun readGraphFromCSV(inputStream: InputStream): List<GraphNode> {
     return graphNodes[y.id]!!
   }
 
-  val reader = inputStream.bufferedReader()
+  val reader = File(pathToCSV).inputStream().bufferedReader()
   while (true) {
     val line: String = reader.readLine() ?: break
     val (tail, head, label) = line.split(' ', limit = 3)

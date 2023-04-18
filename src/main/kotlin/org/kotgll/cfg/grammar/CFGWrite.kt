@@ -1,8 +1,7 @@
 package org.kotgll.cfg.grammar
 
-import org.kotgll.cfg.grammar.symbol.Char
-import org.kotgll.cfg.grammar.symbol.Literal
 import org.kotgll.cfg.grammar.symbol.Nonterminal
+import org.kotgll.cfg.grammar.symbol.Terminal
 import java.io.File
 
 fun writeCFGToTXT(cfg: Nonterminal, pathToTXT: String) {
@@ -31,10 +30,8 @@ fun writeCFGToTXT(cfg: Nonterminal, pathToTXT: String) {
       alternativeString += " ->"
       alternative.elements.forEach { element ->
         alternativeString += " "
-        if (element is Char) {
-          alternativeString += """Char('${element.char}')"""
-        } else if (element is Literal) {
-          alternativeString += """Literal("${element.literal}")"""
+        if (element is Terminal) {
+          alternativeString += """Terminal("${element.value}")"""
         } else if (element is Nonterminal) {
           alternativeString += """Nonterminal("${element.name}")"""
         }

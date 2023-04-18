@@ -5,23 +5,23 @@ import org.kotgll.rsm.grammar.RSMState
 
 class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
   val queue: DescriptorsQueue = DescriptorsQueue()
-  val toPop: HashMap<GSSNode, HashSet<GraphNode>> = HashMap()
-  val gssNodes: HashMap<GSSNode, GSSNode> = HashMap()
-  val parseSuccess: HashMap<Int, HashSet<Int>> = HashMap()
+  val poppedGSSNodes: HashMap<GSSNode, HashSet<GraphNode>> = HashMap()
+  val createdGSSNodes: HashMap<GSSNode, GSSNode> = HashMap()
   val startGSSNodes: MutableMap<GraphNode, GSSNode> = makeStartGSSNodes()
+  val parseResult: HashMap<Int, HashSet<Int>> = HashMap()
 
   fun makeStartGSSNodes(): HashMap<GraphNode, GSSNode> {
     val result: HashMap<GraphNode, GSSNode> = HashMap()
     for (node in startGraphNodes) {
-      result[node] = makeGSSNode(startState, node)
+      result[node] = getOrCreateGSSNode(startState, node, true)
     }
     return result
   }
 
-  fun makeGSSNode(state: RSMState, ci: GraphNode): GSSNode {
-    val gssNode = GSSNode(state, ci)
-    if (!gssNodes.containsKey(gssNode)) gssNodes[gssNode] = gssNode
-    return gssNodes[gssNode]!!
+  fun getOrCreateGSSNode(state: RSMState, pos: GraphNode, isStart: Boolean = false): GSSNode {
+    val gssNode = GSSNode(state, pos, isStart)
+    if (!createdGSSNodes.containsKey(gssNode)) createdGSSNodes[gssNode] = gssNode
+    return createdGSSNodes[gssNode]!!
   }
 
   fun parse(): HashMap<Int, HashSet<Int>> {
@@ -34,50 +34,49 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
       parse(descriptor.rsmState, descriptor.pos, descriptor.gssNode)
     }
 
-    return parseSuccess
+    return parseResult
   }
 
-  fun parse(state: RSMState, pos: GraphNode, cu: GSSNode) {
+  fun parse(state: RSMState, pos: GraphNode, gssNode: GSSNode) {
     for (rsmEdge in state.outgoingTerminalEdges) {
       for (graphEdge in pos.outgoingEdges) {
-        val value: String? = rsmEdge.terminal.match(0, graphEdge.label)
-        if (value == graphEdge.label) {
-          queue.add(rsmEdge.head, cu, graphEdge.head)
+        if (rsmEdge.terminal.value == graphEdge.label) {
+          queue.add(rsmEdge.head, gssNode, graphEdge.head)
         }
       }
     }
 
     for (rsmEdge in state.outgoingNonterminalEdges) {
-      val curGSSNode: GSSNode = createGSSNode(rsmEdge.head, cu, pos)
+      val curGSSNode: GSSNode = createGSSNode(rsmEdge.head, gssNode, pos)
       queue.add(rsmEdge.nonterminal.startState, curGSSNode, pos)
     }
 
-    if (state.isFinal) pop(cu, pos)
+    if (state.isFinal) pop(gssNode, pos)
   }
 
-  fun pop(gssNode: GSSNode, ci: GraphNode) {
+  fun pop(gssNode: GSSNode, pos: GraphNode) {
     if (gssNode.rsmState.id == startState.id &&
         gssNode.rsmState.nonterminal == startState.nonterminal &&
         gssNode.pos.isStart &&
-        ci.isFinal) {
-      if (!parseSuccess.containsKey(gssNode.pos.id)) parseSuccess[gssNode.pos.id] = HashSet()
-      parseSuccess[gssNode.pos.id]!!.add(ci.id)
+        pos.isFinal) {
+      if (!parseResult.containsKey(gssNode.pos.id)) parseResult[gssNode.pos.id] = HashSet()
+      parseResult[gssNode.pos.id]!!.add(pos.id)
     }
-    if (!startGSSNodes.values.contains(gssNode)) {
-      if (!toPop.containsKey(gssNode)) toPop[gssNode] = HashSet()
-      toPop[gssNode]!!.add(ci)
+    if (!gssNode.isStart) {
+      if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
+      poppedGSSNodes[gssNode]!!.add(pos)
       for (u in gssNode.edges) {
-        queue.add(gssNode.rsmState, u, ci)
+        queue.add(gssNode.rsmState, u, pos)
       }
     }
   }
 
-  fun createGSSNode(state: RSMState, gssNode: GSSNode, ci: GraphNode): GSSNode {
-    val v: GSSNode = makeGSSNode(state, ci)
+  fun createGSSNode(state: RSMState, gssNode: GSSNode, pos: GraphNode): GSSNode {
+    val v: GSSNode = getOrCreateGSSNode(state, pos)
 
     if (v.addEdge(gssNode)) {
-      if (toPop.containsKey(v)) {
-        for (z in toPop[v]!!) {
+      if (poppedGSSNodes.containsKey(v)) {
+        for (z in poppedGSSNodes[v]!!) {
           queue.add(state, gssNode, z)
         }
       }

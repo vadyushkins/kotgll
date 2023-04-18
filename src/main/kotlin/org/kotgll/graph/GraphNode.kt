@@ -10,8 +10,6 @@ class GraphNode(val id: Int, var isStart: Boolean = false, var isFinal: Boolean 
     if (other !is GraphNode) return false
 
     if (id != other.id) return false
-    if (isStart != other.isStart) return false
-    if (isFinal != other.isFinal) return false
 
     return true
   }

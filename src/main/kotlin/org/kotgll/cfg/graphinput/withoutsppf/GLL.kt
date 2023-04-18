@@ -8,100 +8,96 @@ import org.kotgll.graph.GraphNode
 
 class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
   val queue: DescriptorsQueue = DescriptorsQueue()
-  val toPop: HashMap<Int, HashMap<Int, GraphNode>> = HashMap()
-  val gssNodes: HashMap<Int, GSSNode> = HashMap()
+  val poppedGSSNodes: HashMap<GSSNode, HashSet<GraphNode>> = HashMap()
+  val createdGSSNodes: HashMap<GSSNode, GSSNode> = HashMap()
   val fakeStartSymbol: Nonterminal = Nonterminal("S'")
-  val startGSSNodes: HashMap<GraphNode, Int> = makeStartGSSNodes()
-  var parseSuccess: HashMap<Int, HashSet<Int>> = HashMap()
+  val startGSSNodes: HashMap<GraphNode, GSSNode> = makeStartGSSNodes()
+  var parseResult: HashMap<Int, HashSet<Int>> = HashMap()
 
-  fun makeStartGSSNodes(): HashMap<GraphNode, Int> {
+  fun makeStartGSSNodes(): HashMap<GraphNode, GSSNode> {
     val alternative = Alternative(listOf(startSymbol))
     fakeStartSymbol.addAlternative(alternative)
 
-    val result: HashMap<GraphNode, Int> = HashMap()
+    val result: HashMap<GraphNode, GSSNode> = HashMap()
     for (node in startGraphNodes) {
-      result[node] = makeGSSNode(alternative, 1, node).hashCode
+      result[node] = getOrCreateGSSNode(alternative, 1, node, true)
     }
     return result
   }
 
-  fun makeGSSNode(alternative: Alternative, dot: Int, ci: GraphNode): GSSNode {
-    val gssNode = GSSNode(alternative, dot, ci)
-    if (!gssNodes.containsKey(gssNode.hashCode)) gssNodes[gssNode.hashCode] = gssNode
-    return gssNodes[gssNode.hashCode]!!
+  fun getOrCreateGSSNode(
+      alternative: Alternative,
+      dot: Int,
+      ci: GraphNode,
+      isStart: Boolean = false,
+  ): GSSNode {
+    val gssNode = GSSNode(alternative, dot, ci, isStart)
+    if (!createdGSSNodes.containsKey(gssNode)) createdGSSNodes[gssNode] = gssNode
+    return createdGSSNodes[gssNode]!!
   }
 
   fun parse(): HashMap<Int, HashSet<Int>> {
     for (alternative in startSymbol.alternatives) {
       for (entry in startGSSNodes.entries) {
-        queue.add(alternative, 0, gssNodes[entry.value]!!, entry.key)
+        queue.add(alternative, 0, entry.value, entry.key)
       }
     }
 
     while (!queue.isEmpty()) {
       val descriptor: DescriptorsQueue.Descriptor = queue.next()
-      if (descriptor.dot == 0) {
-        parse(descriptor.alternative, descriptor.pos, descriptor.gssNode)
+      if (descriptor.dot == 0 && descriptor.alternative.elements.isEmpty()) {
+        pop(descriptor.gssNode, descriptor.pos)
       } else {
-        parseAt(descriptor.alternative, descriptor.dot, descriptor.pos, descriptor.gssNode)
+        parse(descriptor.alternative, descriptor.dot, descriptor.gssNode, descriptor.pos)
       }
     }
 
-    return parseSuccess
+    return parseResult
   }
 
-  fun parse(alternative: Alternative, pos: GraphNode, cu: GSSNode) {
-    if (alternative.elements.isEmpty()) {
-      pop(cu, pos)
-    } else {
-      parseAt(alternative, 0, pos, cu)
-    }
-  }
-
-  fun parseAt(alternative: Alternative, dot: Int, pos: GraphNode, cu: GSSNode) {
+  fun parse(alternative: Alternative, dot: Int, gssNode: GSSNode, pos: GraphNode) {
     if (dot < alternative.elements.size) {
       val curSymbol: Symbol = alternative.elements[dot]
 
       if (curSymbol is Terminal) {
         for (edge in pos.outgoingEdges) {
-          val value: String? = curSymbol.match(0, edge.label)
-          if (value == edge.label) {
-            queue.add(alternative, dot + 1, cu, edge.head)
+          if (curSymbol.value == edge.label) {
+            queue.add(alternative, dot + 1, gssNode, edge.head)
           }
         }
       }
 
       if (curSymbol is Nonterminal) {
-        val curGSSNode: GSSNode = createGSSNode(alternative, dot + 1, cu, pos)
+        val curGSSNode: GSSNode = createGSSNode(alternative, dot + 1, gssNode, pos)
         for (alt in curSymbol.alternatives) {
           queue.add(alt, 0, curGSSNode, pos)
         }
       }
     } else {
-      pop(cu, pos)
+      pop(gssNode, pos)
     }
   }
 
-  fun pop(gssNode: GSSNode, ci: GraphNode) {
-    if (gssNode.alternative.nonterminal == fakeStartSymbol && gssNode.pos.isStart && ci.isFinal) {
-      if (!parseSuccess.containsKey(gssNode.pos.id)) parseSuccess[gssNode.pos.id] = HashSet()
-      parseSuccess[gssNode.pos.id]!!.add(ci.id)
+  fun pop(gssNode: GSSNode, pos: GraphNode) {
+    if (gssNode.alternative.nonterminal == fakeStartSymbol && gssNode.pos.isStart && pos.isFinal) {
+      if (!parseResult.containsKey(gssNode.pos.id)) parseResult[gssNode.pos.id] = HashSet()
+      parseResult[gssNode.pos.id]!!.add(pos.id)
     }
-    if (!startGSSNodes.values.contains(gssNode.hashCode)) {
-      if (!toPop.containsKey(gssNode.hashCode)) toPop[gssNode.hashCode] = HashMap()
-      toPop[gssNode.hashCode]!![ci.id] = ci
-      for (u in gssNode.edges.values) {
-        queue.add(gssNode.alternative, gssNode.dot, u, ci)
+    if (!gssNode.isStart) {
+      if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
+      poppedGSSNodes[gssNode]!!.add(pos)
+      for (u in gssNode.edges) {
+        queue.add(gssNode.alternative, gssNode.dot, u, pos)
       }
     }
   }
 
-  fun createGSSNode(alternative: Alternative, dot: Int, gssNode: GSSNode, ci: GraphNode): GSSNode {
-    val v: GSSNode = makeGSSNode(alternative, dot, ci)
+  fun createGSSNode(alternative: Alternative, dot: Int, gssNode: GSSNode, pos: GraphNode): GSSNode {
+    val v: GSSNode = getOrCreateGSSNode(alternative, dot, pos)
 
     if (v.addEdge(gssNode)) {
-      if (toPop.containsKey(v.hashCode)) {
-        for (z in toPop[v.hashCode]!!.values) {
+      if (poppedGSSNodes.containsKey(v)) {
+        for (z in poppedGSSNodes[v]!!) {
           queue.add(alternative, dot, gssNode, z)
         }
       }

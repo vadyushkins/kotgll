@@ -7,79 +7,76 @@ import org.kotgll.rsm.stringinput.withsppf.sppf.*
 
 class GLL(val startState: RSMState, val input: String) {
   val queue: DescriptorsQueue = DescriptorsQueue(input.length + 1)
-  val toPop: HashMap<Int, HashMap<Int, SPPFNode?>> = HashMap()
-  val gssNodes: HashMap<Int, GSSNode> = HashMap()
-  val sppfNodes: HashMap<Int, SPPFNode> = HashMap()
+  val poppedGSSNodes: HashMap<GSSNode, HashSet<SPPFNode?>> = HashMap()
+  val createdGsSNodes: HashMap<GSSNode, GSSNode> = HashMap()
+  val createdSPPFNodes: HashMap<SPPFNode, SPPFNode> = HashMap()
+  val startGSSNode: GSSNode = getOrCreateGSSNode(startState, 0, true)
+  var parseResult: SPPFNode? = null
 
-  val startGSSNode: GSSNode = makeGSSNode(startState, 0)
-
-  fun makeGSSNode(state: RSMState, ci: Int): GSSNode {
-    val gssNode = GSSNode(state, ci)
-    if (!gssNodes.containsKey(gssNode.hashCode)) gssNodes[gssNode.hashCode] = gssNode
-    return gssNodes[gssNode.hashCode]!!
+  fun getOrCreateGSSNode(state: RSMState, ci: Int, isStart: Boolean = false): GSSNode {
+    val gssNode = GSSNode(state, ci, isStart)
+    if (!createdGsSNodes.containsKey(gssNode)) createdGsSNodes[gssNode] = gssNode
+    return createdGsSNodes[gssNode]!!
   }
 
   fun parse(): SPPFNode? {
-    queue.add(startState, startGSSNode, 0, null)
+    queue.add(startState, startGSSNode, null, 0)
 
     while (!queue.isEmpty()) {
       val descriptor: DescriptorsQueue.Descriptor = queue.next()
-      parse(descriptor.rsmState, descriptor.pos, descriptor.gssNode, descriptor.sppfNode)
+      parse(descriptor.rsmState, descriptor.gssNode, descriptor.sppfNode, descriptor.pos)
     }
 
-    for (sppfNode in sppfNodes.values) {
-      if (sppfNode.hasSymbol(startState.nonterminal) &&
-          sppfNode.leftExtent == 0 &&
-          sppfNode.rightExtent == input.length)
-          return sppfNode
-    }
-    return null
+    return parseResult
   }
 
-  fun parse(state: RSMState, pos: Int, cu: GSSNode, cn: SPPFNode?) {
+  fun parse(state: RSMState, gssNode: GSSNode, sppfNode: SPPFNode?, pos: Int) {
     var curGSSNode: GSSNode
-    var curSPPFNode: SPPFNode? = cn
+    var curSPPFNode: SPPFNode? = sppfNode
 
-    if (state.isStart && state.isFinal) curSPPFNode = getNodeP(state, curSPPFNode, getNodeE(pos))
+    if (state.isStart && state.isFinal)
+        curSPPFNode = getNodeP(state, curSPPFNode, getOrCreateItemSPPFNode(state, pos, pos))
 
     for (rsmEdge in state.outgoingTerminalEdges) {
       if (pos >= input.length) break
-      val value: String? = rsmEdge.terminal.match(pos, input)
-      if (value != null) {
-        val skip: Int = value.length
-        val cr: SPPFNode = getNodeT(rsmEdge.terminal, pos, skip)
-        queue.add(rsmEdge.head, cu, pos + skip, getNodeP(rsmEdge.head, curSPPFNode, cr))
+      if (rsmEdge.terminal.match(pos, input)) {
+        val nextSPPFNode: SPPFNode =
+            getOrCreateTerminalSPPFNode(rsmEdge.terminal, pos, rsmEdge.terminal.size)
+        queue.add(
+            rsmEdge.head,
+            gssNode,
+            getNodeP(rsmEdge.head, curSPPFNode, nextSPPFNode),
+            pos + rsmEdge.terminal.size)
       }
     }
 
     for (rsmEdge in state.outgoingNonterminalEdges) {
-      curGSSNode = createGSSNode(rsmEdge.head, cu, curSPPFNode, pos)
-      queue.add(rsmEdge.nonterminal.startState, curGSSNode, pos, null)
+      curGSSNode = createGSSNode(rsmEdge.head, gssNode, curSPPFNode, pos)
+      queue.add(rsmEdge.nonterminal.startState, curGSSNode, null, pos)
     }
 
-    if (state.isFinal) pop(cu, curSPPFNode, pos)
+    if (state.isFinal) pop(gssNode, curSPPFNode, pos)
   }
 
-  fun pop(gssNode: GSSNode, sppfNode: SPPFNode?, ci: Int) {
-    if (gssNode != startGSSNode) {
-      if (!toPop.containsKey(gssNode.hashCode)) toPop[gssNode.hashCode] = HashMap()
-      toPop[gssNode.hashCode]!![sppfNode.hashCode()] = sppfNode
+  fun pop(gssNode: GSSNode, sppfNode: SPPFNode?, pos: Int) {
+    if (!gssNode.isStart) {
+      if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
+      poppedGSSNodes[gssNode]!!.add(sppfNode)
       for (e in gssNode.edges.entries) {
         for (u in e.value) {
-          val tmpSPPFNode: SPPFNode? = getNodeP(gssNode.rsmState, e.key, sppfNode)
-          if (tmpSPPFNode != null) queue.add(gssNode.rsmState, u, ci, tmpSPPFNode)
+          queue.add(gssNode.rsmState, u, getNodeP(gssNode.rsmState, e.key, sppfNode!!), pos)
         }
       }
     }
   }
 
-  fun createGSSNode(state: RSMState, gssNode: GSSNode, sppfNode: SPPFNode?, ci: Int): GSSNode {
-    val v: GSSNode = makeGSSNode(state, ci)
+  fun createGSSNode(state: RSMState, gssNode: GSSNode, sppfNode: SPPFNode?, pos: Int): GSSNode {
+    val v: GSSNode = getOrCreateGSSNode(state, pos)
 
     if (v.addEdge(sppfNode, gssNode)) {
-      if (toPop.containsKey(v.hashCode)) {
-        for (z in toPop[v.hashCode]!!.values) {
-          queue.add(state, gssNode, z!!.rightExtent, getNodeP(state, sppfNode, z))
+      if (poppedGSSNodes.containsKey(v)) {
+        for (z in poppedGSSNodes[v]!!) {
+          queue.add(state, gssNode, getNodeP(state, sppfNode, z!!), z.rightExtent)
         }
       }
     }
@@ -87,45 +84,44 @@ class GLL(val startState: RSMState, val input: String) {
     return v
   }
 
-  fun getNodeP(state: RSMState, sppfNode: SPPFNode?, nextSPPFNode: SPPFNode?): SPPFNode? {
-    if (nextSPPFNode == null) return null
+  fun getNodeP(state: RSMState, sppfNode: SPPFNode?, nextSPPFNode: SPPFNode): SPPFNode {
+    val leftExtent = sppfNode?.leftExtent ?: nextSPPFNode.leftExtent
+    val rightExtent = nextSPPFNode.rightExtent
 
-    val k = nextSPPFNode.leftExtent
-    val i = nextSPPFNode.rightExtent
-    var j = k
+    val y =
+        if (state.isFinal) getOrCreateSymbolSPPFNode(state.nonterminal, leftExtent, rightExtent)
+        else getOrCreateItemSPPFNode(state, leftExtent, rightExtent)
 
-    if (sppfNode != null) j = sppfNode.leftExtent
-
-    val y: ParentSPPFNode =
-        if (state.isFinal) makeSymbolSPPFNode(state.nonterminal, j, i)
-        else makeItemSPPFNode(state, j, i)
-
-    y.kids.add(PackedSPPFNode(k, state, sppfNode, nextSPPFNode))
+    y.kids.add(PackedSPPFNode(nextSPPFNode.leftExtent, state, sppfNode, nextSPPFNode))
 
     return y
   }
 
-  fun getNodeT(terminal: Terminal, i: Int, j: Int): SPPFNode {
-    val y = TerminalSPPFNode(i, i + j, terminal)
-    if (!sppfNodes.containsKey(y.hashCode)) sppfNodes[y.hashCode] = y
-    return sppfNodes[y.hashCode]!!
+  fun getOrCreateTerminalSPPFNode(terminal: Terminal, leftExtent: Int, rightExtent: Int): SPPFNode {
+    val y = TerminalSPPFNode(leftExtent, leftExtent + rightExtent, terminal)
+    if (!createdSPPFNodes.containsKey(y)) createdSPPFNodes[y] = y
+    return createdSPPFNodes[y]!!
   }
 
-  fun getNodeE(i: Int): SPPFNode {
-    val y = EmptySPPFNode(i)
-    if (!sppfNodes.containsKey(y.hashCode)) sppfNodes[y.hashCode] = y
-    return sppfNodes[y.hashCode]!!
+  fun getOrCreateItemSPPFNode(state: RSMState, leftExtent: Int, rightExtent: Int): ItemSPPFNode {
+    val y = ItemSPPFNode(leftExtent, rightExtent, state)
+    if (!createdSPPFNodes.containsKey(y)) createdSPPFNodes[y] = y
+    return createdSPPFNodes[y]!! as ItemSPPFNode
   }
 
-  fun makeItemSPPFNode(state: RSMState, i: Int, j: Int): ParentSPPFNode {
-    val y = ItemSPPFNode(i, j, state)
-    if (!sppfNodes.containsKey(y.hashCode)) sppfNodes[y.hashCode] = y
-    return sppfNodes[y.hashCode]!! as ParentSPPFNode
-  }
-
-  fun makeSymbolSPPFNode(nonterminal: Nonterminal, i: Int, j: Int): ParentSPPFNode {
-    val y = SymbolSPPFNode(i, j, nonterminal)
-    if (!sppfNodes.containsKey(y.hashCode)) sppfNodes[y.hashCode] = y
-    return sppfNodes[y.hashCode]!! as ParentSPPFNode
+  fun getOrCreateSymbolSPPFNode(
+      nonterminal: Nonterminal,
+      leftExtent: Int,
+      rightExtent: Int
+  ): SymbolSPPFNode {
+    val y = SymbolSPPFNode(leftExtent, rightExtent, nonterminal)
+    if (!createdSPPFNodes.containsKey(y)) createdSPPFNodes[y] = y
+    val result = createdSPPFNodes[y]!! as SymbolSPPFNode
+    if (parseResult == null &&
+        nonterminal == startState.nonterminal &&
+        leftExtent == 0 &&
+        rightExtent == input.length)
+        parseResult = result
+    return result
   }
 }

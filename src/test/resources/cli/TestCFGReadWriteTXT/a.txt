@@ -1,2 +1,2 @@
 StartNonterminal("S")
-Nonterminal("S") -> Char('a')
+Nonterminal("S") -> Terminal("a")

@@ -6,13 +6,13 @@ import kotlin.collections.ArrayDeque
 
 class DescriptorsQueue(size: Int) {
   val todo: ArrayDeque<Descriptor> = ArrayDeque()
-  val done: Array<HashSet<Int>> = Array(size) { HashSet() }
+  val created: Array<HashSet<Descriptor>> = Array(size) { HashSet() }
 
   fun add(alternative: Alternative, dot: Int, gssNode: GSSNode, pos: Int) {
     val descriptor = Descriptor(alternative, dot, gssNode, pos)
-    if (!done[pos].contains(descriptor.hashCode)) {
-      done[pos].add(descriptor.hashCode)
-      todo.add(descriptor)
+    if (!created[pos].contains(descriptor)) {
+      created[pos].add(descriptor)
+      todo.addLast(descriptor)
     }
   }
 
@@ -41,7 +41,7 @@ class DescriptorsQueue(size: Int) {
       return true
     }
 
-    val hashCode: Int = Objects.hash(alternative, dot, gssNode, pos)
+    val hashCode: Int = Objects.hash(alternative, dot, gssNode)
     override fun hashCode() = hashCode
   }
 }

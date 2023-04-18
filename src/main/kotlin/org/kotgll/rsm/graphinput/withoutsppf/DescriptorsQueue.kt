@@ -7,13 +7,13 @@ import kotlin.collections.ArrayDeque
 
 class DescriptorsQueue {
   val todo: ArrayDeque<Descriptor> = ArrayDeque()
-  val done: HashMap<Int, HashSet<Descriptor>> = HashMap()
+  val created: HashMap<GraphNode, HashSet<Descriptor>> = HashMap()
 
   fun add(rsmState: RSMState, gssNode: GSSNode, pos: GraphNode) {
     val descriptor = Descriptor(rsmState, gssNode, pos)
-    if (!done.containsKey(pos.id)) done[pos.id] = HashSet()
-    if (!done[pos.id]!!.contains(descriptor)) {
-      done[pos.id]!!.add(descriptor)
+    if (!created.containsKey(pos)) created[pos] = HashSet()
+    if (!created[pos]!!.contains(descriptor)) {
+      created[pos]!!.add(descriptor)
       todo.addLast(descriptor)
     }
   }
