@@ -8,7 +8,7 @@ import org.kotgll.cfg.grammar.symbol.*
 import org.kotgll.cfg.graphinput.withoutsppf.GLL
 import org.kotgll.graph.GraphEdge
 import org.kotgll.graph.GraphNode
-import readGraphFromString
+import org.kotgll.graph.readGraphFromString
 import kotlin.test.assertEquals
 
 class TestCFGGraphInputWithoutSPPFSuccess {

@@ -11,7 +11,7 @@ import org.kotgll.rsm.grammar.RSMTerminalEdge
 import org.kotgll.rsm.grammar.symbol.Nonterminal
 import org.kotgll.rsm.grammar.symbol.Terminal
 import org.kotgll.rsm.graphinput.withsppf.GLL
-import readGraphFromString
+import org.kotgll.graph.readGraphFromString
 import kotlin.test.assertEquals
 
 class TestRSMGraphInputWithSPPFSuccess {

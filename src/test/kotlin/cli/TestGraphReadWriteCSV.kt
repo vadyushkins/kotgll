@@ -1,11 +1,11 @@
 package cli
 
+import kotlin.test.assertEquals
 import org.junit.jupiter.api.Test
 import org.kotgll.graph.GraphEdge
 import org.kotgll.graph.GraphNode
+import org.kotgll.graph.readGraphFromCSV
 import org.kotgll.graph.writeGraphToCSV
-import readGraphFromCSV
-import kotlin.test.assertEquals
 
 class TestGraphReadWriteCSV {
   @Test

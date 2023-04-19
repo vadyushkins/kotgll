@@ -1,5 +1,5 @@
-import org.kotgll.graph.GraphEdge
-import org.kotgll.graph.GraphNode
+package org.kotgll.graph
+
 import java.io.File
 
 fun readGraphFromString(input: String): GraphNode {
