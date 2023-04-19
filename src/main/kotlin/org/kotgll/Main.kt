@@ -1,13 +1,13 @@
 package org.kotgll
 
+import java.io.File
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
 import kotlinx.cli.default
 import kotlinx.cli.required
 import org.kotgll.cfg.grammar.readCFGFromTXT
+import org.kotgll.graph.readGraphFromCSV
 import org.kotgll.rsm.grammar.readRSMFromTXT
-import readGraphFromCSV
-import java.io.File
 
 enum class InputMode {
   STRING,

@@ -262,7 +262,7 @@ class TestRSMReadWriteTXT {
     rsmState4.addNonterminalEdge(RSMNonterminalEdge(nonterminal = nonterminalS, head = rsmState5))
     rsmState5.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type"), head = rsmState6))
 
-    rsmState4.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("subClassOf"), head = rsmState6))
+    rsmState4.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type"), head = rsmState6))
 
     val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/g1.txt"
     writeRSMToTXT(rsmState0, pathToTXT)
