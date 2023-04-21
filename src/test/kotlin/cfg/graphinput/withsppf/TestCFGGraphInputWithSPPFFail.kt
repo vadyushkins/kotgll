@@ -29,7 +29,8 @@ class TestCFGGraphInputWithSPPFFail {
     nonterminalS.addAlternative(Alternative(listOf(Terminal("a"))))
 
     assertEquals(
-        expected = hashMapOf(), actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
+        expected = hashMapOf(),
+        actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Empty for {0}")
@@ -39,7 +40,8 @@ class TestCFGGraphInputWithSPPFFail {
     nonterminalS.addAlternative(Alternative(listOf(Terminal("a"), Terminal("b"))))
 
     assertEquals(
-        expected = hashMapOf(), actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
+        expected = hashMapOf(),
+        actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Empty for {0}")
@@ -49,7 +51,8 @@ class TestCFGGraphInputWithSPPFFail {
     nonterminalS.addAlternative(Alternative(listOf(Star(Terminal("a")))))
 
     assertEquals(
-        expected = hashMapOf(), actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
+        expected = hashMapOf(),
+        actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Empty for {0}")
@@ -59,7 +62,8 @@ class TestCFGGraphInputWithSPPFFail {
     nonterminalS.addAlternative(Alternative(listOf(Plus(Terminal("a")))))
 
     assertEquals(
-        expected = hashMapOf(), actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
+        expected = hashMapOf(),
+        actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Empty for {0}")
@@ -102,40 +106,42 @@ class TestCFGGraphInputWithSPPFFail {
 
   @ParameterizedTest(name = "Should be Empty for {0}")
   @ValueSource(
-    strings =
-    [
-      "(",
-      ")",
-      "((",
-      "))",
-      "()(",
-      "()()(",
-      "()()()(",
-      "())",
-      "()())",
-      "()()())",
-      "(())(",
-      "(())()(",
-      "(())()()(",
-      "(()))",
-      "(())())",
-      "(())()())",
-      "(())(())(",
-      "(())(())()(",
-      "(())(())()()(",
-      "(())(()))",
-      "(())(())())",
-      "(())(())()())",
-      "(()())(()())(",
-      "(()())(()()))",
-    ])
+      strings =
+          [
+              "(",
+              ")",
+              "((",
+              "))",
+              "()(",
+              "()()(",
+              "()()()(",
+              "())",
+              "()())",
+              "()()())",
+              "(())(",
+              "(())()(",
+              "(())()()(",
+              "(()))",
+              "(())())",
+              "(())()())",
+              "(())(())(",
+              "(())(())()(",
+              "(())(())()()(",
+              "(())(()))",
+              "(())(())())",
+              "(())(())()())",
+              "(()())(()())(",
+              "(()())(()()))",
+          ])
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     nonterminalS.addAlternative(Alternative(listOf()))
-    nonterminalS.addAlternative(Alternative(listOf(Terminal("("), nonterminalS, Terminal(")"), nonterminalS)))
+    nonterminalS.addAlternative(
+        Alternative(listOf(Terminal("("), nonterminalS, Terminal(")"), nonterminalS)))
 
     assertEquals(
-        expected = hashMapOf(), actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
+        expected = hashMapOf(),
+        actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Empty for {0}")
@@ -151,7 +157,8 @@ class TestCFGGraphInputWithSPPFFail {
     nonterminalB.addAlternative(Alternative(listOf(Terminal("b"))))
 
     assertEquals(
-        expected = hashMapOf(), actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
+        expected = hashMapOf(),
+        actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Empty for {0}")
@@ -196,7 +203,8 @@ class TestCFGGraphInputWithSPPFFail {
     nonterminalS.addAlternative(Alternative(listOf(Optional(Terminal("a")))))
 
     assertEquals(
-        expected = hashMapOf(), actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
+        expected = hashMapOf(),
+        actual = GLL(nonterminalS, listOf(readGraphFromString(input))).parse())
   }
 
   @ParameterizedTest(name = "Should be Empty for {0}")
@@ -246,7 +254,8 @@ class TestCFGGraphInputWithSPPFFail {
   fun `test 'dyck' hand-crafted grammar two cycle graph`() {
     val nonterminalS = Nonterminal("S")
     nonterminalS.addAlternative(Alternative(listOf()))
-    nonterminalS.addAlternative(Alternative(listOf(Terminal("("), nonterminalS, Terminal(")"), nonterminalS)))
+    nonterminalS.addAlternative(
+        Alternative(listOf(Terminal("("), nonterminalS, Terminal(")"), nonterminalS)))
 
     val graphNode0 = GraphNode(id = 0, isStart = true, isFinal = true)
     val graphNode1 = GraphNode(id = 1, isStart = true, isFinal = true)

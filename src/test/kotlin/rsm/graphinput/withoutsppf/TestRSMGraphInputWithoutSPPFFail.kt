@@ -5,13 +5,13 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.kotgll.graph.GraphEdge
 import org.kotgll.graph.GraphNode
+import org.kotgll.graph.readGraphFromString
 import org.kotgll.rsm.grammar.RSMNonterminalEdge
 import org.kotgll.rsm.grammar.RSMState
 import org.kotgll.rsm.grammar.RSMTerminalEdge
 import org.kotgll.rsm.grammar.symbol.Nonterminal
 import org.kotgll.rsm.grammar.symbol.Terminal
 import org.kotgll.rsm.graphinput.withoutsppf.GLL
-import org.kotgll.graph.readGraphFromString
 import kotlin.test.assertEquals
 
 class TestRSMGraphInputWithoutSPPFFail {
@@ -170,25 +170,25 @@ class TestRSMGraphInputWithoutSPPFFail {
 
   @ParameterizedTest(name = "Should be Empty for {0}")
   @ValueSource(
-    strings =
-    [
-      "abaa",
-      "abba",
-      "abca",
-      "ababaa",
-      "ababba",
-      "ababca",
-      "abbb",
-      "abcb",
-      "ababbb",
-      "ababcb",
-      "abac",
-      "abbc",
-      "abcc",
-      "ababac",
-      "ababbc",
-      "ababcc",
-    ])
+      strings =
+          [
+              "abaa",
+              "abba",
+              "abca",
+              "ababaa",
+              "ababba",
+              "ababca",
+              "abbb",
+              "abcb",
+              "ababbb",
+              "ababcb",
+              "abac",
+              "abbc",
+              "abcc",
+              "ababac",
+              "ababbc",
+              "ababcc",
+          ])
   fun `test '(ab)-star' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     val rsmState0 =
@@ -234,33 +234,33 @@ class TestRSMGraphInputWithoutSPPFFail {
 
   @ParameterizedTest(name = "Should be Empty for {0}")
   @ValueSource(
-    strings =
-    [
-      "(",
-      ")",
-      "((",
-      "))",
-      "()(",
-      "()()(",
-      "()()()(",
-      "())",
-      "()())",
-      "()()())",
-      "(())(",
-      "(())()(",
-      "(())()()(",
-      "(()))",
-      "(())())",
-      "(())()())",
-      "(())(())(",
-      "(())(())()(",
-      "(())(())()()(",
-      "(())(()))",
-      "(())(())())",
-      "(())(())()())",
-      "(()())(()())(",
-      "(()())(()()))",
-    ])
+      strings =
+          [
+              "(",
+              ")",
+              "((",
+              "))",
+              "()(",
+              "()()(",
+              "()()()(",
+              "())",
+              "()())",
+              "()()())",
+              "(())(",
+              "(())()(",
+              "(())()()(",
+              "(()))",
+              "(())())",
+              "(())()())",
+              "(())(())(",
+              "(())(())()(",
+              "(())(())()()(",
+              "(())(()))",
+              "(())(())())",
+              "(())(())()())",
+              "(()())(()())(",
+              "(()())(()()))",
+          ])
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     val rsmState0 =
@@ -322,28 +322,28 @@ class TestRSMGraphInputWithoutSPPFFail {
 
   @ParameterizedTest(name = "Should be Empty for {0}")
   @ValueSource(
-    strings =
-    [
-      "",
-      "a",
-      "b",
-      "c",
-      "d",
-      "aa",
-      "ac",
-      "ad",
-      "ba",
-      "bb",
-      "bc",
-      "bd",
-      "ca",
-      "cb",
-      "cc",
-      "da",
-      "db",
-      "dc",
-      "dd",
-    ])
+      strings =
+          [
+              "",
+              "a",
+              "b",
+              "c",
+              "d",
+              "aa",
+              "ac",
+              "ad",
+              "ba",
+              "bb",
+              "bc",
+              "bd",
+              "ca",
+              "cb",
+              "cc",
+              "da",
+              "db",
+              "dc",
+              "dd",
+          ])
   fun `test 'ab or cd' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     val rsmState0 =

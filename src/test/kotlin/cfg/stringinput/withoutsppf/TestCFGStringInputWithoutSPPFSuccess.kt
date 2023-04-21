@@ -62,23 +62,23 @@ class TestCFGStringInputWithoutSPPFSuccess {
 
   @ParameterizedTest(name = "Should be True for {0}")
   @ValueSource(
-    strings =
-    [
-      "",
-      "()",
-      "()()",
-      "()()()",
-      "(())",
-      "(())()",
-      "(())()()",
-      "(())(())",
-      "(())(())()",
-      "(())(())()()",
-      "(()())(()())",
-      "((()))",
-      "(((())))",
-      "((((()))))",
-    ])
+      strings =
+          [
+              "",
+              "()",
+              "()()",
+              "()()()",
+              "(())",
+              "(())()",
+              "(())()()",
+              "(())(())",
+              "(())(())()",
+              "(())(())()()",
+              "(()())(()())",
+              "((()))",
+              "(((())))",
+              "((((()))))",
+          ])
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     nonterminalS.addAlternative(Alternative(listOf()))

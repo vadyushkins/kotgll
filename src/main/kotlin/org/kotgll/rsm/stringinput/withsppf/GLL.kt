@@ -8,19 +8,18 @@ import org.kotgll.rsm.stringinput.withsppf.sppf.*
 class GLL(val startState: RSMState, val input: String) {
   val queue: DescriptorsQueue = DescriptorsQueue(input.length + 1)
   val poppedGSSNodes: HashMap<GSSNode, HashSet<SPPFNode?>> = HashMap()
-  val createdGsSNodes: HashMap<GSSNode, GSSNode> = HashMap()
+  val createdGSSNodes: HashMap<GSSNode, GSSNode> = HashMap()
   val createdSPPFNodes: HashMap<SPPFNode, SPPFNode> = HashMap()
-  val startGSSNode: GSSNode = getOrCreateGSSNode(startState, 0, true)
   var parseResult: SPPFNode? = null
 
-  fun getOrCreateGSSNode(state: RSMState, ci: Int, isStart: Boolean = false): GSSNode {
-    val gssNode = GSSNode(state, ci, isStart)
-    if (!createdGsSNodes.containsKey(gssNode)) createdGsSNodes[gssNode] = gssNode
-    return createdGsSNodes[gssNode]!!
+  fun getOrCreateGSSNode(nonterminal: Nonterminal, pos: Int): GSSNode {
+    val gssNode = GSSNode(nonterminal, pos)
+    if (!createdGSSNodes.containsKey(gssNode)) createdGSSNodes[gssNode] = gssNode
+    return createdGSSNodes[gssNode]!!
   }
 
   fun parse(): SPPFNode? {
-    queue.add(startState, startGSSNode, null, 0)
+    queue.add(startState, getOrCreateGSSNode(startState.nonterminal, 0), null, 0)
 
     while (!queue.isEmpty()) {
       val descriptor: DescriptorsQueue.Descriptor = queue.next()
@@ -51,7 +50,7 @@ class GLL(val startState: RSMState, val input: String) {
     }
 
     for (rsmEdge in state.outgoingNonterminalEdges) {
-      curGSSNode = createGSSNode(rsmEdge.head, gssNode, curSPPFNode, pos)
+      curGSSNode = createGSSNode(rsmEdge.nonterminal, rsmEdge.head, gssNode, curSPPFNode, pos)
       queue.add(rsmEdge.nonterminal.startState, curGSSNode, null, pos)
     }
 
@@ -59,21 +58,25 @@ class GLL(val startState: RSMState, val input: String) {
   }
 
   fun pop(gssNode: GSSNode, sppfNode: SPPFNode?, pos: Int) {
-    if (!gssNode.isStart) {
-      if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
-      poppedGSSNodes[gssNode]!!.add(sppfNode)
-      for (e in gssNode.edges.entries) {
-        for (u in e.value) {
-          queue.add(gssNode.rsmState, u, getNodeP(gssNode.rsmState, e.key, sppfNode!!), pos)
-        }
+    if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
+    poppedGSSNodes[gssNode]!!.add(sppfNode)
+    for (e in gssNode.edges.entries) {
+      for (u in e.value) {
+        queue.add(e.key.first, u, getNodeP(e.key.first, e.key.second, sppfNode!!), pos)
       }
     }
   }
 
-  fun createGSSNode(state: RSMState, gssNode: GSSNode, sppfNode: SPPFNode?, pos: Int): GSSNode {
-    val v: GSSNode = getOrCreateGSSNode(state, pos)
+  fun createGSSNode(
+      nonterminal: Nonterminal,
+      state: RSMState,
+      gssNode: GSSNode,
+      sppfNode: SPPFNode?,
+      pos: Int
+  ): GSSNode {
+    val v: GSSNode = getOrCreateGSSNode(nonterminal, pos)
 
-    if (v.addEdge(sppfNode, gssNode)) {
+    if (v.addEdge(state, sppfNode, gssNode)) {
       if (poppedGSSNodes.containsKey(v)) {
         for (z in poppedGSSNodes[v]!!) {
           queue.add(state, gssNode, getNodeP(state, sppfNode, z!!), z.rightExtent)

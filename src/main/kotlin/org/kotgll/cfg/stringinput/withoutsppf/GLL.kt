@@ -9,30 +9,17 @@ class GLL(val startSymbol: Nonterminal, val input: String) {
   val queue: DescriptorsQueue = DescriptorsQueue(input.length + 1)
   val poppedGSSNodes: HashMap<GSSNode, HashSet<Int>> = HashMap()
   val createdGSSNodes: HashMap<GSSNode, GSSNode> = HashMap()
-  val fakeStartSymbol: Nonterminal = Nonterminal("S'")
-  val startGSSNode: GSSNode = makeStartGSSNode()
   var parseResult: Boolean = false
 
-  fun makeStartGSSNode(): GSSNode {
-    val alternative = Alternative(listOf(startSymbol))
-    fakeStartSymbol.addAlternative(alternative)
-    return getOrCreateGSSNode(alternative, 1, 0, true)
-  }
-
-  fun getOrCreateGSSNode(
-      alternative: Alternative,
-      dot: Int,
-      pos: Int,
-      isStart: Boolean = false,
-  ): GSSNode {
-    val gssNode = GSSNode(alternative, dot, pos, isStart)
+  fun getOrCreateGSSNode(nonterminal: Nonterminal, pos: Int): GSSNode {
+    val gssNode = GSSNode(nonterminal, pos)
     if (!createdGSSNodes.contains(gssNode)) createdGSSNodes[gssNode] = gssNode
     return gssNode
   }
 
   fun parse(): Boolean {
     for (alternative in startSymbol.alternatives) {
-      queue.add(alternative, 0, startGSSNode, 0)
+      queue.add(alternative, 0, getOrCreateGSSNode(startSymbol, 0), 0)
     }
 
     while (!queue.isEmpty()) {
@@ -76,23 +63,23 @@ class GLL(val startSymbol: Nonterminal, val input: String) {
 
   fun pop(gssNode: GSSNode, pos: Int) {
     if (!parseResult &&
-        gssNode.alternative.nonterminal == fakeStartSymbol &&
+        gssNode.nonterminal == startSymbol &&
         gssNode.pos == 0 &&
         pos == input.length)
         parseResult = true
-    if (!gssNode.isStart) {
-      if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
-      poppedGSSNodes[gssNode]!!.add(pos)
-      for (u in gssNode.edges) {
-        queue.add(gssNode.alternative, gssNode.dot, u, pos)
+    if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
+    poppedGSSNodes[gssNode]!!.add(pos)
+    for (e in gssNode.edges.entries) {
+      for (u in e.value) {
+        queue.add(e.key.first, e.key.second, u, pos)
       }
     }
   }
 
   fun createGSSNode(alternative: Alternative, dot: Int, gssNode: GSSNode, pos: Int): GSSNode {
-    val v: GSSNode = getOrCreateGSSNode(alternative, dot, pos)
+    val v: GSSNode = getOrCreateGSSNode(alternative.elements[dot - 1] as Nonterminal, pos)
 
-    if (v.addEdge(gssNode)) {
+    if (v.addEdge(alternative, dot, gssNode)) {
       if (poppedGSSNodes.containsKey(v)) {
         for (z in poppedGSSNodes[v]!!) {
           queue.add(alternative, dot, gssNode, z)

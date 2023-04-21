@@ -1,7 +1,5 @@
 package org.kotgll.benchmarks
 
-import java.io.File
-import kotlin.system.measureNanoTime
 import kotlinx.cli.ArgParser
 import kotlinx.cli.ArgType
 import kotlinx.cli.default
@@ -9,6 +7,8 @@ import kotlinx.cli.required
 import org.kotgll.cfg.grammar.readCFGFromTXT
 import org.kotgll.graph.readGraphFromCSV
 import org.kotgll.rsm.grammar.readRSMFromTXT
+import java.io.File
+import kotlin.system.measureNanoTime
 
 fun getResultPath(
     pathToOutput: String,

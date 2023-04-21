@@ -180,23 +180,23 @@ class TestRSMStringInputWithoutSPPFSuccess {
 
   @ParameterizedTest(name = "Should be True for {0}")
   @ValueSource(
-    strings =
-    [
-      "",
-      "()",
-      "()()",
-      "()()()",
-      "(())",
-      "(())()",
-      "(())()()",
-      "(())(())",
-      "(())(())()",
-      "(())(())()()",
-      "(()())(()())",
-      "((()))",
-      "(((())))",
-      "((((()))))",
-    ])
+      strings =
+          [
+              "",
+              "()",
+              "()()",
+              "()()()",
+              "(())",
+              "(())()",
+              "(())()()",
+              "(())(())",
+              "(())(())()",
+              "(())(())()()",
+              "(()())(()())",
+              "((()))",
+              "(((())))",
+              "((((()))))",
+          ])
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     val rsmState0 =
@@ -258,17 +258,17 @@ class TestRSMStringInputWithoutSPPFSuccess {
   fun `test 'ab or cd' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     val rsmState0 =
-      RSMState(
-        id = 0,
-        nonterminal = nonterminalS,
-        isStart = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = nonterminalS,
+            isStart = true,
+        )
     val rsmState1 =
-      RSMState(
-        id = 1,
-        nonterminal = nonterminalS,
-        isFinal = true,
-      )
+        RSMState(
+            id = 1,
+            nonterminal = nonterminalS,
+            isFinal = true,
+        )
 
     nonterminalS.startState = rsmState0
 
@@ -283,18 +283,18 @@ class TestRSMStringInputWithoutSPPFSuccess {
   fun `test 'a-optional' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     val rsmState0 =
-      RSMState(
-        id = 0,
-        nonterminal = nonterminalS,
-        isStart = true,
-        isFinal = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = nonterminalS,
+            isStart = true,
+            isFinal = true,
+        )
     val rsmState1 =
-      RSMState(
-        id = 1,
-        nonterminal = nonterminalS,
-        isFinal = true,
-      )
+        RSMState(
+            id = 1,
+            nonterminal = nonterminalS,
+            isFinal = true,
+        )
 
     nonterminalS.startState = rsmState0
 
@@ -429,88 +429,88 @@ class TestRSMStringInputWithoutSPPFSuccess {
     val nonterminalB = Nonterminal("B")
 
     val rsmState0 =
-      RSMState(
-        id = 0,
-        nonterminal = nonterminalS,
-        isStart = true,
-      )
+        RSMState(
+            id = 0,
+            nonterminal = nonterminalS,
+            isStart = true,
+        )
     nonterminalS.startState = rsmState0
     val rsmState1 =
-      RSMState(
-        id = 1,
-        nonterminal = nonterminalS,
-        isFinal = true,
-      )
+        RSMState(
+            id = 1,
+            nonterminal = nonterminalS,
+            isFinal = true,
+        )
     val rsmState2 =
-      RSMState(
-        id = 2,
-        nonterminal = nonterminalS,
-        isFinal = true,
-      )
+        RSMState(
+            id = 2,
+            nonterminal = nonterminalS,
+            isFinal = true,
+        )
     val rsmState3 =
-      RSMState(
-        id = 3,
-        nonterminal = nonterminalA,
-        isStart = true,
-      )
+        RSMState(
+            id = 3,
+            nonterminal = nonterminalA,
+            isStart = true,
+        )
     nonterminalA.startState = rsmState3
     val rsmState4 =
-      RSMState(
-        id = 4,
-        nonterminal = nonterminalA,
-        isFinal = true,
-      )
+        RSMState(
+            id = 4,
+            nonterminal = nonterminalA,
+            isFinal = true,
+        )
     val rsmState5 =
-      RSMState(
-        id = 5,
-        nonterminal = nonterminalA,
-        isFinal = true,
-      )
+        RSMState(
+            id = 5,
+            nonterminal = nonterminalA,
+            isFinal = true,
+        )
     val rsmState6 =
-      RSMState(
-        id = 6,
-        nonterminal = nonterminalB,
-        isStart = true,
-      )
+        RSMState(
+            id = 6,
+            nonterminal = nonterminalB,
+            isStart = true,
+        )
     nonterminalB.startState = rsmState6
     val rsmState7 = RSMState(id = 7, nonterminal = nonterminalB, isFinal = true)
     val rsmState8 =
-      RSMState(
-        id = 8,
-        nonterminal = nonterminalB,
-        isFinal = true,
-      )
+        RSMState(
+            id = 8,
+            nonterminal = nonterminalB,
+            isFinal = true,
+        )
 
     rsmState0.addNonterminalEdge(
-      RSMNonterminalEdge(
-        nonterminal = nonterminalA,
-        head = rsmState1,
-      ))
+        RSMNonterminalEdge(
+            nonterminal = nonterminalA,
+            head = rsmState1,
+        ))
     rsmState0.addNonterminalEdge(
-      RSMNonterminalEdge(
-        nonterminal = nonterminalB,
-        head = rsmState2,
-      ))
+        RSMNonterminalEdge(
+            nonterminal = nonterminalB,
+            head = rsmState2,
+        ))
     rsmState3.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Terminal("ab"),
-        head = rsmState4,
-      ))
+        RSMTerminalEdge(
+            terminal = Terminal("ab"),
+            head = rsmState4,
+        ))
     rsmState3.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Terminal("cd"),
-        head = rsmState5,
-      ))
+        RSMTerminalEdge(
+            terminal = Terminal("cd"),
+            head = rsmState5,
+        ))
     rsmState6.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Terminal("ab"),
-        head = rsmState7,
-      ))
+        RSMTerminalEdge(
+            terminal = Terminal("ab"),
+            head = rsmState7,
+        ))
     rsmState6.addTerminalEdge(
-      RSMTerminalEdge(
-        terminal = Terminal("cd"),
-        head = rsmState8,
-      ))
+        RSMTerminalEdge(
+            terminal = Terminal("cd"),
+            head = rsmState8,
+        ))
 
     assertTrue(GLL(rsmState0, input).parse())
   }

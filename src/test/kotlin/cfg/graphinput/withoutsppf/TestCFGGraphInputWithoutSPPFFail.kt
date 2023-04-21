@@ -116,37 +116,38 @@ class TestCFGGraphInputWithoutSPPFFail {
 
   @ParameterizedTest(name = "Should be Empty for {0}")
   @ValueSource(
-    strings =
-    [
-      "(",
-      ")",
-      "((",
-      "))",
-      "()(",
-      "()()(",
-      "()()()(",
-      "())",
-      "()())",
-      "()()())",
-      "(())(",
-      "(())()(",
-      "(())()()(",
-      "(()))",
-      "(())())",
-      "(())()())",
-      "(())(())(",
-      "(())(())()(",
-      "(())(())()()(",
-      "(())(()))",
-      "(())(())())",
-      "(())(())()())",
-      "(()())(()())(",
-      "(()())(()()))",
-    ])
+      strings =
+          [
+              "(",
+              ")",
+              "((",
+              "))",
+              "()(",
+              "()()(",
+              "()()()(",
+              "())",
+              "()())",
+              "()()())",
+              "(())(",
+              "(())()(",
+              "(())()()(",
+              "(()))",
+              "(())())",
+              "(())()())",
+              "(())(())(",
+              "(())(())()(",
+              "(())(())()()(",
+              "(())(()))",
+              "(())(())())",
+              "(())(())()())",
+              "(()())(()())(",
+              "(()())(()()))",
+          ])
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     nonterminalS.addAlternative(Alternative(listOf()))
-    nonterminalS.addAlternative(Alternative(listOf(Terminal("("), nonterminalS, Terminal(")"), nonterminalS)))
+    nonterminalS.addAlternative(
+        Alternative(listOf(Terminal("("), nonterminalS, Terminal(")"), nonterminalS)))
 
     assertEquals(
         expected = hashMapOf(),
@@ -272,7 +273,8 @@ class TestCFGGraphInputWithoutSPPFFail {
   fun `test 'dyck' hand-crafted grammar two cycle graph`() {
     val nonterminalS = Nonterminal("S")
     nonterminalS.addAlternative(Alternative(listOf()))
-    nonterminalS.addAlternative(Alternative(listOf(Terminal("("), nonterminalS, Terminal(")"), nonterminalS)))
+    nonterminalS.addAlternative(
+        Alternative(listOf(Terminal("("), nonterminalS, Terminal(")"), nonterminalS)))
 
     val graphNode0 = GraphNode(id = 0, isStart = true, isFinal = true)
     val graphNode1 = GraphNode(id = 1, isStart = true, isFinal = true)

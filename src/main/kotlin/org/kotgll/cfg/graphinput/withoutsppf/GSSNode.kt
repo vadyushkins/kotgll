@@ -1,33 +1,31 @@
 package org.kotgll.cfg.graphinput.withoutsppf
 
 import org.kotgll.cfg.grammar.Alternative
+import org.kotgll.cfg.grammar.symbol.Nonterminal
 import org.kotgll.graph.GraphNode
 import java.util.*
 
-class GSSNode(
-    val alternative: Alternative,
-    val dot: Int,
-    val pos: GraphNode,
-    var isStart: Boolean = false,
-) {
-  val edges: HashSet<GSSNode> = HashSet()
+class GSSNode(val nonterminal: Nonterminal, val pos: GraphNode) {
+  val edges: HashMap<Pair<Alternative, Int>, HashSet<GSSNode>> = HashMap()
 
-  fun addEdge(gssNode: GSSNode) = edges.add(gssNode)
+  fun addEdge(alternative: Alternative, dot: Int, gssNode: GSSNode): Boolean {
+    val label = Pair(alternative, dot)
+    if (!edges.containsKey(label)) edges[label] = HashSet()
+    return edges[label]!!.add(gssNode)
+  }
 
-  override fun toString() =
-      "GSSNode(alternative=$alternative, dot=$dot, pos=$pos, isStart=$isStart)"
+  override fun toString() = "GSSNode(nonterminal=$nonterminal, pos=$pos)"
 
   override fun equals(other: Any?): Boolean {
     if (this === other) return true
     if (other !is GSSNode) return false
 
-    if (alternative != other.alternative) return false
-    if (dot != other.dot) return false
+    if (nonterminal != other.nonterminal) return false
     if (pos != other.pos) return false
 
     return true
   }
 
-  val hashCode = Objects.hash(alternative, dot, pos)
+  val hashCode = Objects.hash(nonterminal, pos)
   override fun hashCode() = hashCode
 }

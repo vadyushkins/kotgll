@@ -11,30 +11,17 @@ class GLL(val startSymbol: Nonterminal, val input: String) {
   val poppedGSSNodes: HashMap<GSSNode, HashSet<SPPFNode?>> = HashMap()
   val createdGSSNodes: HashMap<GSSNode, GSSNode> = HashMap()
   val createdSPPFNodes: HashMap<SPPFNode, SPPFNode> = HashMap()
-  val startGSSNode: GSSNode = makeStartGSSNode()
   var parseResult: SPPFNode? = null
 
-  fun makeStartGSSNode(): GSSNode {
-    val s1 = Nonterminal("S'")
-    val alternative = Alternative(listOf(startSymbol))
-    s1.addAlternative(alternative)
-    return getOrCreateGSSNode(alternative, 1, 0, true)
-  }
-
-  fun getOrCreateGSSNode(
-      alternative: Alternative,
-      dot: Int,
-      pos: Int,
-      isStart: Boolean = false,
-  ): GSSNode {
-    val gssNode = GSSNode(alternative, dot, pos, isStart)
+  fun getOrCreateGSSNode(nonterminal: Nonterminal, pos: Int): GSSNode {
+    val gssNode = GSSNode(nonterminal, pos)
     if (!createdGSSNodes.contains(gssNode)) createdGSSNodes[gssNode] = gssNode
     return createdGSSNodes[gssNode]!!
   }
 
   fun parse(): SPPFNode? {
     for (alternative in startSymbol.alternatives) {
-      queue.add(alternative, 0, startGSSNode, null, 0)
+      queue.add(alternative, 0, getOrCreateGSSNode(startSymbol, 0), null, 0)
     }
 
     while (!queue.isEmpty()) {
@@ -93,19 +80,17 @@ class GLL(val startSymbol: Nonterminal, val input: String) {
   }
 
   fun pop(gssNode: GSSNode, sppfNode: SPPFNode?, pos: Int) {
-    if (!gssNode.isStart) {
-      if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
-      poppedGSSNodes[gssNode]!!.add(sppfNode)
-      for (e in gssNode.edges.entries) {
-        for (u in e.value) {
-          queue.add(
-              gssNode.alternative,
-              gssNode.dot,
-              u,
-              getNodeP(gssNode.alternative, gssNode.dot, createdSPPFNodes[e.key], sppfNode!!),
-              pos,
-          )
-        }
+    if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
+    poppedGSSNodes[gssNode]!!.add(sppfNode)
+    for (e in gssNode.edges.entries) {
+      for (u in e.value) {
+        queue.add(
+            e.key.first,
+            e.key.second,
+            u,
+            getNodeP(e.key.first, e.key.second, e.key.third, sppfNode!!),
+            pos,
+        )
       }
     }
   }
@@ -117,9 +102,9 @@ class GLL(val startSymbol: Nonterminal, val input: String) {
       sppfNode: SPPFNode?,
       pos: Int,
   ): GSSNode {
-    val v: GSSNode = getOrCreateGSSNode(alternative, dot, pos)
+    val v: GSSNode = getOrCreateGSSNode(alternative.elements[dot - 1] as Nonterminal, pos)
 
-    if (v.addEdge(sppfNode, gssNode)) {
+    if (v.addEdge(alternative, dot, sppfNode, gssNode)) {
       if (poppedGSSNodes.containsKey(v)) {
         for (z in poppedGSSNodes[v]!!) {
           queue.add(

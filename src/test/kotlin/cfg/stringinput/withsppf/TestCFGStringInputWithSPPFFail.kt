@@ -55,25 +55,25 @@ class TestCFGStringInputWithSPPFFail {
 
   @ParameterizedTest(name = "Should be Null for {0}")
   @ValueSource(
-    strings =
-    [
-      "abaa",
-      "abba",
-      "abca",
-      "ababaa",
-      "ababba",
-      "ababca",
-      "abbb",
-      "abcb",
-      "ababbb",
-      "ababcb",
-      "abac",
-      "abbc",
-      "abcc",
-      "ababac",
-      "ababbc",
-      "ababcc",
-    ])
+      strings =
+          [
+              "abaa",
+              "abba",
+              "abca",
+              "ababaa",
+              "ababba",
+              "ababca",
+              "abbb",
+              "abcb",
+              "ababbb",
+              "ababcb",
+              "abac",
+              "abbc",
+              "abcc",
+              "ababac",
+              "ababbc",
+              "ababcc",
+          ])
   fun `test '(ab)-star' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     nonterminalS.addAlternative(Alternative(listOf(Star(Terminal("ab")))))

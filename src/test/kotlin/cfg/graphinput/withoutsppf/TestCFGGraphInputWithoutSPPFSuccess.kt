@@ -115,7 +115,8 @@ class TestCFGGraphInputWithoutSPPFSuccess {
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     nonterminalS.addAlternative(Alternative(listOf()))
-    nonterminalS.addAlternative(Alternative(listOf(Terminal("("), nonterminalS, Terminal(")"), nonterminalS)))
+    nonterminalS.addAlternative(
+        Alternative(listOf(Terminal("("), nonterminalS, Terminal(")"), nonterminalS)))
 
     assertEquals(
         expected = hashMapOf(0 to hashSetOf(input.length)),

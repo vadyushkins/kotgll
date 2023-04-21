@@ -11,26 +11,17 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
   val poppedGSSNodes: HashMap<GSSNode, HashSet<SPPFNode?>> = HashMap()
   val createdGSSNodes: HashMap<GSSNode, GSSNode> = HashMap()
   val createdSPPFNodes: HashMap<SPPFNode, SPPFNode> = HashMap()
-  val startGSSNodes: HashMap<GraphNode, GSSNode> = makeStartGSSNodes()
   val parseResult: HashMap<Int, HashMap<Int, SPPFNode>> = HashMap()
 
-  fun makeStartGSSNodes(): HashMap<GraphNode, GSSNode> {
-    val result: HashMap<GraphNode, GSSNode> = HashMap()
-    for (node in startGraphNodes) {
-      result[node] = getOrCreateGSSNode(startState, node, true)
-    }
-    return result
-  }
-
-  fun getOrCreateGSSNode(state: RSMState, ci: GraphNode, isStart: Boolean = false): GSSNode {
-    val gssNode = GSSNode(state, ci, isStart)
+  fun getOrCreateGSSNode(nonterminal: Nonterminal, pos: GraphNode): GSSNode {
+    val gssNode = GSSNode(nonterminal, pos)
     if (!createdGSSNodes.containsKey(gssNode)) createdGSSNodes[gssNode] = gssNode
     return createdGSSNodes[gssNode]!!
   }
 
   fun parse(): HashMap<Int, HashMap<Int, SPPFNode>> {
-    for (entry in startGSSNodes.entries) {
-      queue.add(startState, entry.value, null, entry.key)
+    for (graphNode in startGraphNodes) {
+      queue.add(startState, getOrCreateGSSNode(startState.nonterminal, graphNode), null, graphNode)
     }
 
     while (!queue.isEmpty()) {
@@ -62,7 +53,8 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
     }
 
     for (rsmEdge in state.outgoingNonterminalEdges) {
-      val curGSSNode: GSSNode = createGSSNode(rsmEdge.head, gssNode, curSPPFNode, pos)
+      val curGSSNode: GSSNode =
+          createGSSNode(rsmEdge.nonterminal, rsmEdge.head, gssNode, curSPPFNode, pos)
       queue.add(rsmEdge.nonterminal.startState, curGSSNode, null, pos)
     }
 
@@ -70,30 +62,25 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
   }
 
   fun pop(gssNode: GSSNode, sppfNode: SPPFNode?, pos: GraphNode) {
-    if (!gssNode.isStart) {
-      if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
-      poppedGSSNodes[gssNode]!!.add(sppfNode)
-      for (e in gssNode.edges.entries) {
-        for (u in e.value) {
-          queue.add(
-              gssNode.rsmState,
-              u,
-              getNodeP(gssNode.rsmState, createdSPPFNodes[e.key], sppfNode!!),
-              pos)
-        }
+    if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
+    poppedGSSNodes[gssNode]!!.add(sppfNode)
+    for (e in gssNode.edges.entries) {
+      for (u in e.value) {
+        queue.add(e.key.first, u, getNodeP(e.key.first, e.key.second, sppfNode!!), pos)
       }
     }
   }
 
   fun createGSSNode(
+      nonterminal: Nonterminal,
       state: RSMState,
       gssNode: GSSNode,
       sppfNode: SPPFNode?,
       pos: GraphNode,
   ): GSSNode {
-    val v: GSSNode = getOrCreateGSSNode(state, pos)
+    val v: GSSNode = getOrCreateGSSNode(nonterminal, pos)
 
-    if (v.addEdge(sppfNode, gssNode)) {
+    if (v.addEdge(state, sppfNode, gssNode)) {
       if (poppedGSSNodes.containsKey(v)) {
         for (z in poppedGSSNodes[v]!!) {
           queue.add(state, gssNode, getNodeP(state, sppfNode, z!!), z.rightExtent)

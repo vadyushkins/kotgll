@@ -5,13 +5,13 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 import org.kotgll.graph.GraphEdge
 import org.kotgll.graph.GraphNode
+import org.kotgll.graph.readGraphFromString
 import org.kotgll.rsm.grammar.RSMNonterminalEdge
 import org.kotgll.rsm.grammar.RSMState
 import org.kotgll.rsm.grammar.RSMTerminalEdge
 import org.kotgll.rsm.grammar.symbol.Nonterminal
 import org.kotgll.rsm.grammar.symbol.Terminal
 import org.kotgll.rsm.graphinput.withoutsppf.GLL
-import org.kotgll.graph.readGraphFromString
 import kotlin.test.assertEquals
 
 class TestRSMGraphInputWithoutSPPFSuccess {
@@ -213,23 +213,23 @@ class TestRSMGraphInputWithoutSPPFSuccess {
 
   @ParameterizedTest(name = "Should be NotNull for {0}")
   @ValueSource(
-    strings =
-    [
-      "",
-      "()",
-      "()()",
-      "()()()",
-      "(())",
-      "(())()",
-      "(())()()",
-      "(())(())",
-      "(())(())()",
-      "(())(())()()",
-      "(()())(()())",
-      "((()))",
-      "(((())))",
-      "((((()))))",
-    ])
+      strings =
+          [
+              "",
+              "()",
+              "()()",
+              "()()()",
+              "(())",
+              "(())()",
+              "(())()()",
+              "(())(())",
+              "(())(())()",
+              "(())(())()()",
+              "(()())(()())",
+              "((()))",
+              "(((())))",
+              "((((()))))",
+          ])
   fun `test 'dyck' hand-crafted grammar`(input: String) {
     val nonterminalS = Nonterminal("S")
     val rsmState0 =
