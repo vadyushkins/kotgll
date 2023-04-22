@@ -61,17 +61,18 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
     if (dot < alternative.elements.size) {
       val curSymbol: Symbol = alternative.elements[dot]
 
-      if (curSymbol is Terminal) {
-        for (edge in pos.outgoingEdges) {
-          if (curSymbol.value == edge.label) {
-            val nextSPPFNode: SPPFNode = getOrCreateTerminalSPPFNode(curSymbol, pos, edge.head)
-            queue.add(
-                alternative,
-                dot + 1,
-                gssNode,
-                getNodeP(alternative, dot + 1, sppfNode, nextSPPFNode),
-                edge.head)
-          }
+      if (curSymbol is Terminal && pos.outgoingEdges.containsKey(curSymbol.value)) {
+        for (head in pos.outgoingEdges[curSymbol.value]!!) {
+          queue.add(
+              alternative,
+              dot + 1,
+              gssNode,
+              getNodeP(
+                  alternative,
+                  dot + 1,
+                  sppfNode,
+                  getOrCreateTerminalSPPFNode(curSymbol, pos, head)),
+              head)
         }
       }
 

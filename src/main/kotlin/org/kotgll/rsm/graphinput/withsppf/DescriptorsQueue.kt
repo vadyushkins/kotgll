@@ -13,10 +13,7 @@ class DescriptorsQueue {
   fun add(rsmState: RSMState, gssNode: GSSNode, sppfNode: SPPFNode?, pos: GraphNode) {
     val descriptor = Descriptor(rsmState, gssNode, sppfNode, pos)
     if (!created.containsKey(pos)) created[pos] = HashSet()
-    if (!created[pos]!!.contains(descriptor)) {
-      created[pos]!!.add(descriptor)
-      todo.addLast(descriptor)
-    }
+    if (created[pos]!!.add(descriptor)) todo.addLast(descriptor)
   }
 
   fun next() = todo.removeFirst()
@@ -39,7 +36,6 @@ class DescriptorsQueue {
       if (rsmState != other.rsmState) return false
       if (gssNode != other.gssNode) return false
       if (sppfNode != other.sppfNode) return false
-      if (pos != other.pos) return false
 
       return true
     }

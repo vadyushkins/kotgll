@@ -31,9 +31,9 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
 
   fun parse(state: RSMState, pos: GraphNode, gssNode: GSSNode) {
     for (rsmEdge in state.outgoingTerminalEdges) {
-      for (graphEdge in pos.outgoingEdges) {
-        if (rsmEdge.terminal.value == graphEdge.label) {
-          queue.add(rsmEdge.head, gssNode, graphEdge.head)
+      if (pos.outgoingEdges.containsKey(rsmEdge.terminal.value)) {
+        for (head in pos.outgoingEdges[rsmEdge.terminal.value]!!) {
+          queue.add(rsmEdge.head, gssNode, head)
         }
       }
     }

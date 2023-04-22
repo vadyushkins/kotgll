@@ -6,12 +6,9 @@ fun readGraphFromString(input: String): GraphNode {
   val result = GraphNode(id = 0, isStart = true)
   var cur = result
   for (i in input.indices) {
-    cur.addEdge(
-        GraphEdge(
-            label = input[i] + "",
-            head = GraphNode(id = i + 1),
-        ))
-    cur = cur.outgoingEdges[0].head
+    val head = GraphNode(id = i + 1)
+    cur.addEdge(input[i] + "", head)
+    cur = head
   }
   cur.isFinal = true
   return result
@@ -33,7 +30,7 @@ fun readGraphFromCSV(pathToCSV: String): List<GraphNode> {
     val tailGraphNode = makeGraphNode(id = tail.toInt(), isStart = true, isFinal = true)
     val headGraphNode = makeGraphNode(id = head.toInt(), isStart = true, isFinal = true)
 
-    tailGraphNode.addEdge(GraphEdge(label = label, head = headGraphNode))
+    tailGraphNode.addEdge(label, headGraphNode)
   }
 
   return graphNodes.values.toList()

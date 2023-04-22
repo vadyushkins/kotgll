@@ -100,6 +100,7 @@ fun runCFGWithoutSPPF(
       .forEach { graphPath ->
         val graph = readGraphFromCSV(graphPath.path)
         val graphName = graphPath.nameWithoutExtension
+        println("start:: $graphName")
 
         val resultPath = getResultPath(pathToOutput, graphName, "cfg", cfgName, "without_sppf")
         File(resultPath).writeText("")
@@ -148,6 +149,7 @@ fun runCFGWithSPPF(
       .forEach { graphPath ->
         val graph = readGraphFromCSV(graphPath.path)
         val graphName = graphPath.nameWithoutExtension
+        println("start:: $graphName")
 
         val resultPath = getResultPath(pathToOutput, graphName, "cfg", cfgName, "with_sppf")
         File(resultPath).writeText("")
@@ -196,6 +198,7 @@ fun runRSMWithoutSPPF(
       .forEach { graphPath ->
         val graph = readGraphFromCSV(graphPath.path)
         val graphName = graphPath.nameWithoutExtension
+        println("start:: $graphName")
 
         val resultPath = getResultPath(pathToOutput, graphName, "rsm", rsmName, "without_sppf")
         File(resultPath).writeText("")
@@ -244,6 +247,7 @@ fun runRSMWithSPPF(
       .forEach { graphPath ->
         val graph = readGraphFromCSV(graphPath.path)
         val graphName = graphPath.nameWithoutExtension
+        println("start:: $graphName")
 
         val resultPath = getResultPath(pathToOutput, graphName, "rsm", rsmName, "with_sppf")
         File(resultPath).writeText("")

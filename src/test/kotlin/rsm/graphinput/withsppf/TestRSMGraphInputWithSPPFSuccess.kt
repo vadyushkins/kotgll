@@ -3,7 +3,6 @@ package rsm.graphinput.withsppf
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import org.kotgll.graph.GraphEdge
 import org.kotgll.graph.GraphNode
 import org.kotgll.graph.readGraphFromString
 import org.kotgll.rsm.grammar.RSMNonterminalEdge
@@ -219,8 +218,9 @@ class TestRSMGraphInputWithSPPFSuccess {
     var cur = graph
     var i = 0
     while (i < input.length) {
-      cur.addEdge(GraphEdge(label = "" + input[i] + input[i + 1], head = GraphNode(id = i + 1)))
-      cur = cur.outgoingEdges[0].head
+      val head = GraphNode(id = i + 1)
+      cur.addEdge("" + input[i] + input[i + 1], head)
+      cur = head
       i += 2
     }
     cur.isFinal = true
@@ -342,7 +342,7 @@ class TestRSMGraphInputWithSPPFSuccess {
     val graph = GraphNode(id = 0, isStart = true)
     val graphNode1 = GraphNode(id = 1, isFinal = true)
 
-    graph.addEdge(GraphEdge(label = input, head = graphNode1))
+    graph.addEdge(input, graphNode1)
 
     val result = GLL(rsmState0, listOf(graph)).parse()
     val pairs: HashMap<Int, HashSet<Int>> = HashMap()
@@ -613,11 +613,7 @@ class TestRSMGraphInputWithSPPFSuccess {
             isFinal = true,
         )
 
-    graphNode0.addEdge(
-        GraphEdge(
-            label = input,
-            head = graphNode1,
-        ))
+    graphNode0.addEdge(input, graphNode1)
 
     val result = GLL(rsmState0, listOf(graphNode0)).parse()
     val pairs: HashMap<Int, HashSet<Int>> = HashMap()
@@ -688,12 +684,12 @@ class TestRSMGraphInputWithSPPFSuccess {
     val graphNode2 = GraphNode(id = 2, isStart = true, isFinal = true)
     val graphNode3 = GraphNode(id = 3, isStart = true, isFinal = true)
 
-    graphNode0.addEdge(GraphEdge(label = "(", head = graphNode1))
-    graphNode1.addEdge(GraphEdge(label = "(", head = graphNode2))
-    graphNode2.addEdge(GraphEdge(label = "(", head = graphNode0))
+    graphNode0.addEdge("(", graphNode1)
+    graphNode1.addEdge("(", graphNode2)
+    graphNode2.addEdge("(", graphNode0)
 
-    graphNode2.addEdge(GraphEdge(label = ")", head = graphNode3))
-    graphNode3.addEdge(GraphEdge(label = ")", head = graphNode2))
+    graphNode2.addEdge(")", graphNode3)
+    graphNode3.addEdge(")", graphNode2)
 
     val result = GLL(rsmState0, listOf(graphNode0, graphNode1, graphNode2, graphNode3)).parse()
     val pairs: HashMap<Int, HashSet<Int>> = HashMap()
@@ -750,8 +746,8 @@ class TestRSMGraphInputWithSPPFSuccess {
     val graphNode0 = GraphNode(id = 0, isStart = true, isFinal = true)
     val graphNode1 = GraphNode(id = 1, isStart = true, isFinal = true)
 
-    graphNode0.addEdge(GraphEdge(label = "a", head = graphNode1))
-    graphNode1.addEdge(GraphEdge(label = "a", head = graphNode1))
+    graphNode0.addEdge("a", graphNode1)
+    graphNode1.addEdge("a", graphNode1)
 
     val result = GLL(rsmState0, listOf(graphNode0, graphNode1)).parse()
     val pairs: HashMap<Int, HashSet<Int>> = HashMap()
@@ -790,8 +786,8 @@ class TestRSMGraphInputWithSPPFSuccess {
     val graphNode0 = GraphNode(id = 0, isStart = true, isFinal = true)
     val graphNode1 = GraphNode(id = 1, isStart = true, isFinal = true)
 
-    graphNode0.addEdge(GraphEdge(label = "a", head = graphNode1))
-    graphNode1.addEdge(GraphEdge(label = "a", head = graphNode1))
+    graphNode0.addEdge("a", graphNode1)
+    graphNode1.addEdge("a", graphNode1)
 
     val result = GLL(rsmState0, listOf(graphNode0, graphNode1)).parse()
     val pairs: HashMap<Int, HashSet<Int>> = HashMap()
@@ -840,12 +836,12 @@ class TestRSMGraphInputWithSPPFSuccess {
     val graphNode2 = GraphNode(id = 2, isStart = true, isFinal = true)
     val graphNode3 = GraphNode(id = 3, isStart = true, isFinal = true)
 
-    graphNode0.addEdge(GraphEdge(label = "subClassOf_r", head = graphNode1))
-    graphNode1.addEdge(GraphEdge(label = "subClassOf_r", head = graphNode2))
-    graphNode2.addEdge(GraphEdge(label = "subClassOf_r", head = graphNode0))
+    graphNode0.addEdge("subClassOf_r", graphNode1)
+    graphNode1.addEdge("subClassOf_r", graphNode2)
+    graphNode2.addEdge("subClassOf_r", graphNode0)
 
-    graphNode2.addEdge(GraphEdge(label = "subClassOf", head = graphNode3))
-    graphNode3.addEdge(GraphEdge(label = "subClassOf", head = graphNode2))
+    graphNode2.addEdge("subClassOf", graphNode3)
+    graphNode3.addEdge("subClassOf", graphNode2)
 
     val result = GLL(rsmState0, listOf(graphNode0, graphNode1, graphNode2, graphNode3)).parse()
     val pairs: HashMap<Int, HashSet<Int>> = HashMap()

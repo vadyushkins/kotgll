@@ -39,15 +39,16 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
         curSPPFNode = getNodeP(state, curSPPFNode, getOrCreateItemSPPFNode(state, pos, pos))
 
     for (rsmEdge in state.outgoingTerminalEdges) {
-      for (graphEdge in pos.outgoingEdges) {
-        if (rsmEdge.terminal.value == graphEdge.label) {
-          val nextSPPFNode: SPPFNode =
-              getOrCreateTerminalSPPFNode(rsmEdge.terminal, pos, graphEdge.head)
+      if (pos.outgoingEdges.containsKey(rsmEdge.terminal.value)) {
+        for (head in pos.outgoingEdges[rsmEdge.terminal.value]!!) {
           queue.add(
               rsmEdge.head,
               gssNode,
-              getNodeP(rsmEdge.head, curSPPFNode, nextSPPFNode),
-              graphEdge.head)
+              getNodeP(
+                  rsmEdge.head,
+                  curSPPFNode,
+                  getOrCreateTerminalSPPFNode(rsmEdge.terminal, pos, head)),
+              head)
         }
       }
     }

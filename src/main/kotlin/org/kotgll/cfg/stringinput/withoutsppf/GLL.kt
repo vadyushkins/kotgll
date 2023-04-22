@@ -14,7 +14,7 @@ class GLL(val startSymbol: Nonterminal, val input: String) {
   fun getOrCreateGSSNode(nonterminal: Nonterminal, pos: Int): GSSNode {
     val gssNode = GSSNode(nonterminal, pos)
     if (!createdGSSNodes.contains(gssNode)) createdGSSNodes[gssNode] = gssNode
-    return gssNode
+    return createdGSSNodes[gssNode]!!
   }
 
   fun parse(): Boolean {
@@ -51,9 +51,8 @@ class GLL(val startSymbol: Nonterminal, val input: String) {
       }
 
       if (curSymbol is Nonterminal) {
-        val curGSSNode = createGSSNode(alternative, curDot + 1, gssNode, curPos)
         for (alt in curSymbol.alternatives) {
-          queue.add(alt, 0, curGSSNode, curPos)
+          queue.add(alt, 0, createGSSNode(alternative, curDot + 1, gssNode, curPos), curPos)
         }
         return
       }

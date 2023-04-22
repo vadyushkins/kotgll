@@ -19,10 +19,7 @@ class DescriptorsQueue {
   ) {
     val descriptor = Descriptor(alternative, dot, gssNode, sppfNode, pos)
     if (!created.containsKey(pos)) created[pos] = HashSet()
-    if (!created[pos]!!.contains(descriptor)) {
-      created[pos]!!.add(descriptor)
-      todo.addLast(descriptor)
-    }
+    if (created[pos]!!.add(descriptor)) todo.addLast(descriptor)
   }
 
   fun next() = todo.removeFirst()
@@ -47,7 +44,6 @@ class DescriptorsQueue {
       if (dot != other.dot) return false
       if (gssNode != other.gssNode) return false
       if (sppfNode != other.sppfNode) return false
-      if (pos != other.pos) return false
 
       return true
     }

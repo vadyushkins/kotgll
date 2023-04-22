@@ -59,9 +59,12 @@ class GLL(val startSymbol: Nonterminal, val input: String) {
       if (curSymbol is Terminal) {
         if (curPos >= input.length) return
         if (curSymbol.match(curPos, input)) {
-          val nextSPPFNode: SPPFNode =
-              getOrCreateTerminalSPPFNode(curSymbol, curPos, curSymbol.size)
-          curSPPFNode = getNodeP(alternative, i + 1, curSPPFNode, nextSPPFNode)
+          curSPPFNode =
+              getNodeP(
+                  alternative,
+                  i + 1,
+                  curSPPFNode,
+                  getOrCreateTerminalSPPFNode(curSymbol, curPos, curSymbol.size))
           curPos += curSymbol.size
           continue
         }
