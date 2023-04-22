@@ -54,9 +54,11 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
     }
 
     for (rsmEdge in state.outgoingNonterminalEdges) {
-      val curGSSNode: GSSNode =
-          createGSSNode(rsmEdge.nonterminal, rsmEdge.head, gssNode, curSPPFNode, pos)
-      queue.add(rsmEdge.nonterminal.startState, curGSSNode, null, pos)
+      queue.add(
+          rsmEdge.nonterminal.startState,
+          createGSSNode(rsmEdge.nonterminal, rsmEdge.head, gssNode, curSPPFNode, pos),
+          null,
+          pos)
     }
 
     if (state.isFinal) pop(gssNode, curSPPFNode, pos)

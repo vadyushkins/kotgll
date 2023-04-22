@@ -48,9 +48,8 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
       }
 
       if (curSymbol is Nonterminal) {
-        val curGSSNode: GSSNode = createGSSNode(alternative, dot + 1, gssNode, pos)
         for (alt in curSymbol.alternatives) {
-          queue.add(alt, 0, curGSSNode, pos)
+          queue.add(alt, 0, createGSSNode(alternative, dot + 1, gssNode, pos), pos)
         }
       }
     } else {

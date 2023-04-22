@@ -51,7 +51,6 @@ class GLL(val startSymbol: Nonterminal, val input: String) {
 
   fun parse(alternative: Alternative, dot: Int, gssNode: GSSNode, sppfNode: SPPFNode?, pos: Int) {
     var curPos: Int = pos
-    var curGSSNode: GSSNode = gssNode
     var curSPPFNode: SPPFNode? = sppfNode
     for (i in dot until alternative.elements.size) {
       val curSymbol: Symbol = alternative.elements[i]
@@ -72,14 +71,14 @@ class GLL(val startSymbol: Nonterminal, val input: String) {
       }
 
       if (curSymbol is Nonterminal) {
-        curGSSNode = createGSSNode(alternative, i + 1, curGSSNode, curSPPFNode, curPos)
         for (alt in curSymbol.alternatives) {
-          queue.add(alt, 0, curGSSNode, null, curPos)
+          queue.add(
+              alt, 0, createGSSNode(alternative, i + 1, gssNode, curSPPFNode, curPos), null, curPos)
         }
         return
       }
     }
-    pop(curGSSNode, curSPPFNode, curPos)
+    pop(gssNode, curSPPFNode, curPos)
   }
 
   fun pop(gssNode: GSSNode, sppfNode: SPPFNode?, pos: Int) {

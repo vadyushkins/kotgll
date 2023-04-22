@@ -30,7 +30,6 @@ class GLL(val startState: RSMState, val input: String) {
   }
 
   fun parse(state: RSMState, gssNode: GSSNode, sppfNode: SPPFNode?, pos: Int) {
-    var curGSSNode: GSSNode
     var curSPPFNode: SPPFNode? = sppfNode
 
     if (state.isStart && state.isFinal)
@@ -50,8 +49,11 @@ class GLL(val startState: RSMState, val input: String) {
     }
 
     for (rsmEdge in state.outgoingNonterminalEdges) {
-      curGSSNode = createGSSNode(rsmEdge.nonterminal, rsmEdge.head, gssNode, curSPPFNode, pos)
-      queue.add(rsmEdge.nonterminal.startState, curGSSNode, null, pos)
+      queue.add(
+          rsmEdge.nonterminal.startState,
+          createGSSNode(rsmEdge.nonterminal, rsmEdge.head, gssNode, curSPPFNode, pos),
+          null,
+          pos)
     }
 
     if (state.isFinal) pop(gssNode, curSPPFNode, pos)

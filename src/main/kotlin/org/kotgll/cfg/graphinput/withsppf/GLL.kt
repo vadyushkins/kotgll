@@ -77,9 +77,8 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
       }
 
       if (curSymbol is Nonterminal) {
-        val curGSSNode: GSSNode = createGSSNode(alternative, dot + 1, gssNode, sppfNode, pos)
         for (alt in curSymbol.alternatives) {
-          queue.add(alt, 0, curGSSNode, null, pos)
+          queue.add(alt, 0, createGSSNode(alternative, dot + 1, gssNode, sppfNode, pos), null, pos)
         }
       }
     } else {
