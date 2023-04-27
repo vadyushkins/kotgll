@@ -6,7 +6,12 @@ import org.kotgll.cfg.grammar.symbol.Symbol
 import org.kotgll.cfg.grammar.symbol.Terminal
 import org.kotgll.graph.GraphNode
 
-class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
+class GLL(val startSymbol: Nonterminal, val startGraphNodes: ArrayList<GraphNode>) {
+  constructor(
+      startSymbol: Nonterminal,
+      startGraphNodes: List<GraphNode>
+  ) : this(startSymbol, ArrayList(startGraphNodes))
+
   val queue: DescriptorsQueue = DescriptorsQueue()
   val poppedGSSNodes: HashMap<GSSNode, HashSet<GraphNode>> = HashMap()
   val createdGSSNodes: HashMap<GSSNode, GSSNode> = HashMap()

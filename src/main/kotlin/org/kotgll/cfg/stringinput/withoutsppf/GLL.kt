@@ -68,7 +68,7 @@ class GLL(val startSymbol: Nonterminal, val input: String) {
         parseResult = true
     if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
     poppedGSSNodes[gssNode]!!.add(pos)
-    for (e in gssNode.edges.entries) {
+    for (e in gssNode.edges) {
       for (u in e.value) {
         queue.add(e.key.first, e.key.second, u, pos)
       }

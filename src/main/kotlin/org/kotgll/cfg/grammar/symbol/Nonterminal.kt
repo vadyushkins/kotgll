@@ -4,7 +4,7 @@ import org.kotgll.cfg.grammar.Alternative
 
 open class Nonterminal(
     val name: String,
-    val alternatives: MutableList<Alternative> = emptyList<Alternative>().toMutableList(),
+    val alternatives: ArrayList<Alternative> = ArrayList(),
 ) : Symbol {
   override fun toString() = "Nonterminal($name)"
 

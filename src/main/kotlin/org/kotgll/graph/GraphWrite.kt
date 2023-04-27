@@ -2,8 +2,8 @@ package org.kotgll.graph
 
 import java.io.File
 
-fun writeGraphToCSV(graph: List<GraphNode>, pathToCSV: String) {
-  val edges: MutableList<Triple<GraphNode, String, GraphNode>> = mutableListOf()
+fun writeGraphToCSV(graph: ArrayList<GraphNode>, pathToCSV: String) {
+  val edges: ArrayList<Triple<GraphNode, String, GraphNode>> = ArrayList()
 
   val visited: HashSet<GraphNode> = HashSet()
   val queue: ArrayDeque<GraphNode> = ArrayDeque(graph)

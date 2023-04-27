@@ -14,7 +14,7 @@ fun readGraphFromString(input: String): GraphNode {
   return result
 }
 
-fun readGraphFromCSV(pathToCSV: String): List<GraphNode> {
+fun readGraphFromCSV(pathToCSV: String): ArrayList<GraphNode> {
   val graphNodes: HashMap<Int, GraphNode> = HashMap()
   fun makeGraphNode(id: Int, isStart: Boolean = false, isFinal: Boolean = false): GraphNode {
     val y = GraphNode(id, isStart, isFinal)
@@ -33,5 +33,5 @@ fun readGraphFromCSV(pathToCSV: String): List<GraphNode> {
     tailGraphNode.addEdge(label, headGraphNode)
   }
 
-  return graphNodes.values.toList()
+  return ArrayList(graphNodes.values)
 }

@@ -6,7 +6,12 @@ import org.kotgll.rsm.grammar.symbol.Nonterminal
 import org.kotgll.rsm.grammar.symbol.Terminal
 import org.kotgll.rsm.graphinput.withsppf.sppf.*
 
-class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
+class GLL(val startState: RSMState, val startGraphNodes: ArrayList<GraphNode>) {
+  constructor(
+      startState: RSMState,
+      startGraphNodes: List<GraphNode>
+  ) : this(startState, ArrayList(startGraphNodes))
+
   val queue: DescriptorsQueue = DescriptorsQueue()
   val poppedGSSNodes: HashMap<GSSNode, HashSet<SPPFNode?>> = HashMap()
   val createdGSSNodes: HashMap<GSSNode, GSSNode> = HashMap()
@@ -67,7 +72,7 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
   fun pop(gssNode: GSSNode, sppfNode: SPPFNode?, pos: GraphNode) {
     if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
     poppedGSSNodes[gssNode]!!.add(sppfNode)
-    for (e in gssNode.edges.entries) {
+    for (e in gssNode.edges) {
       for (u in e.value) {
         queue.add(e.key.first, u, getNodeP(e.key.first, e.key.second, sppfNode!!), pos)
       }

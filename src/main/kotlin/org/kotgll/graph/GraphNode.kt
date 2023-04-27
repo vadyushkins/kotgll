@@ -1,7 +1,7 @@
 package org.kotgll.graph
 
 class GraphNode(val id: Int, var isStart: Boolean = false, var isFinal: Boolean = false) {
-  var outgoingEdges: HashMap<String, HashSet<GraphNode>> = HashMap()
+  var outgoingEdges: HashMap<String, ArrayList<GraphNode>> = HashMap()
 
   override fun toString() = "GraphNode(id=$id, isStart=$isStart, isFinal=$isFinal)"
 
@@ -18,7 +18,7 @@ class GraphNode(val id: Int, var isStart: Boolean = false, var isFinal: Boolean 
   override fun hashCode() = id
 
   fun addEdge(label: String, head: GraphNode) {
-    if (!outgoingEdges.containsKey(label)) outgoingEdges[label] = HashSet()
-    outgoingEdges[label]!!.add(head)
+    if (!outgoingEdges.containsKey(label)) outgoingEdges[label] = ArrayList()
+    if (!outgoingEdges[label]!!.contains(head)) outgoingEdges[label]!!.add(head)
   }
 }

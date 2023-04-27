@@ -8,8 +8,8 @@ class RSMState(
     val isStart: Boolean = false,
     val isFinal: Boolean = false
 ) {
-  val outgoingTerminalEdges: MutableList<RSMTerminalEdge> = mutableListOf()
-  val outgoingNonterminalEdges: MutableList<RSMNonterminalEdge> = mutableListOf()
+  val outgoingTerminalEdges: ArrayList<RSMTerminalEdge> = ArrayList()
+  val outgoingNonterminalEdges: ArrayList<RSMNonterminalEdge> = ArrayList()
 
   override fun toString() =
       "RSMState(id=$id, nonterminal=$nonterminal, isStart=$isStart, isFinal=$isFinal)"

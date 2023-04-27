@@ -5,7 +5,7 @@ import org.kotgll.cfg.grammar.symbol.Terminal
 import java.io.File
 
 fun writeCFGToTXT(cfg: Nonterminal, pathToTXT: String) {
-  val alternatives: MutableList<Alternative> = mutableListOf()
+  val alternatives: ArrayList<Alternative> = ArrayList()
   val nonterminals: HashSet<Nonterminal> = HashSet()
   val queue: ArrayDeque<Nonterminal> = ArrayDeque(listOf(cfg))
   while (!queue.isEmpty()) {

@@ -7,7 +7,12 @@ import org.kotgll.cfg.grammar.symbol.Terminal
 import org.kotgll.cfg.graphinput.withsppf.sppf.*
 import org.kotgll.graph.GraphNode
 
-class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
+class GLL(val startSymbol: Nonterminal, val startGraphNodes: ArrayList<GraphNode>) {
+  constructor(
+      startSymbol: Nonterminal,
+      startGraphNodes: List<GraphNode>
+  ) : this(startSymbol, ArrayList(startGraphNodes))
+
   val queue: DescriptorsQueue = DescriptorsQueue()
   val poppedGSSNodes: HashMap<GSSNode, HashSet<SPPFNode?>> = HashMap()
   val createdGSSNodes: HashMap<GSSNode, GSSNode> = HashMap()
@@ -89,7 +94,7 @@ class GLL(val startSymbol: Nonterminal, val startGraphNodes: List<GraphNode>) {
   fun pop(gssNode: GSSNode, sppfNode: SPPFNode?, pos: GraphNode) {
     if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
     poppedGSSNodes[gssNode]!!.add(sppfNode)
-    for (e in gssNode.edges.entries) {
+    for (e in gssNode.edges) {
       for (u in e.value) {
         queue.add(
             e.key.first,

@@ -1,7 +1,6 @@
 package org.kotgll.rsm.grammar
 
 import org.kotgll.rsm.grammar.symbol.Terminal
-import java.util.*
 
 class RSMTerminalEdge(val terminal: Terminal, val head: RSMState) : RSMEdge {
   override fun toString() = "RSMTerminalEdge(terminal=$terminal, head=$head)"
@@ -16,6 +15,6 @@ class RSMTerminalEdge(val terminal: Terminal, val head: RSMState) : RSMEdge {
     return true
   }
 
-  val hashCode: Int = Objects.hash(terminal)
+  val hashCode: Int = terminal.hashCode
   override fun hashCode() = hashCode
 }

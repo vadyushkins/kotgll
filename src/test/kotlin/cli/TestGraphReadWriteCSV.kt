@@ -15,7 +15,7 @@ class TestGraphReadWriteCSV {
     val expectedGraphNodes = listOf(graphNode0, graphNode1)
 
     val pathToCSV = "src/test/resources/cli/TestGraphReadWriteCSV/OneEdgeGraph.csv"
-    writeGraphToCSV(expectedGraphNodes, pathToCSV)
+    writeGraphToCSV(ArrayList(expectedGraphNodes), pathToCSV)
     val actualGraphNodes = readGraphFromCSV(pathToCSV)
 
     assertEquals(expected = expectedGraphNodes, actual = actualGraphNodes)
@@ -31,7 +31,7 @@ class TestGraphReadWriteCSV {
     val expectedGraphNodes = listOf(graphNode0, graphNode1, graphNode2)
 
     val pathToCSV = "src/test/resources/cli/TestGraphReadWriteCSV/TwoEdgesGraph.csv"
-    writeGraphToCSV(expectedGraphNodes, pathToCSV)
+    writeGraphToCSV(ArrayList(expectedGraphNodes), pathToCSV)
     val actualGraphNodes = readGraphFromCSV(pathToCSV)
 
     assertEquals(expected = expectedGraphNodes, actual = actualGraphNodes)
@@ -48,7 +48,7 @@ class TestGraphReadWriteCSV {
     val expectedGraphNodes = listOf(graphNode0, graphNode1, graphNode2)
 
     val pathToCSV = "src/test/resources/cli/TestGraphReadWriteCSV/OneCycleGraph.csv"
-    writeGraphToCSV(expectedGraphNodes, pathToCSV)
+    writeGraphToCSV(ArrayList(expectedGraphNodes), pathToCSV)
     val actualGraphNodes = readGraphFromCSV(pathToCSV)
 
     assertEquals(expected = expectedGraphNodes, actual = actualGraphNodes)
@@ -70,7 +70,7 @@ class TestGraphReadWriteCSV {
     graphNode3.addEdge(")", graphNode2)
 
     val pathToCSV = "src/test/resources/cli/TestGraphReadWriteCSV/dyck.csv"
-    writeGraphToCSV(expectedGraphNodes, pathToCSV)
+    writeGraphToCSV(ArrayList(expectedGraphNodes), pathToCSV)
     val actualGraphNodes = readGraphFromCSV(pathToCSV)
 
     assertEquals(expected = expectedGraphNodes, actual = actualGraphNodes)

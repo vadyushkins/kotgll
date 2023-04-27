@@ -4,7 +4,12 @@ import org.kotgll.graph.GraphNode
 import org.kotgll.rsm.grammar.RSMState
 import org.kotgll.rsm.grammar.symbol.Nonterminal
 
-class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
+class GLL(val startState: RSMState, val startGraphNodes: ArrayList<GraphNode>) {
+  constructor(
+      startState: RSMState,
+      startGraphNodes: List<GraphNode>
+  ) : this(startState, ArrayList(startGraphNodes))
+
   val queue: DescriptorsQueue = DescriptorsQueue()
   val poppedGSSNodes: HashMap<GSSNode, HashSet<GraphNode>> = HashMap()
   val createdGSSNodes: HashMap<GSSNode, GSSNode> = HashMap()
@@ -55,7 +60,7 @@ class GLL(val startState: RSMState, val startGraphNodes: List<GraphNode>) {
     }
     if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
     poppedGSSNodes[gssNode]!!.add(pos)
-    for (e in gssNode.edges.entries) {
+    for (e in gssNode.edges) {
       for (u in e.value) {
         queue.add(e.key, u, pos)
       }

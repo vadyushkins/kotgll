@@ -3,7 +3,9 @@ package org.kotgll.cfg.grammar
 import org.kotgll.cfg.grammar.symbol.Nonterminal
 import org.kotgll.cfg.grammar.symbol.Symbol
 
-class Alternative(val elements: List<Symbol>) {
+class Alternative(val elements: ArrayList<Symbol>) {
+  constructor(elements: List<Symbol>) : this(ArrayList(elements))
+
   lateinit var nonterminal: Nonterminal
 
   override fun toString() = "Alternative($elements)"

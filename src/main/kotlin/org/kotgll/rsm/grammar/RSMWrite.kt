@@ -3,14 +3,14 @@ package org.kotgll.rsm.grammar
 import java.io.File
 
 fun writeRSMToTXT(rsm: RSMState, pathToTXT: String) {
-  val states: MutableList<RSMState> = mutableListOf()
-  val edges: HashMap<RSMState, MutableList<RSMEdge>> = hashMapOf()
+  val states: ArrayList<RSMState> = ArrayList()
+  val edges: HashMap<RSMState, ArrayList<RSMEdge>> = HashMap()
 
   val queue: ArrayDeque<RSMState> = ArrayDeque(listOf(rsm))
   while (!queue.isEmpty()) {
     val v = queue.removeFirst()
     states.add(v)
-    if (!edges.containsKey(v)) edges[v] = mutableListOf()
+    if (!edges.containsKey(v)) edges[v] = ArrayList()
     for (edge in v.outgoingTerminalEdges) {
       if (!edges[v]!!.contains(edge)) edges[v]!!.add(edge)
       if (!states.contains(edge.head)) queue.addLast(edge.head)

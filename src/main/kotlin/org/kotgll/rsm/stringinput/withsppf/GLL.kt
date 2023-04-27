@@ -62,7 +62,7 @@ class GLL(val startState: RSMState, val input: String) {
   fun pop(gssNode: GSSNode, sppfNode: SPPFNode?, pos: Int) {
     if (!poppedGSSNodes.containsKey(gssNode)) poppedGSSNodes[gssNode] = HashSet()
     poppedGSSNodes[gssNode]!!.add(sppfNode)
-    for (e in gssNode.edges.entries) {
+    for (e in gssNode.edges) {
       for (u in e.value) {
         queue.add(e.key.first, u, getNodeP(e.key.first, e.key.second, sppfNode!!), pos)
       }

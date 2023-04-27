@@ -34,7 +34,7 @@ fun readCFGFromTXT(pathToTXT: String): Nonterminal {
           makeNonterminal(
               nonterminalRegex.matchEntire(alternativeNonterminal)!!.groups["value"]!!.value)
 
-      val elements: MutableList<Symbol> = mutableListOf()
+      val elements: ArrayList<Symbol> = ArrayList()
       for (element in alternativeElements.split(' ')) {
         if (terminalRegex.matches(element)) {
           val elementValue = terminalRegex.matchEntire(element)!!.groups["value"]!!.value
