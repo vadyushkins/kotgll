@@ -19,6 +19,6 @@ class GraphNode(val id: Int, var isStart: Boolean = false, var isFinal: Boolean 
 
   fun addEdge(label: String, head: GraphNode) {
     if (!outgoingEdges.containsKey(label)) outgoingEdges[label] = ArrayList()
-    if (!outgoingEdges[label]!!.contains(head)) outgoingEdges[label]!!.add(head)
+    outgoingEdges[label]!!.add(head)
   }
 }
