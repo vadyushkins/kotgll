@@ -3,6 +3,8 @@
 * [Usage](https://github.com/vadyushkins/kotgll#usage)
   * [From sources](https://github.com/vadyushkins/kotgll#from-sources)
   * [Using JAR](https://github.com/vadyushkins/kotgll#using-jar)
+  * [CFG Format Example](https://github.com/vadyushkins/kotgll#cfg-format-example)
+  * [RSM Format Example](https://github.com/vadyushkins/kotgll#rsm-format-example)
 
 ## About
 GLL implementation in Kotlin
@@ -65,4 +67,34 @@ curl -L -O https://github.com/vadyushkins/kotgll/releases/download/v1.0.0/kotgll
 
 ```text
 java -jar kotgll-1.0.0.jar --input graph --grammar rsm --sppf off --inputPath src/test/resources/cli/TestGraphReadWriteCSV/dyck.csv --grammarPath src/test/resources/cli/TestRSMReadWriteTXT/dyck.txt --outputPath ./result.txt
+```
+### CFG Format Example
+
+```text
+StartNonterminal("S")
+Nonterminal("S") -> Terminal("subClassOf_r") Nonterminal("S") Terminal("subClassOf")
+Nonterminal("S") -> Terminal("subClassOf_r") Terminal("subClassOf")
+Nonterminal("S") -> Terminal("type_r") Nonterminal("S") Terminal("type")
+Nonterminal("S") -> Terminal("type_r") Terminal("type")
+```
+
+### RSM Format Example
+
+```text
+StartState(id=0,nonterminal=Nonterminal("S"),isStart=true,isFinal=false)
+State(id=0,nonterminal=Nonterminal("S"),isStart=true,isFinal=false)
+State(id=1,nonterminal=Nonterminal("S"),isStart=false,isFinal=false)
+State(id=4,nonterminal=Nonterminal("S"),isStart=false,isFinal=false)
+State(id=3,nonterminal=Nonterminal("S"),isStart=false,isFinal=true)
+State(id=2,nonterminal=Nonterminal("S"),isStart=false,isFinal=false)
+State(id=6,nonterminal=Nonterminal("S"),isStart=false,isFinal=true)
+State(id=5,nonterminal=Nonterminal("S"),isStart=false,isFinal=false)
+TerminalEdge(tail=0,head=1,terminal=Terminal("subClassOf_r"))
+TerminalEdge(tail=0,head=4,terminal=Terminal("type_r"))
+TerminalEdge(tail=1,head=3,terminal=Terminal("subClassOf"))
+NonterminalEdge(tail=1,head=2,nonterminal=Nonterminal("S"))
+TerminalEdge(tail=4,head=6,terminal=Terminal("type"))
+NonterminalEdge(tail=4,head=5,nonterminal=Nonterminal("S"))
+TerminalEdge(tail=2,head=3,terminal=Terminal("subClassOf"))
+TerminalEdge(tail=5,head=6,terminal=Terminal("type"))
 ```
