@@ -356,7 +356,7 @@ class TestRSMReadWriteTXT {
     val rsmState5 = RSMState(id = 5, nonterminal = nonterminalV)
     val rsmState6 = RSMState(id = 6, nonterminal = nonterminalV, isFinal = true)
     val rsmState7 = RSMState(id = 7, nonterminal = nonterminalV, isFinal = true)
-    val rsmState8 = RSMState(id = 8, nonterminal = nonterminalV)
+    val rsmState8 = RSMState(id = 8, nonterminal = nonterminalV, isFinal = true)
     val rsmState9 = RSMState(id = 9, nonterminal = nonterminalV, isFinal = true)
 
     nonterminalV.startState = rsmState4
