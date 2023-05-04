@@ -371,18 +371,16 @@ class TestRSMReadWriteTXT {
     rsmState5.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a_r"), head = rsmState6))
 
     rsmState6.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState8))
-    rsmState6.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState9))
     rsmState6.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a_r"), head = rsmState6))
     rsmState6.addNonterminalEdge(RSMNonterminalEdge(nonterminal = nonterminalS, head = rsmState5))
     rsmState6.addNonterminalEdge(RSMNonterminalEdge(nonterminal = nonterminalS, head = rsmState7))
 
     rsmState7.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState8))
-    rsmState7.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState9))
 
+    rsmState8.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState8))
     rsmState8.addNonterminalEdge(RSMNonterminalEdge(nonterminal = nonterminalS, head = rsmState9))
 
     rsmState9.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState8))
-    rsmState9.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState9))
 
     val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/c_analysis.txt"
     writeRSMToTXT(rsmState0, pathToTXT)
