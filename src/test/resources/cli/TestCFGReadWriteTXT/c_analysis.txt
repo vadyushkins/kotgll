@@ -1,0 +1,9 @@
+StartNonterminal("S")
+Nonterminal("S") -> Terminal("d_r") Nonterminal("V") Terminal("d")
+Nonterminal("V") -> Nonterminal("V1") Nonterminal("V2") Nonterminal("V3")
+Nonterminal("V1") ->
+Nonterminal("V1") -> Nonterminal("V2") Terminal("a_r") Nonterminal("V1")
+Nonterminal("V2") ->
+Nonterminal("V2") -> Nonterminal("S")
+Nonterminal("V3") ->
+Nonterminal("V3") -> Terminal("a") Nonterminal("V2") Nonterminal("V3")

@@ -27,10 +27,10 @@ class RSMState(
   override fun hashCode() = hashCode
 
   fun addTerminalEdge(edge: RSMTerminalEdge) {
-    outgoingTerminalEdges.add(edge)
+    if (!outgoingTerminalEdges.contains(edge)) outgoingTerminalEdges.add(edge)
   }
 
   fun addNonterminalEdge(edge: RSMNonterminalEdge) {
-    outgoingNonterminalEdges.add(edge)
+    if (!outgoingNonterminalEdges.contains(edge)) outgoingNonterminalEdges.add(edge)
   }
 }

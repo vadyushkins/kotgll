@@ -1,0 +1,5 @@
+StartNonterminal("S")
+Nonterminal("S") ->
+Nonterminal("S") -> Terminal("type")
+Nonterminal("S") -> Terminal("subClassOf")
+Nonterminal("S") -> Nonterminal("S") Nonterminal("S")
