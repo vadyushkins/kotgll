@@ -366,7 +366,9 @@ class TestRSMReadWriteTXT {
     rsmState2.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("d"), head = rsmState3))
 
     rsmState4.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a_r"), head = rsmState6))
+    rsmState4.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState8))
     rsmState4.addNonterminalEdge(RSMNonterminalEdge(nonterminal = nonterminalS, head = rsmState5))
+    rsmState4.addNonterminalEdge(RSMNonterminalEdge(nonterminal = nonterminalS, head = rsmState7))
 
     rsmState5.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a_r"), head = rsmState6))
 
@@ -395,7 +397,51 @@ class TestRSMReadWriteTXT {
   }
 
   @Test
-  fun `'reg1' rsm`() {
+  fun `'rdf_reg1' rsm`() {
+    val nonterminalS = Nonterminal("S")
+    val rsmState0 = RSMState(id = 0, nonterminal = nonterminalS, isStart = true, isFinal = true)
+
+    nonterminalS.startState = rsmState0
+
+    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type"), head = rsmState0))
+
+    val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/rdf_reg1.txt"
+    writeRSMToTXT(rsmState0, pathToTXT)
+    val actualRSMState = readRSMFromTXT(pathToTXT)
+
+    assertEquals(expected = rsmState0, actual = actualRSMState)
+    assertEquals(
+        expected = rsmState0.outgoingTerminalEdges, actual = actualRSMState.outgoingTerminalEdges)
+    assertEquals(
+        expected = rsmState0.outgoingNonterminalEdges,
+        actual = actualRSMState.outgoingNonterminalEdges)
+  }
+
+  @Test
+  fun `'rdf_reg2' rsm`() {
+    val nonterminalS = Nonterminal("S")
+    val rsmState0 = RSMState(id = 0, nonterminal = nonterminalS, isStart = true)
+    val rsmState1 = RSMState(id = 1, nonterminal = nonterminalS, isFinal = true)
+
+    nonterminalS.startState = rsmState0
+
+    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type"), head = rsmState1))
+    rsmState1.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("subClassOf"), head = rsmState1))
+
+    val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/rdf_reg2.txt"
+    writeRSMToTXT(rsmState0, pathToTXT)
+    val actualRSMState = readRSMFromTXT(pathToTXT)
+
+    assertEquals(expected = rsmState0, actual = actualRSMState)
+    assertEquals(
+        expected = rsmState0.outgoingTerminalEdges, actual = actualRSMState.outgoingTerminalEdges)
+    assertEquals(
+        expected = rsmState0.outgoingNonterminalEdges,
+        actual = actualRSMState.outgoingNonterminalEdges)
+  }
+
+  @Test
+  fun `'rdf_reg3' rsm`() {
     val nonterminalS = Nonterminal("S")
     val rsmState0 = RSMState(id = 0, nonterminal = nonterminalS, isStart = true, isFinal = true)
 
@@ -404,7 +450,7 @@ class TestRSMReadWriteTXT {
     rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type"), head = rsmState0))
     rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("subClassOf"), head = rsmState0))
 
-    val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/reg1.txt"
+    val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/rdf_reg3.txt"
     writeRSMToTXT(rsmState0, pathToTXT)
     val actualRSMState = readRSMFromTXT(pathToTXT)
 
@@ -417,35 +463,10 @@ class TestRSMReadWriteTXT {
   }
 
   @Test
-  fun `'reg2' rsm`() {
+  fun `'rdf_reg4' rsm`() {
     val nonterminalS = Nonterminal("S")
     val rsmState0 = RSMState(id = 0, nonterminal = nonterminalS, isStart = true, isFinal = true)
-
-    nonterminalS.startState = rsmState0
-
-    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type"), head = rsmState0))
-    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type_r"), head = rsmState0))
-    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("subClassOf"), head = rsmState0))
-    rsmState0.addTerminalEdge(
-        RSMTerminalEdge(terminal = Terminal("subClassOf_r"), head = rsmState0))
-
-    val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/reg2.txt"
-    writeRSMToTXT(rsmState0, pathToTXT)
-    val actualRSMState = readRSMFromTXT(pathToTXT)
-
-    assertEquals(expected = rsmState0, actual = actualRSMState)
-    assertEquals(
-        expected = rsmState0.outgoingTerminalEdges, actual = actualRSMState.outgoingTerminalEdges)
-    assertEquals(
-        expected = rsmState0.outgoingNonterminalEdges,
-        actual = actualRSMState.outgoingNonterminalEdges)
-  }
-
-  @Test
-  fun `'reg3' rsm`() {
-    val nonterminalS = Nonterminal("S")
-    val rsmState0 = RSMState(id = 0, nonterminal = nonterminalS, isStart = true, isFinal = true)
-    val rsmState1 = RSMState(id = 1, nonterminal = nonterminalS, isStart = true, isFinal = true)
+    val rsmState1 = RSMState(id = 1, nonterminal = nonterminalS, isFinal = true)
 
     nonterminalS.startState = rsmState0
 
@@ -454,7 +475,7 @@ class TestRSMReadWriteTXT {
 
     rsmState1.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("subClassOf"), head = rsmState1))
 
-    val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/reg3.txt"
+    val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/rdf_reg4.txt"
     writeRSMToTXT(rsmState0, pathToTXT)
     val actualRSMState = readRSMFromTXT(pathToTXT)
 
@@ -467,33 +488,85 @@ class TestRSMReadWriteTXT {
   }
 
   @Test
-  fun `'reg4' rsm`() {
+  fun `'c_analysis_reg1' rsm`() {
     val nonterminalS = Nonterminal("S")
     val rsmState0 = RSMState(id = 0, nonterminal = nonterminalS, isStart = true, isFinal = true)
-    val rsmState1 = RSMState(id = 1, nonterminal = nonterminalS, isStart = true, isFinal = true)
-    val rsmState2 = RSMState(id = 2, nonterminal = nonterminalS, isStart = true, isFinal = true)
-    val rsmState3 = RSMState(id = 3, nonterminal = nonterminalS, isStart = true, isFinal = true)
 
     nonterminalS.startState = rsmState0
 
-    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type"), head = rsmState0))
-    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("subClassOf"), head = rsmState1))
-    rsmState0.addTerminalEdge(
-        RSMTerminalEdge(terminal = Terminal("subClassOf_r"), head = rsmState2))
-    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type_r"), head = rsmState3))
+    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState0))
 
-    rsmState1.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("subClassOf"), head = rsmState1))
-    rsmState1.addTerminalEdge(
-        RSMTerminalEdge(terminal = Terminal("subClassOf_r"), head = rsmState2))
-    rsmState1.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type_r"), head = rsmState3))
+    val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/c_analysis_reg1.txt"
+    writeRSMToTXT(rsmState0, pathToTXT)
+    val actualRSMState = readRSMFromTXT(pathToTXT)
 
-    rsmState2.addTerminalEdge(
-        RSMTerminalEdge(terminal = Terminal("subClassOf_r"), head = rsmState2))
-    rsmState2.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type_r"), head = rsmState3))
+    assertEquals(expected = rsmState0, actual = actualRSMState)
+    assertEquals(
+        expected = rsmState0.outgoingTerminalEdges, actual = actualRSMState.outgoingTerminalEdges)
+    assertEquals(
+        expected = rsmState0.outgoingNonterminalEdges,
+        actual = actualRSMState.outgoingNonterminalEdges)
+  }
 
-    rsmState3.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("type_r"), head = rsmState3))
+  @Test
+  fun `'c_analysis_reg2' rsm`() {
+    val nonterminalS = Nonterminal("S")
+    val rsmState0 = RSMState(id = 0, nonterminal = nonterminalS, isStart = true)
+    val rsmState1 = RSMState(id = 1, nonterminal = nonterminalS, isFinal = true)
 
-    val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/reg4.txt"
+    nonterminalS.startState = rsmState0
+
+    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState1))
+    rsmState1.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("d"), head = rsmState1))
+
+    val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/c_analysis_reg2.txt"
+    writeRSMToTXT(rsmState0, pathToTXT)
+    val actualRSMState = readRSMFromTXT(pathToTXT)
+
+    assertEquals(expected = rsmState0, actual = actualRSMState)
+    assertEquals(
+        expected = rsmState0.outgoingTerminalEdges, actual = actualRSMState.outgoingTerminalEdges)
+    assertEquals(
+        expected = rsmState0.outgoingNonterminalEdges,
+        actual = actualRSMState.outgoingNonterminalEdges)
+  }
+
+  @Test
+  fun `'c_analysis_reg3' rsm`() {
+    val nonterminalS = Nonterminal("S")
+    val rsmState0 = RSMState(id = 0, nonterminal = nonterminalS, isStart = true, isFinal = true)
+
+    nonterminalS.startState = rsmState0
+
+    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState0))
+    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("d"), head = rsmState0))
+
+    val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/c_analysis_reg3.txt"
+    writeRSMToTXT(rsmState0, pathToTXT)
+    val actualRSMState = readRSMFromTXT(pathToTXT)
+
+    assertEquals(expected = rsmState0, actual = actualRSMState)
+    assertEquals(
+        expected = rsmState0.outgoingTerminalEdges, actual = actualRSMState.outgoingTerminalEdges)
+    assertEquals(
+        expected = rsmState0.outgoingNonterminalEdges,
+        actual = actualRSMState.outgoingNonterminalEdges)
+  }
+
+  @Test
+  fun `'c_analysis_reg4' rsm`() {
+    val nonterminalS = Nonterminal("S")
+    val rsmState0 = RSMState(id = 0, nonterminal = nonterminalS, isStart = true, isFinal = true)
+    val rsmState1 = RSMState(id = 1, nonterminal = nonterminalS, isFinal = true)
+
+    nonterminalS.startState = rsmState0
+
+    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("a"), head = rsmState0))
+    rsmState0.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("d"), head = rsmState1))
+
+    rsmState1.addTerminalEdge(RSMTerminalEdge(terminal = Terminal("d"), head = rsmState1))
+
+    val pathToTXT = "src/test/resources/cli/TestRSMReadWriteTXT/c_analysis_reg4.txt"
     writeRSMToTXT(rsmState0, pathToTXT)
     val actualRSMState = readRSMFromTXT(pathToTXT)
 

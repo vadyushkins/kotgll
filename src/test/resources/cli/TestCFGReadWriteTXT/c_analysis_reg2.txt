@@ -1,0 +1,5 @@
+StartNonterminal("S")
+Nonterminal("S") ->
+Nonterminal("S") -> Terminal("a") Nonterminal("A")
+Nonterminal("A") ->
+Nonterminal("A") -> Terminal("d") Nonterminal("A")

@@ -136,15 +136,13 @@ class TestCFGReadWriteTXT {
   }
 
   @Test
-  fun `'reg1' cfg`() {
+  fun `'rdf_reg1' cfg`() {
     val nonterminalS = Nonterminal("S")
 
     nonterminalS.addAlternative(Alternative(listOf()))
-    nonterminalS.addAlternative(Alternative(listOf(Terminal("type"))))
-    nonterminalS.addAlternative(Alternative(listOf(Terminal("subClassOf"))))
-    nonterminalS.addAlternative(Alternative(listOf(nonterminalS, nonterminalS)))
+    nonterminalS.addAlternative(Alternative(listOf(Terminal("type"), nonterminalS)))
 
-    val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/reg1.txt"
+    val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/rdf_reg1.txt"
     writeCFGToTXT(nonterminalS, pathToTXT)
     val actualNonterminal = readCFGFromTXT(pathToTXT)
 
@@ -153,17 +151,17 @@ class TestCFGReadWriteTXT {
   }
 
   @Test
-  fun `'reg2' cfg`() {
+  fun `'rdf_reg2' cfg`() {
     val nonterminalS = Nonterminal("S")
+    val nonterminalA = Nonterminal("A")
 
     nonterminalS.addAlternative(Alternative(listOf()))
-    nonterminalS.addAlternative(Alternative(listOf(Terminal("type"))))
-    nonterminalS.addAlternative(Alternative(listOf(Terminal("type_r"))))
-    nonterminalS.addAlternative(Alternative(listOf(Terminal("subClassOf"))))
-    nonterminalS.addAlternative(Alternative(listOf(Terminal("subClassOf_r"))))
-    nonterminalS.addAlternative(Alternative(listOf(nonterminalS, nonterminalS)))
+    nonterminalS.addAlternative(Alternative(listOf(Terminal("type"), nonterminalA)))
 
-    val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/reg2.txt"
+    nonterminalA.addAlternative(Alternative(listOf()))
+    nonterminalA.addAlternative(Alternative(listOf(Terminal("subClassOf"), nonterminalA)))
+
+    val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/rdf_reg2.txt"
     writeCFGToTXT(nonterminalS, pathToTXT)
     val actualNonterminal = readCFGFromTXT(pathToTXT)
 
@@ -172,7 +170,23 @@ class TestCFGReadWriteTXT {
   }
 
   @Test
-  fun `'reg3' cfg`() {
+  fun `'rdf_reg3' cfg`() {
+    val nonterminalS = Nonterminal("S")
+
+    nonterminalS.addAlternative(Alternative(listOf()))
+    nonterminalS.addAlternative(Alternative(listOf(Terminal("type"), nonterminalS)))
+    nonterminalS.addAlternative(Alternative(listOf(Terminal("subClassOf"), nonterminalS)))
+
+    val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/rdf_reg3.txt"
+    writeCFGToTXT(nonterminalS, pathToTXT)
+    val actualNonterminal = readCFGFromTXT(pathToTXT)
+
+    assertEquals(expected = nonterminalS, actual = actualNonterminal)
+    assertEquals(expected = nonterminalS.alternatives, actual = actualNonterminal.alternatives)
+  }
+
+  @Test
+  fun `'rdf_reg4' cfg`() {
     val nonterminalS = Nonterminal("S")
     val nonterminalA = Nonterminal("A")
     val nonterminalB = Nonterminal("B")
@@ -185,7 +199,7 @@ class TestCFGReadWriteTXT {
     nonterminalB.addAlternative(Alternative(listOf()))
     nonterminalB.addAlternative(Alternative(listOf(Terminal("subClassOf"), nonterminalB)))
 
-    val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/reg3.txt"
+    val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/rdf_reg4.txt"
     writeCFGToTXT(nonterminalS, pathToTXT)
     val actualNonterminal = readCFGFromTXT(pathToTXT)
 
@@ -194,29 +208,70 @@ class TestCFGReadWriteTXT {
   }
 
   @Test
-  fun `'reg5' cfg`() {
+  fun `'c_analysis_reg1' cfg`() {
+    val nonterminalS = Nonterminal("S")
+
+    nonterminalS.addAlternative(Alternative(listOf()))
+    nonterminalS.addAlternative(Alternative(listOf(Terminal("a"), nonterminalS)))
+
+    val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/c_analysis_reg1.txt"
+    writeCFGToTXT(nonterminalS, pathToTXT)
+    val actualNonterminal = readCFGFromTXT(pathToTXT)
+
+    assertEquals(expected = nonterminalS, actual = actualNonterminal)
+    assertEquals(expected = nonterminalS.alternatives, actual = actualNonterminal.alternatives)
+  }
+
+  @Test
+  fun `'c_analysis_reg2' cfg`() {
+    val nonterminalS = Nonterminal("S")
+    val nonterminalA = Nonterminal("A")
+
+    nonterminalS.addAlternative(Alternative(listOf()))
+    nonterminalS.addAlternative(Alternative(listOf(Terminal("a"), nonterminalA)))
+
+    nonterminalA.addAlternative(Alternative(listOf()))
+    nonterminalA.addAlternative(Alternative(listOf(Terminal("d"), nonterminalA)))
+
+    val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/c_analysis_reg2.txt"
+    writeCFGToTXT(nonterminalS, pathToTXT)
+    val actualNonterminal = readCFGFromTXT(pathToTXT)
+
+    assertEquals(expected = nonterminalS, actual = actualNonterminal)
+    assertEquals(expected = nonterminalS.alternatives, actual = actualNonterminal.alternatives)
+  }
+
+  @Test
+  fun `'c_analysis_reg3' cfg`() {
+    val nonterminalS = Nonterminal("S")
+
+    nonterminalS.addAlternative(Alternative(listOf()))
+    nonterminalS.addAlternative(Alternative(listOf(Terminal("a"), nonterminalS)))
+    nonterminalS.addAlternative(Alternative(listOf(Terminal("d"), nonterminalS)))
+
+    val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/c_analysis_reg3.txt"
+    writeCFGToTXT(nonterminalS, pathToTXT)
+    val actualNonterminal = readCFGFromTXT(pathToTXT)
+
+    assertEquals(expected = nonterminalS, actual = actualNonterminal)
+    assertEquals(expected = nonterminalS.alternatives, actual = actualNonterminal.alternatives)
+  }
+
+  @Test
+  fun `'c_analysis_reg4' cfg`() {
     val nonterminalS = Nonterminal("S")
     val nonterminalA = Nonterminal("A")
     val nonterminalB = Nonterminal("B")
-    val nonterminalC = Nonterminal("C")
-    val nonterminalD = Nonterminal("D")
 
-    nonterminalS.addAlternative(
-        Alternative(listOf(nonterminalA, nonterminalB, nonterminalC, nonterminalD)))
+    nonterminalS.addAlternative(Alternative(listOf(nonterminalA, nonterminalB)))
 
     nonterminalA.addAlternative(Alternative(listOf()))
-    nonterminalA.addAlternative(Alternative(listOf(Terminal("type"), nonterminalA)))
+    nonterminalA.addAlternative(Alternative(listOf(Terminal("a"), nonterminalA)))
 
     nonterminalB.addAlternative(Alternative(listOf()))
-    nonterminalB.addAlternative(Alternative(listOf(Terminal("subClassOf"), nonterminalB)))
+    nonterminalB.addAlternative(Alternative(listOf(Terminal("d"), nonterminalB)))
 
-    nonterminalC.addAlternative(Alternative(listOf()))
-    nonterminalC.addAlternative(Alternative(listOf(Terminal("subClassOf_r"), nonterminalC)))
-
-    nonterminalD.addAlternative(Alternative(listOf()))
-    nonterminalD.addAlternative(Alternative(listOf(Terminal("type_r"), nonterminalD)))
-
-    val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/reg4.txt"
+    val pathToTXT = "src/test/resources/cli/TestCFGReadWriteTXT/c_analysis_reg4.txt"
     writeCFGToTXT(nonterminalS, pathToTXT)
     val actualNonterminal = readCFGFromTXT(pathToTXT)
 

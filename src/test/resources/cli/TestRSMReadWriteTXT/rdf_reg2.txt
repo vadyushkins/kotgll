@@ -1,0 +1,5 @@
+StartState(id=0,nonterminal=Nonterminal("S"),isStart=true,isFinal=false)
+State(id=0,nonterminal=Nonterminal("S"),isStart=true,isFinal=false)
+State(id=1,nonterminal=Nonterminal("S"),isStart=false,isFinal=true)
+TerminalEdge(tail=0,head=1,terminal=Terminal("type"))
+TerminalEdge(tail=1,head=1,terminal=Terminal("subClassOf"))

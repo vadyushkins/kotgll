@@ -1,0 +1,4 @@
+StartState(id=0,nonterminal=Nonterminal("S"),isStart=true,isFinal=true)
+State(id=0,nonterminal=Nonterminal("S"),isStart=true,isFinal=true)
+TerminalEdge(tail=0,head=0,terminal=Terminal("a"))
+TerminalEdge(tail=0,head=0,terminal=Terminal("d"))

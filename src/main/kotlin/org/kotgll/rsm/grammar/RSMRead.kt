@@ -18,11 +18,11 @@ fun readRSMFromTXT(pathToTXT: String): RSMState {
     return rsmStates[y.hashCode]!!
   }
 
-  val nonterminals: HashMap<Int, Nonterminal> = HashMap()
+  val nonterminals: HashMap<Nonterminal, Nonterminal> = HashMap()
   fun makeNonterminal(name: String): Nonterminal {
     val y = Nonterminal(name)
-    if (!nonterminals.containsKey(y.hashCode)) nonterminals[y.hashCode] = y
-    return nonterminals[y.hashCode]!!
+    if (!nonterminals.contains(y)) nonterminals[y] = y
+    return nonterminals[y]!!
   }
 
   val startStateRegex =
