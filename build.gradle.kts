@@ -12,7 +12,7 @@ repositories { mavenCentral() }
 
 dependencies {
   testImplementation(kotlin("test"))
-  testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.2")
+  testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.3")
   implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.5")
 }
 
