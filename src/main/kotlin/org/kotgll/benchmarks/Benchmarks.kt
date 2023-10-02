@@ -6,6 +6,7 @@ import kotlinx.cli.default
 import kotlinx.cli.required
 import org.kotgll.cfg.grammar.readCFGFromTXT
 import org.kotgll.graph.readGraphFromCSV
+import org.kotgll.graph.readStartNodesFromCSV
 import org.kotgll.rsm.grammar.readRSMFromTXT
 import java.io.File
 import kotlin.system.measureNanoTime
@@ -43,11 +44,18 @@ fun main(args: Array<String>) {
       parser
           .option(ArgType.Choice<SPPFMode>(), fullName = "sppf", description = "Sppf mode")
           .default(SPPFMode.ON)
-  val pathToInput by
+  val pathToGraphs by
       parser
           .option(
-              ArgType.String, fullName = "inputPath", description = "Path to folder with graphs")
+              ArgType.String, fullName = "graphsPath", description = "Path to folder with graphs")
           .required()
+  val pathToStartNodes by
+      parser
+          .option(
+              ArgType.String,
+              fullName = "startNodesPath",
+              description = "Path to folder with start nodes for each graph")
+          .default("")
   val pathToGrammar by
       parser
           .option(
@@ -67,30 +75,46 @@ fun main(args: Array<String>) {
           .option(
               ArgType.Int, fullName = "benchmarkRounds", description = "Number of benchmark rounds")
           .default(10)
+  val chunkSize by
+      parser
+          .option(ArgType.Int, fullName = "chunkSize", description = "Start nodes chunk size")
+          .default(10)
 
   parser.parse(args)
 
   if (grammarMode == GrammarMode.CFG) {
     if (sppfMode == SPPFMode.ON) {
-      runCFGWithSPPF(pathToInput, pathToGrammar, pathToOutput, warmUpRounds, benchmarksRounds)
+      runCFGWithSPPF(pathToGraphs,
+        pathToStartNodes, pathToGrammar, pathToOutput, warmUpRounds, benchmarksRounds, chunkSize)
     } else if (sppfMode == SPPFMode.OFF) {
-      runCFGWithoutSPPF(pathToInput, pathToGrammar, pathToOutput, warmUpRounds, benchmarksRounds)
+      runCFGWithoutSPPF(
+          pathToGraphs,
+          pathToStartNodes,
+          pathToGrammar,
+          pathToOutput,
+          warmUpRounds,
+          benchmarksRounds,
+          chunkSize)
     }
   } else if (grammarMode == GrammarMode.RSM) {
     if (sppfMode == SPPFMode.ON) {
-      runRSMWithSPPF(pathToInput, pathToGrammar, pathToOutput, warmUpRounds, benchmarksRounds)
+      runRSMWithSPPF(pathToGraphs,
+        pathToStartNodes, pathToGrammar, pathToOutput, warmUpRounds, benchmarksRounds, chunkSize)
     } else if (sppfMode == SPPFMode.OFF) {
-      runRSMWithoutSPPF(pathToInput, pathToGrammar, pathToOutput, warmUpRounds, benchmarksRounds)
+      runRSMWithoutSPPF(pathToGraphs, pathToStartNodes, pathToGrammar, pathToOutput, warmUpRounds, benchmarksRounds,
+        chunkSize)
     }
   }
 }
 
 fun runCFGWithoutSPPF(
     pathToGraphs: String,
+    pathToStartNodes: String,
     pathToCFG: String,
     pathToOutput: String,
     warmUpRounds: Int,
-    benchmarkRounds: Int
+    benchmarkRounds: Int,
+    chunkSize: Int
 ) {
   val cfg = readCFGFromTXT(pathToCFG)
   val cfgName = File(pathToCFG).nameWithoutExtension
@@ -101,45 +125,58 @@ fun runCFGWithoutSPPF(
         val graphName = graphPath.nameWithoutExtension
         println("start:: $graphName")
         val graph = readGraphFromCSV(graphPath.path)
+        val startNodes = readStartNodesFromCSV("$pathToStartNodes/$graphName.csv")
 
-        val resultPath = getResultPath(pathToOutput, graphName, "cfg", cfgName, "without_sppf")
-        File(resultPath).writeText("")
+        for (chunkStart in 0..<startNodes.size step chunkSize) {
+          val chunkEnd = kotlin.math.min(chunkStart + chunkSize, startNodes.size)
 
-        for (warmUp in 1..warmUpRounds) {
-          var result: HashMap<Int, HashSet<Int>>
-          val elapsed = measureNanoTime {
-            result = org.kotgll.cfg.graphinput.withoutsppf.GLL(cfg, graph).parse()
+          val resultPath = getResultPath(pathToOutput, graphName, "cfg", cfgName, "without_sppf")
+          File(resultPath).writeText("")
+
+          for (warmUp in 1..warmUpRounds) {
+            var result: HashMap<Int, HashSet<Int>>
+            val elapsed = measureNanoTime {
+              result =
+                  org.kotgll.cfg.graphinput.withoutsppf
+                      .GLL(cfg, graph.subList(chunkStart, chunkEnd))
+                      .parse()
+            }
+            val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
+
+            var number = 0
+            result.keys.forEach { key -> number += result[key]!!.size }
+
+            println("warmup:: $graphName $cfgName ${number} $elapsedSeconds")
           }
-          val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
 
-          var number = 0
-          result.keys.forEach { key -> number += result[key]!!.size }
+          for (benchmarkAttempt in 1..benchmarkRounds) {
+            var result: HashMap<Int, HashSet<Int>>
+            val elapsed = measureNanoTime {
+              result =
+                  org.kotgll.cfg.graphinput.withoutsppf
+                      .GLL(cfg, graph.subList(chunkStart, chunkEnd))
+                      .parse()
+            }
+            val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
 
-          println("warmup:: $graphName $cfgName ${number} $elapsedSeconds")
-        }
+            var number = 0
+            result.keys.forEach { key -> number += result[key]!!.size }
 
-        for (benchmarkAttempt in 1..benchmarkRounds) {
-          var result: HashMap<Int, HashSet<Int>>
-          val elapsed = measureNanoTime {
-            result = org.kotgll.cfg.graphinput.withoutsppf.GLL(cfg, graph).parse()
+            println("benchmark:: $graphName $cfgName ${number} $elapsedSeconds")
+            File(resultPath).appendText(elapsed.toString() + "\n")
           }
-          val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
-
-          var number = 0
-          result.keys.forEach { key -> number += result[key]!!.size }
-
-          println("benchmark:: $graphName $cfgName ${number} $elapsedSeconds")
-          File(resultPath).appendText(elapsed.toString() + "\n")
         }
       }
 }
 
 fun runCFGWithSPPF(
-    pathToGraphs: String,
-    pathToCFG: String,
-    pathToOutput: String,
-    warmUpRounds: Int,
-    benchmarkRounds: Int
+  pathToGraphs: String,
+  pathToStartNodes: String,
+  pathToCFG: String,
+  pathToOutput: String,
+  warmUpRounds: Int,
+  benchmarkRounds: Int,
+  chunkSize: Int
 ) {
   val cfg = readCFGFromTXT(pathToCFG)
   val cfgName = File(pathToCFG).nameWithoutExtension
@@ -150,45 +187,52 @@ fun runCFGWithSPPF(
         val graphName = graphPath.nameWithoutExtension
         println("start:: $graphName")
         val graph = readGraphFromCSV(graphPath.path)
+        val startNodes = readStartNodesFromCSV("$pathToStartNodes/$graphName.csv")
 
-        val resultPath = getResultPath(pathToOutput, graphName, "cfg", cfgName, "with_sppf")
-        File(resultPath).writeText("")
+        for (chunkStart in 0..<startNodes.size step chunkSize) {
+          val chunkEnd = kotlin.math.min(chunkStart + chunkSize, startNodes.size)
 
-        for (warmUp in 1..warmUpRounds) {
-          var result: HashMap<Int, HashMap<Int, org.kotgll.cfg.graphinput.withsppf.sppf.SPPFNode>>
-          val elapsed = measureNanoTime {
-            result = org.kotgll.cfg.graphinput.withsppf.GLL(cfg, graph).parse()
+            val resultPath = getResultPath(pathToOutput, graphName, "cfg", cfgName, "with_sppf")
+            File(resultPath).writeText("")
+
+            for (warmUp in 1..warmUpRounds) {
+              var result: HashMap<Int, HashMap<Int, org.kotgll.cfg.graphinput.withsppf.sppf.SPPFNode>>
+              val elapsed = measureNanoTime {
+                result = org.kotgll.cfg.graphinput.withsppf.GLL(cfg, graph.subList(chunkStart, chunkEnd)).parse()
+              }
+              val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
+
+              var number = 0
+              result.keys.forEach { key -> number += result[key]!!.keys.size }
+
+              println("warmup:: $graphName $cfgName ${number} $elapsedSeconds")
+            }
+
+            for (benchmarkAttempt in 1..benchmarkRounds) {
+              var result: HashMap<Int, HashMap<Int, org.kotgll.cfg.graphinput.withsppf.sppf.SPPFNode>>
+              val elapsed = measureNanoTime {
+                result = org.kotgll.cfg.graphinput.withsppf.GLL(cfg, graph.subList(chunkStart, chunkEnd)).parse()
+              }
+              val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
+
+              var number = 0
+              result.keys.forEach { key -> number += result[key]!!.keys.size }
+
+              println("benchmark:: $graphName $cfgName ${number} $elapsedSeconds")
+              File(resultPath).appendText(elapsed.toString() + "\n")
+            }
           }
-          val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
-
-          var number = 0
-          result.keys.forEach { key -> number += result[key]!!.keys.size }
-
-          println("warmup:: $graphName $cfgName ${number} $elapsedSeconds")
-        }
-
-        for (benchmarkAttempt in 1..benchmarkRounds) {
-          var result: HashMap<Int, HashMap<Int, org.kotgll.cfg.graphinput.withsppf.sppf.SPPFNode>>
-          val elapsed = measureNanoTime {
-            result = org.kotgll.cfg.graphinput.withsppf.GLL(cfg, graph).parse()
-          }
-          val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
-
-          var number = 0
-          result.keys.forEach { key -> number += result[key]!!.keys.size }
-
-          println("benchmark:: $graphName $cfgName ${number} $elapsedSeconds")
-          File(resultPath).appendText(elapsed.toString() + "\n")
-        }
       }
 }
 
 fun runRSMWithoutSPPF(
     pathToGraphs: String,
+    pathToStartNodes: String,
     pathToRSM: String,
     pathToOutput: String,
     warmUpRounds: Int,
-    benchmarkRounds: Int
+    benchmarkRounds: Int,
+    chunkSize: Int,
 ) {
   val rsm = readRSMFromTXT(pathToRSM)
   val rsmName = File(pathToRSM).nameWithoutExtension
@@ -199,45 +243,52 @@ fun runRSMWithoutSPPF(
         val graphName = graphPath.nameWithoutExtension
         println("start:: $graphName")
         val graph = readGraphFromCSV(graphPath.path)
+        val startNodes = readStartNodesFromCSV("$pathToStartNodes/$graphName.csv")
 
-        val resultPath = getResultPath(pathToOutput, graphName, "rsm", rsmName, "without_sppf")
-        File(resultPath).writeText("")
+        for (chunkStart in 0..<startNodes.size step chunkSize) {
+          val chunkEnd = kotlin.math.min(chunkStart + chunkSize, startNodes.size)
 
-        for (warmUp in 1..warmUpRounds) {
-          var result: HashMap<Int, HashSet<Int>>
-          val elapsed = measureNanoTime {
-            result = org.kotgll.rsm.graphinput.withoutsppf.GLL(rsm, graph).parse()
+          val resultPath = getResultPath(pathToOutput, graphName, "rsm", rsmName, "without_sppf")
+          File(resultPath).writeText("")
+
+          for (warmUp in 1..warmUpRounds) {
+            var result: HashMap<Int, HashSet<Int>>
+            val elapsed = measureNanoTime {
+              result = org.kotgll.rsm.graphinput.withoutsppf.GLL(rsm, graph.subList(chunkStart, chunkEnd)).parse()
+            }
+            val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
+
+            var number = 0
+            result.keys.forEach { key -> number += result[key]!!.size }
+
+            println("warmup:: $graphName $rsmName ${number} $elapsedSeconds")
           }
-          val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
 
-          var number = 0
-          result.keys.forEach { key -> number += result[key]!!.size }
+          for (benchmarkAttempt in 1..benchmarkRounds) {
+            var result: HashMap<Int, HashSet<Int>>
+            val elapsed = measureNanoTime {
+              result = org.kotgll.rsm.graphinput.withoutsppf.GLL(rsm, graph.subList(chunkStart, chunkEnd)).parse()
+            }
+            val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
 
-          println("warmup:: $graphName $rsmName ${number} $elapsedSeconds")
-        }
+            var number = 0
+            result.keys.forEach { key -> number += result[key]!!.size }
 
-        for (benchmarkAttempt in 1..benchmarkRounds) {
-          var result: HashMap<Int, HashSet<Int>>
-          val elapsed = measureNanoTime {
-            result = org.kotgll.rsm.graphinput.withoutsppf.GLL(rsm, graph).parse()
+            println("benchmark:: $graphName $rsmName ${number} $elapsedSeconds")
+            File(resultPath).appendText(elapsed.toString() + "\n")
           }
-          val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
-
-          var number = 0
-          result.keys.forEach { key -> number += result[key]!!.size }
-
-          println("benchmark:: $graphName $rsmName ${number} $elapsedSeconds")
-          File(resultPath).appendText(elapsed.toString() + "\n")
         }
       }
 }
 
 fun runRSMWithSPPF(
-    pathToGraphs: String,
-    pathToRSM: String,
-    pathToOutput: String,
-    warmUpRounds: Int,
-    benchmarkRounds: Int
+  pathToGraphs: String,
+  pathToStartNodes: String,
+  pathToRSM: String,
+  pathToOutput: String,
+  warmUpRounds: Int,
+  benchmarkRounds: Int,
+  chunkSize: Int,
 ) {
   val rsm = readRSMFromTXT(pathToRSM)
   val rsmName = File(pathToRSM).nameWithoutExtension
@@ -248,35 +299,40 @@ fun runRSMWithSPPF(
         val graphName = graphPath.nameWithoutExtension
         println("start:: $graphName")
         val graph = readGraphFromCSV(graphPath.path)
+        val startNodes = readStartNodesFromCSV("$pathToStartNodes/$graphName.csv")
 
-        val resultPath = getResultPath(pathToOutput, graphName, "rsm", rsmName, "with_sppf")
-        File(resultPath).writeText("")
+        for (chunkStart in 0..<startNodes.size step chunkSize) {
+          val chunkEnd = kotlin.math.min(chunkStart + chunkSize, startNodes.size)
 
-        for (warmUp in 1..warmUpRounds) {
-          var result: HashMap<Int, HashMap<Int, org.kotgll.rsm.graphinput.withsppf.sppf.SPPFNode>>
-          val elapsed = measureNanoTime {
-            result = org.kotgll.rsm.graphinput.withsppf.GLL(rsm, graph).parse()
+            val resultPath = getResultPath(pathToOutput, graphName, "rsm", rsmName, "with_sppf")
+            File(resultPath).writeText("")
+
+            for (warmUp in 1..warmUpRounds) {
+              var result: HashMap<Int, HashMap<Int, org.kotgll.rsm.graphinput.withsppf.sppf.SPPFNode>>
+              val elapsed = measureNanoTime {
+                result = org.kotgll.rsm.graphinput.withsppf.GLL(rsm, graph.subList(chunkStart, chunkEnd)).parse()
+              }
+              val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
+
+              var number = 0
+              result.keys.forEach { key -> number += result[key]!!.keys.size }
+
+              println("warmup:: $graphName $rsmName ${number} $elapsedSeconds")
+            }
+
+            for (benchmarkAttempt in 1..benchmarkRounds) {
+              var result: HashMap<Int, HashMap<Int, org.kotgll.rsm.graphinput.withsppf.sppf.SPPFNode>>
+              val elapsed = measureNanoTime {
+                result = org.kotgll.rsm.graphinput.withsppf.GLL(rsm, graph.subList(chunkStart, chunkEnd)).parse()
+              }
+              val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
+
+              var number = 0
+              result.keys.forEach { key -> number += result[key]!!.keys.size }
+
+              println("benchmark:: $graphName $rsmName ${number} $elapsedSeconds")
+              File(resultPath).appendText(elapsed.toString() + "\n")
+            }
           }
-          val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
-
-          var number = 0
-          result.keys.forEach { key -> number += result[key]!!.keys.size }
-
-          println("warmup:: $graphName $rsmName ${number} $elapsedSeconds")
-        }
-
-        for (benchmarkAttempt in 1..benchmarkRounds) {
-          var result: HashMap<Int, HashMap<Int, org.kotgll.rsm.graphinput.withsppf.sppf.SPPFNode>>
-          val elapsed = measureNanoTime {
-            result = org.kotgll.rsm.graphinput.withsppf.GLL(rsm, graph).parse()
-          }
-          val elapsedSeconds = elapsed.toDouble() / 1_000_000_000.0
-
-          var number = 0
-          result.keys.forEach { key -> number += result[key]!!.keys.size }
-
-          println("benchmark:: $graphName $rsmName ${number} $elapsedSeconds")
-          File(resultPath).appendText(elapsed.toString() + "\n")
-        }
       }
 }

@@ -35,3 +35,20 @@ fun readGraphFromCSV(pathToCSV: String): ArrayList<GraphNode> {
 
   return ArrayList(graphNodes.values)
 }
+
+fun readStartNodesFromCSV(pathToCSV: String): ArrayList<GraphNode> {
+  val graphNodes: HashMap<Int, GraphNode> = HashMap()
+  fun makeGraphNode(id: Int, isStart: Boolean = false, isFinal: Boolean = false): GraphNode {
+    val y = GraphNode(id, isStart, isFinal)
+    if (!graphNodes.containsKey(y.id)) graphNodes[y.id] = y
+    return graphNodes[y.id]!!
+  }
+
+  val reader = File(pathToCSV).inputStream().bufferedReader()
+  while (true) {
+    val node: Int = reader.readLine()?.toInt() ?: break
+    makeGraphNode(node, isStart = true, isFinal = true)
+  }
+
+  return ArrayList(graphNodes.values)
+}
