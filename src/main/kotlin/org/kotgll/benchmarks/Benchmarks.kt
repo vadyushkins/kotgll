@@ -17,10 +17,11 @@ fun getResultPath(
     grammarMode: String = "cfg",
     grammarName: String,
     sppfMode: String,
+    chunkSize: Int,
 ): String {
   return pathToOutput +
       (if (pathToOutput.endsWith("/")) "" else "/") +
-      "${graph}_${grammarMode}_${grammarName}_${sppfMode}.csv"
+      "${graph}_${grammarMode}_${grammarName}_${sppfMode}_${chunkSize}.csv"
 }
 
 enum class GrammarMode {
@@ -127,11 +128,11 @@ fun runCFGWithoutSPPF(
         val graph = readGraphFromCSV(graphPath.path)
         val startNodes = readStartNodesFromCSV("$pathToStartNodes/$graphName.csv")
 
+        val resultPath = getResultPath(pathToOutput, graphName, "cfg", cfgName, "without_sppf", chunkSize)
+        File(resultPath).writeText("")
+
         for (chunkStart in 0..<startNodes.size step chunkSize) {
           val chunkEnd = kotlin.math.min(chunkStart + chunkSize, startNodes.size)
-
-          val resultPath = getResultPath(pathToOutput, graphName, "cfg", cfgName, "without_sppf")
-          File(resultPath).writeText("")
 
           for (warmUp in 1..warmUpRounds) {
             var result: HashMap<Int, HashSet<Int>>
@@ -189,11 +190,11 @@ fun runCFGWithSPPF(
         val graph = readGraphFromCSV(graphPath.path)
         val startNodes = readStartNodesFromCSV("$pathToStartNodes/$graphName.csv")
 
+        val resultPath = getResultPath(pathToOutput, graphName, "cfg", cfgName, "with_sppf", chunkSize)
+        File(resultPath).writeText("")
+
         for (chunkStart in 0..<startNodes.size step chunkSize) {
           val chunkEnd = kotlin.math.min(chunkStart + chunkSize, startNodes.size)
-
-            val resultPath = getResultPath(pathToOutput, graphName, "cfg", cfgName, "with_sppf")
-            File(resultPath).writeText("")
 
             for (warmUp in 1..warmUpRounds) {
               var result: HashMap<Int, HashMap<Int, org.kotgll.cfg.graphinput.withsppf.sppf.SPPFNode>>
@@ -245,11 +246,11 @@ fun runRSMWithoutSPPF(
         val graph = readGraphFromCSV(graphPath.path)
         val startNodes = readStartNodesFromCSV("$pathToStartNodes/$graphName.csv")
 
+        val resultPath = getResultPath(pathToOutput, graphName, "rsm", rsmName, "without_sppf", chunkSize)
+        File(resultPath).writeText("")
+
         for (chunkStart in 0..<startNodes.size step chunkSize) {
           val chunkEnd = kotlin.math.min(chunkStart + chunkSize, startNodes.size)
-
-          val resultPath = getResultPath(pathToOutput, graphName, "rsm", rsmName, "without_sppf")
-          File(resultPath).writeText("")
 
           for (warmUp in 1..warmUpRounds) {
             var result: HashMap<Int, HashSet<Int>>
@@ -301,11 +302,11 @@ fun runRSMWithSPPF(
         val graph = readGraphFromCSV(graphPath.path)
         val startNodes = readStartNodesFromCSV("$pathToStartNodes/$graphName.csv")
 
+        val resultPath = getResultPath(pathToOutput, graphName, "rsm", rsmName, "with_sppf", chunkSize)
+        File(resultPath).writeText("")
+
         for (chunkStart in 0..<startNodes.size step chunkSize) {
           val chunkEnd = kotlin.math.min(chunkStart + chunkSize, startNodes.size)
-
-            val resultPath = getResultPath(pathToOutput, graphName, "rsm", rsmName, "with_sppf")
-            File(resultPath).writeText("")
 
             for (warmUp in 1..warmUpRounds) {
               var result: HashMap<Int, HashMap<Int, org.kotgll.rsm.graphinput.withsppf.sppf.SPPFNode>>
