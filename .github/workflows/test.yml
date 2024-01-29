@@ -23,7 +23,7 @@ jobs:
           java-version: 11
 
       - name: Execute Gradle `test` task
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v3
         with:
           arguments: test --scan
           cache-read-only: |
